@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="product_template_form_view_inherit_gap" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.gap</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="account.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <!-- GAP V1 -->
+            <xpath expr="//field[@name='taxes_id']" position="after">
+                <field name="is_rebu" invisible="1"/>
+                <!-- Correction make ir always visible
+                <field name="rebu_tax_id" invisible="is_rebu == False"/-->
+                <field name="rebu_tax_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

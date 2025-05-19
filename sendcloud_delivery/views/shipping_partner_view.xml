@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_shipping_partner_form" model="ir.ui.view">
+        <field name="name">SendCloud Configuration</field>
+        <field name="model">shipping.partner</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="base_shipping_partner.view_shipping_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <header>
+                    <button name="get_sendcloud_integration_details" string="Get Integration Details"
+                            invisible="provider_company != 'sendcloud_ts'" type="object"
+                            class="oe_highlight"/>
+                    <button name="get_sendcloud_carriers" string="Retrieve Services"
+                            invisible="provider_company != 'sendcloud_ts'" type="object"
+                            class="oe_highlight"/>
+                    <button name="get_sendcloud_sender_address"
+                            string="Retrieve Sender Addresses"
+                            invisible="provider_company != 'sendcloud_ts'"
+                            type="object" class="oe_highlight"/>
+                </header>
+            </xpath>
+            <xpath expr="//notebook/page[@name='api_credential']/group"
+                   position="inside">
+                <group invisible="provider_company != 'sendcloud_ts'">
+                    <field name="sendcloud_public_key"
+                           invisible="provider_company != 'sendcloud_ts'" required="provider_company =='sendcloud_ts'"/>
+                    <field name="sendcloud_secret_key"
+                           invisible="provider_company != 'sendcloud_ts'" required="provider_company =='sendcloud_ts'"/>
+                    <field name="sendcloud_integration_id"
+                           invisible="provider_company != 'sendcloud_ts'"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

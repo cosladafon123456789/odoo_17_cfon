@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Plastic Type -->
+        <record id="plastic_type_view_tree" model="ir.ui.view">
+            <field name="name">plastic.type.view.tree</field>
+            <field name="model">plastic.type</field>
+            <field name="arch" type="xml">
+                <tree string="Plastic Type" editable="bottom">
+                    <field name="code" />
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="plastic_type_view_form" model="ir.ui.view">
+            <field name="name">plastic.type.view.form</field>
+            <field name="model">plastic.type</field>
+            <field name="arch" type="xml">
+                <form string="Plastic Type">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="code" />
+                            </group>
+                            <group>
+                                <field name="name" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_plastic_type">
+            <field name="name">Plastic Type</field>
+            <field name="res_model">plastic.type</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Plastic Fiscal Position -->
+        <record id="plastic_fiscal_position_view_tree" model="ir.ui.view">
+            <field name="name">plastic.fiscal.position.view.tree</field>
+            <field name="model">plastic.fiscal.position</field>
+            <field name="arch" type="xml">
+                <tree string="Plastic Fiscal Position" editable="bottom">
+                    <field name="type" />
+                    <field name="code" />
+                    <field name="name" />
+                    <field name="description" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="plastic_fiscal_position_view_form" model="ir.ui.view">
+            <field name="name">plastic.fiscal.position.view.form</field>
+            <field name="model">plastic.fiscal.position</field>
+            <field name="arch" type="xml">
+                <form string="Plastic Fiscal Position">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="type" />
+                                <field name="code" />
+                            </group>
+                            <group>
+                                <field name="name" />
+                                <field name="description" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_plastic_fiscal_position">
+            <field name="name">Plastic Fiscal Position</field>
+            <field name="res_model">plastic.fiscal.position</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Plastic Concept -->
+        <record id="plastic_concept_view_tree" model="ir.ui.view">
+            <field name="name">plastic.concept.view.tree</field>
+            <field name="model">plastic.concept</field>
+            <field name="arch" type="xml">
+                <tree string="Plastic Concept" editable="bottom">
+                    <field name="type" />
+                    <field name="code" />
+                    <field name="name" />
+                    <field name="sign" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="plastic_concept_view_form" model="ir.ui.view">
+            <field name="name">plastic.concept.view.form</field>
+            <field name="model">plastic.concept</field>
+            <field name="arch" type="xml">
+                <form string="Plastic Concept">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="type" />
+                                <field name="code" />
+                            </group>
+                            <group>
+                                <field name="name" />
+                                <field name="sign" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_plastic_concept">
+            <field name="name">Plastic Concept</field>
+            <field name="res_model">plastic.concept</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

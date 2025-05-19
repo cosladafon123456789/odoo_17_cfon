@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="l10n_es.account_chart_template_common" model="account.chart.template">
+            <field name="willpay_account_bank_id" ref="l10n_es.pgc_572_child"/>
+            <field name="willpay_account_partner_id" ref="l10n_es.account_common_4300"/>
+            <field name="willpay_account_recieved_id" ref="l10n_es.account_common_4310"/>
+            <field name="willpay_account_collection_id" ref="l10n_es.account_common_4312"/>
+            <field name="willpay_account_discounted_id" ref="l10n_es.account_common_4311"/>
+            <field name="willpay_account_unpaid_id" ref="l10n_es.account_common_4315"/>
+            <field name="willpay_account_debit_discount_id" ref="l10n_es.account_common_5208"/>
+            <field name="willpay_account_interests_id" ref="l10n_es.account_common_6650"/>
+            <field name="willpay_account_management_fee_id" ref="l10n_es.account_common_626"/>
+        </record>
+
+    </data>
+</odoo>

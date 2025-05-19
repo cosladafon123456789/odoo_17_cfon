@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mod_180" model="account.report">
+        <field name="name">Tax Report (Mod 180)</field>
+        <field name="filter_analytic" eval="False" />
+        <field name="filter_date_range" eval="True" />
+        <field name="filter_period_comparison" eval="False" />
+        <field name="filter_unfold_all" eval="False"/>
+        <field name="filter_show_draft" eval="False"/>
+        <field name="filter_unreconciled" eval="False"/>
+        <field name="filter_journals" eval="True"/>
+        <field name="filter_hierarchy">never</field>
+        <field name="filter_hide_0_lines">never</field>
+        <field name="country_id" ref="base.es"/>
+        <field name="filter_multi_company">selector</field>
+        <field name="root_report_id" ref="account.generic_tax_report"/>
+        <field name="custom_handler_model_id" ref="model_l10n_es_mod180_tax_report_handler"/>
+        <field name="column_ids">
+            <record id="mod_180_exercise" model="account.report.column">
+                <field name="name">Exercise</field>
+                <field name="expression_label">exercise</field>
+                <field name="figure_type">date</field>
+                <field name="sortable" eval="True"/>
+            </record>
+            <record id="mod_180_key" model="account.report.column">
+                <field name="name">Key</field>
+                <field name="expression_label">key</field>
+                <field name="figure_type">string</field>
+                <field name="sortable" eval="True"/>
+            </record>
+            <record id="mod_180_vat" model="account.report.column">
+                <field name="name">VAT</field>
+                <field name="expression_label">vat</field>
+                <field name="figure_type">string</field>
+                <field name="sortable" eval="False" />
+            </record>
+            <record id="mod_180_state" model="account.report.column">
+                <field name="name">State</field>
+                <field name="expression_label">state</field>
+                <field name="figure_type">string</field>
+                <field name="sortable" eval="False"/>
+            </record>
+            <record id="mod_180_base_income" model="account.report.column">
+                <field name="name">Base withholdings and payments on account</field>
+                <field name="expression_label">base_and_income</field>
+                <field name="sortable" eval="True"/>
+            </record>
+            <record id="mod_180_percent" model="account.report.column">
+                <field name="name">Percent</field>
+                <field name="expression_label">percent</field>
+                <field name="sortable" eval="True"/>
+            </record>
+            <record id="mod_180_widthholding" model="account.report.column">
+                <field name="name">Withholdings and payments on account</field>
+                <field name="expression_label">withholding</field>
+                <field name="sortable" eval="True"/>
+            </record>
+        </field>
+        <field name="line_ids">
+        </field>
+    </record>
+</odoo>

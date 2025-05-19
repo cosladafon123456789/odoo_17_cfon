@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <data noupdate="0">
+        <record id="sii_map_v1_1" model="sii.map">
+            <field name="name">Mapeo de Impuestos 1.1</field>
+            <field name="version">1.1</field>
+            <field name="date_from">2018-07-01</field>
+        </record>
+        
+        <!-- SII OUT Tax Map Lines -->
+        <record id="sii_map_v1_1_line_SFESB" model="sii.map.line">
+            <field name="code">SFESB</field>
+            <field name="out_map_id" ref="sii_map_v1_1"/>
+            <field name="name">Sujetas Bienes</field>
+            <field name="operation_type_id" ref="l10n_es_extra_reports.sii_operation_type_s1" />
+        </record>
+        <record id="sii_map_v1_1_line_SFESS" model="sii.map.line">
+            <field name="code">SFESS</field>
+            <field name="out_map_id" ref="sii_map_v1_1"/>
+            <field name="name">Sujetas Servicios</field>
+            <field name="operation_type_id" ref="l10n_es_extra_reports.sii_operation_type_s1" />
+        </record>
+        <record id="sii_map_v1_1_line_SFESISP" model="sii.map.line">
+            <field name="code">SFESISP</field>
+            <field name="out_map_id" ref="sii_map_v1_1"/>
+            <field name="name">Sujetas ISP</field>
+            <field name="operation_type_id" ref="l10n_es_extra_reports.sii_operation_type_s2" />
+        </record>
+        <record id="sii_map_v1_1_line_SFENS" model="sii.map.line">
+            <field name="code">SFENS</field>
+            <field name="out_map_id" ref="sii_map_v1_1"/>
+            <field name="name">Bienes No Sujeta</field>
+            <field name="operation_type_id" ref="l10n_es_extra_reports.sii_operation_type_n2" />
+        </record>
+        <record id="sii_map_v1_1_line_SFESNS" model="sii.map.line">
+            <field name="code">SFESNS</field>
+            <field name="out_map_id" ref="sii_map_v1_1"/>
+            <field name="name">Servicios No Sujeta</field>
+            <field name="operation_type_id" ref="l10n_es_extra_reports.sii_operation_type_n2" />
+        </record>
+        <record id="sii_map_v1_1_line_SFESBE" model="sii.map.line">
+            <field name="code">SFESBE</field>
+            <field name="out_map_id" ref="sii_map_v1_1"/>
+            <field name="name">Bienes Exento</field>
+            <field name="operation_type_id" ref="l10n_es_extra_reports.sii_operation_type_ex" />
+        </record>
+        <record id="sii_map_v1_1_line_SFESSE" model="sii.map.line">
+            <field name="code">SFESSE</field>
+            <field name="out_map_id" ref="sii_map_v1_1"/>
+            <field name="name">Servicios Exento</field>
+            <field name="operation_type_id" ref="l10n_es_extra_reports.sii_operation_type_ex" />
+        </record>
+        <record id="sii_map_v1_1_line_SFESBEI" model="sii.map.line">
+            <field name="code">SFESBEI</field>
+            <field name="out_map_id" ref="sii_map_v1_1"/>
+            <field name="name">Bienes Exento Intracomunitarias</field>
+            <field name="operation_type_id" ref="l10n_es_extra_reports.sii_operation_type_ex" />
+            <field name="cause_exemption_id" ref="l10n_es_extra_reports.sii_cause_exemption_05" />
+        </record>
+        <record id="sii_map_v1_1_line_SFESBEE" model="sii.map.line">
+            <field name="code">SFESBEE</field>
+            <field name="out_map_id" ref="sii_map_v1_1"/>
+            <field name="name">Bienes Exento Exportaciones</field>
+            <field name="operation_type_id" ref="l10n_es_extra_reports.sii_operation_type_ex" />
+            <field name="cause_exemption_id" ref="l10n_es_extra_reports.sii_cause_exemption_02" />
+        </record>
+        <record id="sii_map_v1_1_line_SRE" model="sii.map.line">
+            <field name="code">SRE</field>
+            <field name="out_map_id" ref="sii_map_v1_1"/>
+            <field name="name">Recargo Equivalencias</field>
+        </record>
+
+        <!-- SII IN Tax Map Lines -->
+        <record id="sii_map_v1_1_line_SFRS" model="sii.map.line">
+            <field name="code">SFRS</field>
+            <field name="in_map_id" ref="sii_map_v1_1"/>
+            <field name="name">Sujetas</field>
+        </record>
+        <record id="sii_map_v1_1_line_SFRISP" model="sii.map.line">
+            <field name="code">SFRISP</field>
+            <field name="in_map_id" ref="sii_map_v1_1"/>
+            <field name="name">ISP</field>
+        </record>
+        <record id="sii_map_v1_1_line_SFRBI" model="sii.map.line">
+            <field name="code">SFRBI</field>
+            <field name="in_map_id" ref="sii_map_v1_1"/>
+            <field name="name">Bienes de Inversión</field>
+        </record>
+
+        <record id="sii_map_v1_1_line_SFRR" model="sii.map.line">
+            <field name="code">SFRR</field>
+            <field name="in_map_id" ref="sii_map_v1_1"/>
+            <field name="name">Retención</field>
+        </record>
+        <record id="sii_map_v1_1_line_SFRND" model="sii.map.line">
+            <field name="code">SFRND</field>
+            <field name="in_map_id" ref="sii_map_v1_1"/>
+            <field name="name">No deducible</field>
+        </record>
+
+        <record id="sii_map_v1_1_line_SFRDUA" model="sii.map.line">
+            <field name="code">SFRDUA</field>
+            <field name="in_map_id" ref="sii_map_v1_1"/>
+            <field name="name">DUA</field>
+        </record>
+
+        <record id="sii_map_v1_1_line_PRE" model="sii.map.line">
+            <field name="code">SRE</field>
+            <field name="in_map_id" ref="sii_map_v1_1"/>
+            <field name="name">Recargo Equivalencia</field>
+        </record>
+
+    </data>
+</odoo>

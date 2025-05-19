@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="product_normal_form_view_inherit" model="ir.ui.view">
+            <field name="name">product.product.form.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <page name="plastic_types" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </page>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    
+        <!-- GAP V1 -->
+        <record id="nmod_303_casilla_97" model="account.report.line">
+            <field name="name">[97] Operaciones en régimen especial de bienes usados, objetos de arte, antigüedades y objetos de colección</field>
+            <field name="code">naeat_mod_303_97</field>
+            <field name="parent_id" ref="l10n_es.mod_303_title_18"/>
+            <field name="expression_ids">
+                <record id="mod_303_casilla_150_balance" model="account.report.expression">
+                    <field name="label">balance</field>
+                    <field name="engine">domain</field>
+                    <field name="formula" eval="[('tax_tag_ids','=',ref('perso_cfon.balance_mod303_casilla_97_pos', raise_if_not_found=False))]"/>
+                    <field name="subformula">sum</field>
+                </record>
+            </field>
+        </record>
+
+        <record id="balance_mod303_casilla_97_pos" model="account.account.tag">
+            <field name="name">+mod303[97]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="balance_mod303_casilla_97_neg" model="account.account.tag">
+            <field name="name">-mod303[97]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <!--record id="l10n_es.mod_303" model="account.report">
+            <record id="nmod_303_casilla_97" model="account.report.line">
+                <field name="name">[97] Operaciones en régimen especial de bienes usados, objetos de arte, antigüedades y objetos de colección</field>
+                <field name="code">naeat_mod_303_97</field>
+                <field name="parent_id" ref="l10n_es.mod_303_title_18"/>
+                <field name="expression_ids">
+                    <record id="nmod_303_casilla_97_balance" model="account.report.expression">
+                        <field name="label">balance</field>
+                        <field name="engine">tax_tags</field>
+                        <field name="subformula">mod303[60]</field>
+                    </record>
+                </field>
+            </record>
+        </record-->
+
+    </data>
+</odoo>

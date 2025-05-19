@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_model_plastic_type,plastic_type user,model_plastic_type,account.group_account_user,1,1,1,0
+manager_model_plastic_type,plastic_type admin,model_plastic_type,account.group_account_manager,1,1,1,1
+access_model_plastic_fiscal_position,plastic_fiscal_position user,model_plastic_fiscal_position,account.group_account_user,1,1,1,0
+manager_model_plastic_fiscal_position,plastic_fiscal_position admin,model_plastic_fiscal_position,account.group_account_manager,1,1,1,1
+access_model_plastic_concept,plastic_concept user,model_plastic_concept,account.group_account_user,1,1,1,0
+manager_model_plastic_concept,plastic_concept admin,model_plastic_concept,account.group_account_manager,1,1,1,1
+access_product_plastic_type,access_product_plastic_type,model_product_plastic_type,base.group_user,1,1,1,1

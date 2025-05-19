@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Decimal Precision -->
+        <record forcecreate="True" id="decimal_plastic" model="decimal.precision">
+            <field name="name">Plastic Units</field>
+            <field name="digits">3</field>
+        </record>
+
+        <!-- Plastic Types -->
+        <record id="plastic_type_a" model="plastic.type">
+            <field name="name">Envase no reutilizable que contienen plástico</field>
+            <field name="code">A</field>
+        </record>
+
+        <record id="plastic_type_b" model="plastic.type">
+            <field name="name">Producto de plástico semielaborado destinado a la obtención de envase no reutilizables que contienen plástico</field>
+            <field name="code">B</field>
+        </record>
+
+        <record id="plastic_type_c" model="plastic.type">
+            <field name="name">Producto de plástico destinado a permitir el cierre, la comercialización o la presentación de envases de plástico no reutilizables que contienen plástico</field>
+            <field name="code">C</field>
+        </record>
+
+        <!-- Plastic Fiscal Positions -->
+        <record id="fiscal_position_acc_1" model="plastic.fiscal.position">
+            <field name="type">accountant</field>
+            <field name="description">Fabricación sujeta y no exenta de productos objeto del impuesto</field>
+            <field name="name">Sujeción y no exención</field>
+            <field name="code">A</field>
+        </record>
+
+        <record id="fiscal_position_acc_2" model="plastic.fiscal.position">
+            <field name="type">accountant</field>
+            <field name="description">Fabricación de productos objeto del impuesto que, antes del devengo del impuesto, han dejado de ser adecuados para su utilización o han sido destruidos.</field>
+            <field name="name">No sujeción artículo 73 a) Ley 7/2022, de 8 de abril</field>
+            <field name="code">B</field>
+        </record>
+        
+        <record id="fiscal_position_acc_3" model="plastic.fiscal.position">
+            <field name="type">accountant</field>
+            <field name="description">Fabricación de productos objeto del impuesto destinados a ser enviados fuera del territorio español (directamente por el fabricante o por un tercero por su nombre o por su cuenta)</field>
+            <field name="name">No sujeción artículo 73 b) Ley 7/2022, de 8 de abril</field>
+            <field name="code">C</field>
+        </record>
+        
+        <record id="fiscal_position_acc_4" model="plastic.fiscal.position">
+            <field name="type">accountant</field>
+            <field name="description">Fabricación de pinturas, tintas, lacas y adhesivos concebidos para ser incorporados a productos objeto del impuesto.</field>
+            <field name="name">No sujeción artículo 73 c) Ley 7/2022, de 8 de abril</field>
+            <field name="code">D</field>
+        </record>
+        
+        <record id="fiscal_position_acc_5" model="plastic.fiscal.position">
+            <field name="type">accountant</field>
+            <field name="description">Fabricación de envases del art. 68.1a) de la Ley no diseñados para ser entregados conjuntamente con las mercancías.</field>
+            <field name="name">No sujeción artículo 73 d) Ley 7/2022, de 8 de abril</field>
+            <field name="code">E</field>
+        </record>
+        
+        <record id="fiscal_position_acc_6" model="plastic.fiscal.position">
+            <field name="type">accountant</field>
+            <field name="description">Fabricación de envases del art. 68.1a) de la Ley destinados a prestar su función en medicamentos, productos sanitarios, alimentos para usos médicos especiales, preparados para lactantes de uso hospitalario o residuos peligrosos de origen sanitario.</field>
+            <field name="name">Exención artículo 75 a) 1º Ley 7/2022, de 8 de abril</field>
+            <field name="code">F</field>
+        </record>
+        
+        <record id="fiscal_position_acc_7" model="plastic.fiscal.position">
+            <field name="type">accountant</field>
+            <field name="description">Fabricación de productos del art. 68.1b) de la Ley destinados a obtener envases del art. 68.1a) de la Ley para medicamentos, productos sanitarios, alimentos para usos médicos especiales, preparados para lactantes de uso hospitalario o residuos peligrosos de origen sanitario.</field>
+            <field name="name">Exención artículo 75 a) 2º Ley 7/2022, de 8 de abril</field>
+            <field name="code">G</field>
+        </record>
+        
+        <record id="fiscal_position_acc_8" model="plastic.fiscal.position">
+            <field name="type">accountant</field>
+            <field name="description">Fabricación de productos del art. 68.1c) de la Ley destinados a permitir el cierre, la comercialización o la presentación de envases no reutilizables para medicamentos, productos sanitarios, alimentos para usos médicos especiales, preparados para lactantes de uso hospitalario o residuos peligrosos de origen sanitario.</field>
+            <field name="name">Exención artículo 75 a) 3º Ley 7/2022, de 8 de abril</field>
+            <field name="code">H</field>
+        </record>
+        
+        <record id="fiscal_position_acc_9" model="plastic.fiscal.position">
+            <field name="type">accountant</field>
+            <field name="description">La fabricación de rollos de plástico empleados en las pacas o balas para ensilado de forrajes o cereales de uso agrícola o ganadero.</field>
+            <field name="name">Exención artículo 75 c) Ley 7/2022, de 8 de abril</field>
+            <field name="code">I</field>
+        </record>
+        
+        <record id="fiscal_position_acc_10" model="plastic.fiscal.position">
+            <field name="type">accountant</field>
+            <field name="description">Fabricación de productos del art. 68.1.b) de la Ley cuando no se vayan a destinar a obtener los envases del art. 68.1a) de la Ley.</field>
+            <field name="name">Exención artículo 75 g) 1º Ley 7/2022, de 8 de abril</field>
+            <field name="code">J</field>
+        </record>
+        
+        <record id="fiscal_position_acc_11" model="plastic.fiscal.position">
+            <field name="type">accountant</field>
+            <field name="description">Fabricación de productos del artículo 68.1c) de la Ley cuando no se vayan a utilizar para permitir el cierre, la comercialización o la presentación de envases no reutilizables.</field>
+            <field name="name">Exención artículo 75 g) 2º Ley 7/2022, de 8 de abril</field>
+            <field name="code">K</field>
+        </record>
+
+        <record id="fiscal_position_registry_1" model="plastic.fiscal.position">
+            <field name="type">registry_book</field>
+            <field name="description">Adquisición intracomunitaria sujeta y no exenta de productos objeto del impuesto.</field>
+            <field name="name">Sujeción y no exención Ley 7/2022, de 8 de abril</field>
+            <field name="code">A</field>
+        </record>
+
+        <record id="fiscal_position_registry_2" model="plastic.fiscal.position">
+            <field name="type">registry_book</field>
+            <field name="description">Adquisición intracomunitaria de pinturas, tintas, lacas y adhesivos concebidos para ser incorporados a productos objeto del impuesto</field>
+            <field name="name">No sujeción artículo 73 c) Ley 7/2022, de 8 de abril</field>
+            <field name="code">B</field>
+        </record>
+
+        <record id="fiscal_position_registry_3" model="plastic.fiscal.position">
+            <field name="type">registry_book</field>
+            <field name="description">Adquisición intracomunitaria de envases del art. 68.1a) de la Ley no diseñados para ser entregados conjuntamente con las mercancías.</field>
+            <field name="name">No sujeción artículo 73 d) Ley 7/2022, de 8 de abril</field>
+            <field name="code">C</field>
+        </record>
+
+        <record id="fiscal_position_registry_4" model="plastic.fiscal.position">
+            <field name="type">registry_book</field>
+            <field name="description">Adquisición intracomunitaria de envases del art. 68.1a) de la Ley destinados a prestar su función en medicamentos, productos sanitarios, alimentos para usos médicos especiales, preparados para lactantes de uso hospitalario o residuos peligrosos de origen sanitario</field>
+            <field name="name">Exención artículo 75 a) 1º Ley 7/2022, de 8 de abril</field>
+            <field name="code">D</field>
+        </record>
+
+        <record id="fiscal_position_registry_5" model="plastic.fiscal.position">
+            <field name="type">registry_book</field>
+            <field name="description">Adquisición intracomunitaria de productos del art. 68.1b) de la Ley destinados a obtener envases del art. 68.1a) de la Ley para medicamentos, productos sanitarios, alimentos para usos médicos especiales, preparados para lactantes de uso hospitalario o residuos peligrosos de origen sanitario.</field>
+            <field name="name">Exención artículo 75 a) 2º Ley 7/2022, de 8 de abril</field>
+            <field name="code">E</field>
+        </record>
+
+        <record id="fiscal_position_registry_6" model="plastic.fiscal.position">
+            <field name="type">registry_book</field>
+            <field name="description">Adquisición intracomunitaria de productos del art. 68.1c) de la Ley destinados a permitir el cierre, la comercialización o la presentación de envases no reutilizables para medicamentos, productos sanitarios, alimentos para usos médicos especiales, preparados para lactantes de uso hospitalario o residuos peligrosos de origen sanitario</field>
+            <field name="name">Exención artículo 75 a) 3º Ley 7/2022, de 8 de abril</field>
+            <field name="code">F</field>
+        </record>
+
+        <record id="fiscal_position_registry_7" model="plastic.fiscal.position">
+            <field name="type">registry_book</field>
+            <field name="description">Adquisición intracomunitaria de envases del art. 68.1a) de la Ley que se introduzcan en el territorio español prestando su función en medicamentos, productos sanitarios, alimentos para usos médicos especiales, preparados para lactantes de uso hospitalario o residuos peligrosos de origen sanitario.</field>
+            <field name="name">Exención artículo 75 b) Ley 7/2022, de 8 de abril</field>
+            <field name="code">G</field>
+        </record>
+
+        <record id="fiscal_position_registry_8" model="plastic.fiscal.position">
+            <field name="type">registry_book</field>
+            <field name="description">Adquisición intracomunitaria de rollos de plástico empleados en las pacas o balas para ensilado de forrajes o cereales de uso agrícola o ganadero</field>
+            <field name="name">Exención artículo 75 c) Ley 7/2022, de 8 de abril</field>
+            <field name="code">H</field>
+        </record>
+
+        <record id="fiscal_position_registry_9" model="plastic.fiscal.position">
+            <field name="type">registry_book</field>
+            <field name="description">Adquisición intracomunitaria de productos objeto del impuesto que, con anterioridad a finalizar el plazo de presentación de la correspondiente autoliquidación, se destinen a ser enviados fuera del territorio español (directamente por el adquirente intracomunitario, o por un tercero en su nombre o por su cuenta).</field>
+            <field name="name">Exención artículo 75 d) Ley 7/2022, de 8 de abril</field>
+            <field name="code">I</field>
+        </record>
+
+        <record id="fiscal_position_registry_10" model="plastic.fiscal.position">
+            <field name="type">registry_book</field>
+            <field name="description">Adquisición intracomunitaria de productos objeto del impuesto que, con anterioridad a finalizar el plazo de presentación de la correspondiente autoliquidación, hayan dejado de ser adecuados para su utilización o hayan sido destruidos.</field>
+            <field name="name">Exención artículo 75 e) Ley 7/2022, de 8 de abril</field>
+            <field name="code">J</field>
+        </record>
+
+        <record id="fiscal_position_registry_11" model="plastic.fiscal.position">
+            <field name="type">registry_book</field>
+            <field name="description">Adquisición intracomunitaria de envases del art. 68.1a) de la Ley siempre que el peso total del plástico no reciclado contenido en dichos envases no exceda de 5 kilogramos en un mes.</field>
+            <field name="name">Exención artículo 75 f) Ley 7/2022, de 8 de abril</field>
+            <field name="code">K</field>
+        </record>
+
+        <record id="fiscal_position_registry_12" model="plastic.fiscal.position">
+            <field name="type">registry_book</field>
+            <field name="description">Adquisición intracomunitaria de productos del art. 68.1b) de la Ley cuando no se vayan a destinar a obtener envases del art. 68.1a) de la Ley.</field>
+            <field name="name">Exención artículo 75 g) 1º Ley 7/2022, de 8 de abril</field>
+            <field name="code">L</field>
+        </record>
+
+        <record id="fiscal_position_registry_13" model="plastic.fiscal.position">
+            <field name="type">registry_book</field>
+            <field name="description">Adquisición intracomunitaria de productos del artículo 68.1c) de la Ley cuando no se vayan a utilizar para permitir el cierre, la comercialización o la presentación de envases no reutilizables.</field>
+            <field name="name">Exención artículo 75 g) 2º Ley 7/2022, de 8 de abril</field>
+            <field name="code">M</field>
+        </record>
+
+        <!-- Plastic Concepts -->
+        <record id="concept_acc_1" model="plastic.concept">
+            <field name="type">accountant</field>
+            <field name="name">Existencia inicial</field>
+            <field name="code">1</field>
+            <field name="sign">+</field>
+        </record>
+
+        <record id="concept_acc_2" model="plastic.concept">
+            <field name="type">accountant</field>
+            <field name="name">Fabricación</field>
+            <field name="code">2</field>
+            <field name="sign">+</field>
+        </record>
+
+        <record id="concept_acc_3" model="plastic.concept">
+            <field name="type">accountant</field>
+            <field name="name">Devolución de productos para su destrucción o reincorporación al proceso de fabricación</field>
+            <field name="code">3</field>
+            <field name="sign">+</field>
+        </record>
+
+        <record id="concept_acc_4" model="plastic.concept">
+            <field name="type">accountant</field>
+            <field name="name">Entrega o puesta a disposición de los productos contabilizados</field>
+            <field name="code">4</field>
+            <field name="sign">-</field>
+        </record>
+
+        <record id="concept_acc_5" model="plastic.concept">
+            <field name="type">accountant</field>
+            <field name="name">Demás bajas de los productos contabilizados diferentes de su entrega o puesta a disposición</field>
+            <field name="code">5</field>
+            <field name="sign">-</field>
+        </record>
+
+        <record id="concept_registry_1" model="plastic.concept">
+            <field name="type">registry_book</field>
+            <field name="name">Adquisición intracomunitaria</field>
+            <field name="code">1</field>
+        </record>
+
+        <record id="concept_registry_2" model="plastic.concept">
+            <field name="type">registry_book</field>
+            <field name="name">Envío fuera del territorio español</field>
+            <field name="code">2</field>
+        </record>
+
+        <record id="concept_registry_3" model="plastic.concept">
+            <field name="type">registry_book</field>
+            <field name="name">Inadecuación o destrucción</field>
+            <field name="code">3</field>
+        </record>
+
+        <record id="concept_registry_4" model="plastic.concept">
+            <field name="type">registry_book</field>
+            <field name="name">Devolución para destrucción o reincorporación al proceso de fabricación</field>
+            <field name="code">4</field>
+        </record>
+
+    </data>
+</odoo>

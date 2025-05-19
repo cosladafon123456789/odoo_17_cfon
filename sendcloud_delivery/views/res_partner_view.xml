@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_streethouse" model="ir.ui.view">
+        <field name="name">res.partner.streetno</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath
+                    expr="//div[hasclass('o_address_format')]//field[@name='street']"
+                    position="after">
+                <field name="street_no" class="o_address_street_no"
+                       placeholder="House Number..."
+                       readonly="type == 'contact' and parent_id != False"/>
+            </xpath>
+
+            <xpath expr="//div[@name='div_address']//field[@name='street']"
+                   position="after">
+                <field name="street_no" class="o_address_street_no"
+                       placeholder="House Number..."/>
+            </xpath>
+
+            <xpath expr="//field[@name='child_ids']" position="attributes">
+                <attribute name="context">{'default_parent_id':
+                                               active_id, 'default_street': street, 'default_street_no':
+                                               street_no, 'default_street2': street2,
+                                           'default_city': city, 'default_state_id': state_id,
+                                           'default_zip': zip, 'default_country_id':
+                                               country_id, 'default_lang': lang, 'default_user_id': user_id, 'default_type': 'other'}
+                </attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_partner_address_streethouse" model="ir.ui.view">
+        <field name="name">res.partner.address.streetno</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_address_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('o_address_format')]//field[@name='street']" position="after">
+                <field name="street_no" class="o_address_street_no"
+                       placeholder="House Number..."/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

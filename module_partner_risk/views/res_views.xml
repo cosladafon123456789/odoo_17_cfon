@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<odoo>
+
+	<!-- Res Partner -->
+	<record id="view_partner_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="priority" eval="19" />
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='sale']/field[@name='user_id']" position="after" >
+                <field name="has_groups" invisible="1"/>
+                <field name="risk_caution" invisible="parent_id != False" readonly="has_groups == False" />
+                <field name="risk_company_id" invisible="risk_caution != False" readonly="has_groups == False" />
+                <field name="state" invisible="risk_caution != False" readonly="has_groups == False" />
+                <field name="risk_level" invisible="risk_caution != False" readonly="has_groups == False" />
+                <field name="risk_credit" invisible="risk_caution != False" readonly="has_groups == False" widget="monetary" options="{'currency_field': 'currency_id'}" />
+                <field name="risk_available" invisible="risk_caution != False" readonly="has_groups == False" widget="monetary" options="{'currency_field': 'currency_id'}" />
+            </xpath>
+        </field>
+    </record>
+
+    <!-- INSURANCE.CARRIER -->
+     <record id="insurance_carrier_view_tree" model="ir.ui.view">
+        <field name="name">insurance.carrier.tree</field>
+        <field name="model">insurance.carrier</field>
+        <field name="arch" type="xml">
+            <tree editable="top" string="Insurance Carrier">
+                <field name="name"/>
+                <field name="partner_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="insurance_carrier_action" model="ir.actions.act_window">
+        <field name="name">Insurance Carrier</field>
+        <field name="res_model">insurance.carrier</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="insurance_carrier_menu" action="insurance_carrier_action"
+        sequence="2" parent="contacts.res_partner_menu_config"/>
+
+</odoo>

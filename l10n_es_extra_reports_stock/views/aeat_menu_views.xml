@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Plastic Reports -->
+        <menuitem id="menu_plastic_config" 
+            parent="account.menu_finance_configuration"
+            sequence="35" 
+            groups="account.group_account_manager" 
+            name="Plastics" />
+
+        <menuitem id="menu_plastic_types" 
+            parent="menu_plastic_config" 
+            action="l10n_es_extra_reports_stock.action_plastic_type" 
+            name="Plastic Types" />
+
+        <menuitem id="menu_platic_fiscal_position" 
+            parent="menu_plastic_config" 
+            action="l10n_es_extra_reports_stock.action_plastic_fiscal_position" 
+            name="Plastic Fiscal Positions" />
+
+        <menuitem id="menu_plastic_concept" 
+            parent="menu_plastic_config" 
+            action="l10n_es_extra_reports_stock.action_plastic_concept" 
+            name="Plastic Concept" />
+
+    </data>
+</odoo>

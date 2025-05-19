@@ -1,0 +1,5 @@
+id,sequence,description,invoice_label,type_tax_use,name,description@es,amount,amount_type,tax_group_id,analytic,l10n_es_type,l10n_es_exempt_reason,l10n_es_bien_inversion,tax_scope,include_base_amount,repartition_line_ids/repartition_type,repartition_line_ids/tag_ids,repartition_line_ids/document_type,repartition_line_ids/account_id,repartition_line_ids/factor_percent,invoice_label@es,children_tax_ids
+"account_tax_template_s_iva0b_rebu","","VAT 0% REBU (Goods)","VAT 0% REBU","sale","0% REBU","VAT 0% REBU (Bienes)","0.0","percent","tax_group_iva_0","","sujeto","","","consu","",base,"",invoice,"","","VAT 0% REBU (Bienes)",
+"","","","","","","","","","","","","","","","",tax,"",invoice,account_common_477,"","",""
+"","","","","","","","","","","","","","","","",base,"",refund,"","","",""
+"","","","","","","","","","","","","","","","",tax,"",refund,account_common_477,"","",""

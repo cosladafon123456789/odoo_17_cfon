@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sender_address_view" model="ir.ui.view">
+        <field name="name">sender.address.tree</field>
+        <field name="model">sender.address</field>
+        <field name="arch" type="xml">
+            <tree string="Sendcloud Sender Address" editable="top" create="false">
+                <field name="address_id" readonly="1"/>
+                <field name="name" readonly="1"/>
+                <field name="city" readonly="1"/>
+                <field name="country" readonly="1"/>
+                <field name="vat_number" readonly="1"/>
+                <field name="default_address"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_sender_address" model="ir.actions.act_window">
+        <field name="name">sender address</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sender.address</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem id="menu_sender_address" name="Sender Addresses" parent="stock.menu_delivery" sequence="15"
+              action="action_sender_address"/>
+</odoo>

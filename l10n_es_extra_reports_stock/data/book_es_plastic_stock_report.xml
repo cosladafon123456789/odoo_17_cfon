@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="book_es_plastic_report_main_table_header">
+            <thead class="o_account_reports_header_hierarchy">
+                <t t-set="optional_headers" t-value="[]" />
+                <t t-call="l10n_es_extra_reports.book_es_report_main_header" />
+            </thead>
+        </template>
+
+        <!-- BOOK ES PLASTIC STOCK -->
+        <record id="book_es_plastic_report" model="account.report">
+            <field name="name">Plastic stock book report</field>
+            <field name="country_id" ref="base.es"/>
+            <field name="filter_analytic" eval="False" />
+            <field name="filter_period_comparison" eval="False" />
+            <field name="filter_unfold_all" eval="False"/>
+            <field name="filter_show_draft" eval="False"/>
+            <field name="filter_unreconciled" eval="False"/>
+            <field name="filter_journals" eval="False"/>
+            <field name="filter_hierarchy">never</field>
+            <field name="filter_multi_company">selector</field>
+            <field name="default_opening_date_filter">last_month</field>
+            <field name="custom_handler_model_id" ref="model_l10n_es_book_es_plastic_report_handler" />
+            <field name="root_report_id" ref="l10n_es_extra_reports.book_es_out_report" />
+            <field name="column_ids">
+                <record id="book_es_plastic_number" model="account.report.column">
+                    <field name="name">Número de asiento</field>
+                    <field name="expression_label">number</field>
+                    <field name="figure_type">string</field>
+                    <field name="sortable" eval="False"/>
+                </record>
+                <record id="book_es_plastic_date_done" model="account.report.column">
+                    <field name="name">Fecha hecho contabilizado</field>
+                    <field name="expression_label">date_done</field>
+                    <field name="figure_type">date</field>
+                    <field name="sortable" eval="False"/>
+                </record>
+                <record id="book_es_plastic_concept" model="account.report.column">
+                    <field name="name">Concepto</field>
+                    <field name="expression_label">concept</field>
+                    <field name="figure_type">string</field>
+                    <field name="sortable" eval="False"/>
+                </record>
+                <record id="book_es_plastic_key" model="account.report.column">
+                    <field name="name">Clave producto</field>
+                    <field name="expression_label">product_key</field>
+                    <field name="figure_type">string</field>
+                    <field name="sortable" eval="False"/>
+                </record>
+                <record id="book_es_plastic_description" model="account.report.column">
+                    <field name="name">Descripción Producto</field>
+                    <field name="expression_label">product_description</field>
+                    <field name="figure_type">string</field>
+                    <field name="sortable" eval="False"/>
+                </record>
+                <record id="book_es_plastic_fiscal" model="account.report.column">
+                    <field name="name">Régimen Fiscal</field>
+                    <field name="expression_label">fiscal_position</field>
+                    <field name="figure_type">string</field>
+                    <field name="sortable" eval="False"/>
+                </record>
+                <record id="book_es_plastic_reason" model="account.report.column">
+                    <field name="name">Justificante</field>
+                    <field name="expression_label">reason</field>
+                    <field name="figure_type">string</field>
+                    <field name="sortable" eval="False"/>
+                </record>
+                <record id="book_es_plastic_kg" model="account.report.column">
+                    <field name="name">Kilogramos</field>
+                    <field name="expression_label">kg</field>
+                    <field name="figure_type">string</field>
+                    <field name="sortable" eval="False"/>
+                </record>
+                <record id="book_es_plasitc_kg_not_recycled" model="account.report.column">
+                    <field name="name">Kilogramos No Reciclados</field>
+                    <field name="expression_label">kg_not_recycled</field>
+                    <field name="figure_type">string</field>
+                    <field name="sortable" eval="False"/>
+                </record>
+                <record id="book_es_plastic_document_type" model="account.report.column">
+                    <field name="name">Prov./Dest.: Tipo Documento</field>
+                    <field name="expression_label">document_type</field>
+                    <field name="figure_type">string</field>
+                    <field name="sortable" eval="False"/>
+                </record>
+                <record id="book_es_plastic_nr_document" model="account.report.column">
+                    <field name="name">Prov./Dest.: Nº documento</field>
+                    <field name="expression_label">nr_document</field>
+                    <field name="figure_type">string</field>
+                    <field name="sortable" eval="False"/>
+                </record>
+                <record id="book_es_plastic_social_reason" model="account.report.column">
+                    <field name="name">Prov./Dest.: Razón social</field>
+                    <field name="expression_label">social_reason</field>
+                    <field name="figure_type">string</field>
+                    <field name="sortable" eval="False"/>
+                </record>
+                <record id="book_es_plastic_note" model="account.report.column">
+                    <field name="name">Observaciones</field>
+                    <field name="expression_label">note</field>
+                    <field name="figure_type">string</field>
+                    <field name="sortable" eval="False"/>
+                </record>
+            </field>
+        </record>
+
+        <record id="action_plastic_stock_report" model="ir.actions.client">
+            <field name="name">Plastic Stock Book Report</field>
+            <field name="tag">account_report</field>
+            <field name="context" eval="{'report_id': ref('l10n_es_extra_reports_stock.book_es_plastic_report')}"/>
+        </record>
+
+        <menuitem id="menu_action_plastic_report" name="Plastic Stock Report" action="action_plastic_stock_report" parent="account.account_reports_legal_statements_menu" sequence="50"/>
+
+    </data>
+</odoo>

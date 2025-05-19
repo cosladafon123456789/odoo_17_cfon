@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+    <t t-name="SendCloudServicePointDetails">
+        <div>
+            <div readonly="1" style="position: relative;">
+                <textarea readonly="1" style="border: 0; width: 100%;height: 100%;box-sizing: border-box;"><t t-esc="value" /></textarea>
+                <button t-if="self.mode !== 'readonly'" title="Clear" class="btn btn-secondary o_empty_service_point" style="position: absolute;top: 0;right: 0;">X</button>
+            </div>
+            <t t-if="self.mode !== 'readonly'">
+                <t t-set="record" t-value="self.recordData"/>
+                <t t-set="is_button_visible" t-value="record.state == 'done' or record.state == 'cancel'"/>
+            <button t-if="!value and !self.recordData.carrier_tracking_ref and !is_button_visible" class="btn btn-primary o_select_service_point">Select Service Point</button>
+            </t>
+        </div>
+</t>
+</template>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_sendcloud_integration_form" model="ir.ui.view">
+            <field name="name">sendcloud.integration.form</field>
+            <field name="model">sendcloud.integration</field>
+            <field name="arch" type="xml">
+                <form string="SendCloud Integration" create="false">
+                    <header>
+                    </header>
+                    <div groups="account.group_account_invoice" class="alert alert-info" role="alert" style="margin-bottom:0px;" >
+                        Any update will be directly reflect to <strong>SendCloud</strong>
+                    </div>
+                    <sheet>
+                        <div class="oe_button_box">
+                        </div>
+                        <div class="oe_title">
+                            <label for="name" string="Integration Name"/>
+                            <h1>
+                                <field name="name" placeholder="Integration Name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="sendcloud_id" readonly="1"/>
+                            <field name="service_point_enabled" widget="boolean_toggle"/>
+                            <field name="service_point_carrier_ids" widget="many2many_tags"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_sendcloud_integration_tree" model="ir.ui.view">
+            <field name="name">sendcloud.integration.tree</field>
+            <field name="model">sendcloud.integration</field>
+            <field name="arch" type="xml">
+                <tree string="SendCloud Integration" create="false">
+                    <field name="name"/>
+                    <field name="sendcloud_id"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

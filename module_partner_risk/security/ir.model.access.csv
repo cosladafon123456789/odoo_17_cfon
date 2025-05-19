@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+module_partner_risk.access_insurance_carrier,access_insurance_carrier,module_partner_risk.model_insurance_carrier,base.group_user,1,1,1,1

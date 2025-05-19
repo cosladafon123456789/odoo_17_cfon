@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_backend" name="Sendcloud assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/sendcloud_delivery/static/src/js/sendcloud_service_point.js"/>
+        </xpath>
+    </template>
+
+    <template id="assets_common" name="Sendcloud Assets Common" inherit_id="web.assets_common">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src='/sendcloud_delivery/static/src/lib/sc.api.min.js'/>
+        </xpath>
+    </template>
+</odoo>

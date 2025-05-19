@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_move_form_inherit_gap" model="ir.ui.view">
+        <field name="name">account.move.forminherit.gap</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <!-- GAP V1 -->
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="rebu_entry_id" invisible="1"/>
+                <field name="origin_rebu_move_id" invisible="1"/>
+                <field name="rebu_reversal_id" invisible="1"/>
+                <field name="rebu_reversal_origin_id" invisible="1"/>
+                <field name="is_rebu_entry" invisible="1"/>
+            </xpath>
+            <!-- GAP V1 -->
+            <xpath expr="//field[@name='quick_edit_total_amount']" position="after">
+                <field name="is_rebu" invisible="is_rebu_entry == True"/>
+            </xpath>
+            <!-- GAP V1 -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_rebu_entry" class="oe_stat_button" icon="fa-bars" type="object" invisible="rebu_entry_id == False">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">REBU Entry</span>
+                    </div>
+                </button>
+
+                <button name="action_open_rebu_origin" class="oe_stat_button" icon="fa-bars" type="object" invisible="origin_rebu_move_id == False">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Original Invoice</span>
+                    </div>
+                </button>
+
+                <button name="action_open_reversal_of_rebu" class="oe_stat_button" icon="fa-bars" type="object" invisible="rebu_reversal_id == False">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Reversal REBU</span>
+                    </div>
+                </button>
+
+                <button name="action_open_origin_of_rebu_reversal" class="oe_stat_button" icon="fa-bars" type="object" invisible="rebu_reversal_origin_id == False">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Original REBU</span>
+                    </div>
+                </button>
+
+            </xpath>
+        </field>
+    </record>
+
+
+    <!--record id="account_tag_view_form_inherit_gap" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.gap</field>
+        <field name="model">account.account.tag</field>
+        <field name="inherit_id" ref="account.account_tag_view_form"/>
+        <field name="arch" type="xml">
+        </field>
+    </record-->
+</odoo>

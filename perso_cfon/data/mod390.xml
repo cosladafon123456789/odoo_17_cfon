@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    
+        <!-- GAP V1 -->
+        <record id="balance_mod390_casilla_227" model="account.account.tag">
+            <field name="name">mod390[227]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <!-- GAP V1 -->
+        <record id="nmod_390_casilla_227" model="account.report.line">
+            <field name="name">[227] Operaciones en régimen especial de bienes usados, objetos de arte, antigüedades y objetos de colección</field>
+            <field name="code">naeat_mod_390_227</field>
+            <field name="parent_id" ref="l10n_es.mod_390_title_3"/>
+            <field name="expression_ids">
+                <record id="nmod_390_casilla_227_balance" model="account.report.expression">
+                    <field name="label">balance</field>
+                    <field name="engine">domain</field>
+                    <field name="formula" eval="[('tax_tag_ids','=',ref('perso_cfon.balance_mod390_casilla_227', raise_if_not_found=False))]"/>
+                    <field name="subformula">-sum</field>
+                </record>
+            </field>
+        </record>
+
+        <!-- GAP V1 casilla 01 -->
+        <record id="mod_390_01_pos" model="account.account.tag">
+            <field name="name">+mod390[01]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <!-- GAP V1 casilla 01 -->
+        <record id="mod_390_01_neg" model="account.account.tag">
+            <field name="name">-mod390[01]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <!-- GAP V1 casilla 03 -->
+        <record id="mod_390_03_pos" model="account.account.tag">
+            <field name="name">+mod390[03]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_03_neg" model="account.account.tag">
+            <field name="name">-mod390[03]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <!-- GAP V1 casilla 04 -->
+        <record id="mod_390_04_pos" model="account.account.tag">
+            <field name="name">+mod390[04]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_04_neg" model="account.account.tag">
+            <field name="name">-mod390[04]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <!-- GAP V1 casilla 05 -->
+        <record id="mod_390_05_pos" model="account.account.tag">
+            <field name="name">+mod390[05]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_05_neg" model="account.account.tag">
+            <field name="name">-mod390[05]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+
+        <!-- GAP V1 casilla 06 -->
+        <record id="mod_390_06_pos" model="account.account.tag">
+            <field name="name">+mod390[06]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_06_neg" model="account.account.tag">
+            <field name="name">-mod390[06]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <!-- GAP V1 casilla 07 y redefinicion en informe -->
+        <record id="mod_390_07_pos" model="account.account.tag">
+            <field name="name">+mod390[07]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_07_neg" model="account.account.tag">
+            <field name="name">-mod390[07]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <record id="l10n_es.mod_390_casilla_07_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">domain</field>
+            <field name="formula">[('tax_tag_ids', '!=', 405),('tax_tag_ids', '=', 43)]</field>
+            <field name="subformula">-sum</field>
+        </record>
+
+
+        <!-- GAP V1 casilla 08 y redefinicion en informe -->
+        <record id="mod_390_08_pos" model="account.account.tag">
+            <field name="name">+mod390[08]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_08_neg" model="account.account.tag">
+            <field name="name">-mod390[08]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <record id="l10n_es.mod_390_casilla_08_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">tax_tags</field>
+            <field name="formula">+mod390[08]</field>
+            <field name="subformula"></field>
+        </record>
+
+        <!-- GAP V1 casilla 09 -->
+        <record id="mod_390_09_pos" model="account.account.tag">
+            <field name="name">+mod390[09]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_09_neg" model="account.account.tag">
+            <field name="name">-mod390[09]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <record id="l10n_es.mod_390_casilla_09_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">tax_tags</field>
+            <field name="formula">+mod390[09]</field>
+            <field name="subformula"></field>
+        </record>
+
+
+        <!-- GAP V1 casilla 10 -->
+        <record id="mod_390_10_pos" model="account.account.tag">
+            <field name="name">+mod390[10]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_10_neg" model="account.account.tag">
+            <field name="name">-mod390[10]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <record id="l10n_es.mod_390_casilla_10_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">tax_tags</field>
+            <field name="formula">+mod390[10]</field>
+            <field name="subformula"></field>
+        </record>
+
+        <!-- GAP V1 casilla 11 -->
+        <record id="mod_390_11_pos" model="account.account.tag">
+            <field name="name">+mod390[11]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_11_neg" model="account.account.tag">
+            <field name="name">-mod390[11]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+        
+        <record id="l10n_es.mod_390_casilla_11_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">tax_tags</field>
+            <field name="formula">+mod390[11]</field>
+            <field name="subformula"></field>
+        </record>
+
+
+        <!-- GAP V1 casilla 12 -->
+        <record id="mod_390_12_pos" model="account.account.tag">
+            <field name="name">+mod390[12]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_12_neg" model="account.account.tag">
+            <field name="name">-mod390[12]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <record id="l10n_es.mod_390_casilla_12_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">tax_tags</field>
+            <field name="formula">+mod390[12]</field>
+            <field name="subformula"></field>
+        </record>
+
+
+        <!-- GAP V1 casilla 150 y redefinicion en informe -->
+        <record id="mod_390_150_pos" model="account.account.tag">
+            <field name="name">+mod390[150]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_150_neg" model="account.account.tag">
+            <field name="name">-mod390[150]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <record id="l10n_es.mod_390_casilla_150_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">tax_tags</field>
+            <field name="formula">+mod390[150]</field>
+            <field name="subformula"></field>
+        </record>
+
+
+        <!-- GAP V1 casilla 152 -->
+        <record id="mod_390_152_pos" model="account.account.tag">
+            <field name="name">+mod390[152]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_152_neg" model="account.account.tag">
+            <field name="name">-mod390[152]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <record id="l10n_es.mod_390_casilla_152_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">tax_tags</field>
+            <field name="formula">+mod390[152]</field>
+            <field name="subformula"></field>
+        </record>
+
+
+        <!-- GAP V1 casilla 153 -->
+        <record id="mod_390_153_pos" model="account.account.tag">
+            <field name="name">+mod390[153]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_153_neg" model="account.account.tag">
+            <field name="name">-mod390[153]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <record id="l10n_es.mod_390_casilla_153_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">tax_tags</field>
+            <field name="formula">+mod390[153]</field>
+            <field name="subformula"></field>
+        </record>
+
+
+        <!-- GAP V1 casilla 155 -->
+        <record id="mod_390_155_pos" model="account.account.tag">
+            <field name="name">+mod390[155]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_155_neg" model="account.account.tag">
+            <field name="name">-mod390[155]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <!--record id="l10n_es.mod_390_casilla_155_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">tax_tags</field>
+            <field name="formula">+mod390[155]</field>
+            <field name="subformula"></field>
+        </record-->
+
+
+        <!-- GAP V1 casilla 712 -->
+        <record id="mod_390_712_pos" model="account.account.tag">
+            <field name="name">+mod390[712]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_712_neg" model="account.account.tag">
+            <field name="name">-mod390[712]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <record id="l10n_es.mod_390_casilla_712_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">tax_tags</field>
+            <field name="formula">+mod390[712]</field>
+            <field name="subformula"></field>
+        </record>
+
+
+        <!-- GAP V1 casilla 713 -->
+        <record id="mod_390_713_pos" model="account.account.tag">
+            <field name="name">+mod390[713]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_713_neg" model="account.account.tag">
+            <field name="name">-mod390[713]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <record id="l10n_es.mod_390_casilla_713_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">tax_tags</field>
+            <field name="formula">+mod390[713]</field>
+            <field name="subformula"></field>
+        </record>
+
+
+        <!-- GAP V1 casilla 714 -->
+        <record id="mod_390_714_pos" model="account.account.tag">
+            <field name="name">+mod390[714]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_714_neg" model="account.account.tag">
+            <field name="name">-mod390[714]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <record id="l10n_es.mod_390_casilla_714_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">tax_tags</field>
+            <field name="formula">+mod390[714]</field>
+            <field name="subformula"></field>
+        </record>
+
+
+        <!-- GAP V1 casilla 715 -->
+        <record id="mod_390_715_pos" model="account.account.tag">
+            <field name="name">+mod390[715]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">False</field>
+        </record>
+
+        <record id="mod_390_715_neg" model="account.account.tag">
+            <field name="name">-mod390[715]</field>
+            <field name="applicability">taxes</field>
+            <field name="country_id">68</field>
+            <field name="tax_negate">True</field>
+        </record>
+
+        <record id="l10n_es.mod_390_casilla_715_balance" model="account.report.expression">
+            <field name="label">balance</field>
+            <field name="engine">tax_tags</field>
+            <field name="formula">+mod390[715]</field>
+            <field name="subformula"></field>
+        </record>
+
+    </data>
+</odoo>

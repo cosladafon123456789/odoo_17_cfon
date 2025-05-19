@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="account_willpay_form" model="ir.ui.view">
+        <field name="name">account.willpay.form</field>
+        <field name="model">account.willpay</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_recieve" type="object" string="Recieve willpay" invisible="state != 'draft'" />
+                    <button name="action_send_willpay_to_bank" type="object" string="Send to Bank" invisible="state != 'recieved'" />
+                    <button name="action_anticipate_willpay" type="object" string="Anticipate Willpay" invisible="state != 'recieved'" />
+                    <button name="action_collect_willpay" type="object" string="Collect Willpay" invisible="state != 'anticipated' or state != 'in_collection'" />
+                    <button name="action_return_willpay" type="object" string="Return Willpay" invisible="state != 'anticipated'" />
+                    <button name="action_cancel_willpay" type="object" string="Cancel Willpay" invisible="state != 'charged' or state != 'returned'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="recieved,in_collection,charged" />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box"/>
+                    <div class="oe_title mb24">
+                        <h1>
+                            <field name="name" readonly="1" />
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="partner_id" />
+                            <field name="currency_id" invisible="1" />
+                            <field name="amount" widget="monetary" />
+                            <field name="date" />
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company" />
+                            <field name="bank_id" />
+                            <field name="journal_id" />
+                            <field name="create_date" />
+                            <field name="due_date" />
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page name="invoices" string="Invoices">
+                            <field name="invoice_ids" domain="[('partner_id', 'child_of', partner_id)]" readonly= "state != 'draft'" />
+                        </page>
+                        <page name="moves" string="Moves" invisible="move_ids == False or move_ids == '[ ]'" >
+                            <field name="move_ids" readonly="state != 'draft'">
+                                <tree default_order='id ASC'>
+                                    <field name="id" invisible="1" />
+                                    <field name="willpay_state" widget="badge" />
+                                    <field name="name" />
+                                    <field name="company_id" groups="base.group_multi_company" optional="show"/>
+                                    <field name="amount_total" />
+                                    <field name="amount_total_in_currency_signed" string="Total in Currency" groups="base.group_multi_currency" optional="show"/>
+                                    <field name="currency_id" invisible="1" />
+                                    <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'posted'"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="account_willpay_tree" model="ir.ui.view">
+        <field name="name">account.willpay.tree</field>
+        <field name="model">account.willpay</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="partner_id" />
+                <field name="company_id" groups="base.group_multi_company" />
+                <field name="amount" widget="monetary" />
+                <field name="date" />
+                <field name="due_date" widget="remaining_days" />
+                <field name="state" />
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_account_willpay">
+        <field name="name">Willpays</field>
+        <field name="res_model">account.willpay</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_account_willpay"
+        parent="account.menu_finance_entries"
+        sequence="2"
+        groups="account.group_account_manager"
+        name="Willpays" 
+        action="account_willpay.action_account_willpay" 
+    />
+
+</odoo>

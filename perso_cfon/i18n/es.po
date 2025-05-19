@@ -1,0 +1,295 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* perso_cfon
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0+e-20240314\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-15 09:33+0000\n"
+"PO-Revision-Date: 2024-03-15 10:34+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.0.1\n"
+
+#. module: perso_cfon
+#: model_terms:ir.ui.view,arch_db:perso_cfon.view_move_form_inherit_gap
+msgid "<span class=\"o_stat_text\">Original Invoice</span>"
+msgstr "<span class=\"o_stat_text\">Factura Origen</span>"
+
+#. module: perso_cfon
+#: model_terms:ir.ui.view,arch_db:perso_cfon.view_move_form_inherit_gap
+msgid "<span class=\"o_stat_text\">Original REBU</span>"
+msgstr "<span class=\"o_stat_text\">REBU Origen</span>"
+
+#. module: perso_cfon
+#: model_terms:ir.ui.view,arch_db:perso_cfon.view_move_form_inherit_gap
+msgid "<span class=\"o_stat_text\">REBU Entry</span>"
+msgstr "<span class=\"o_stat_text\">Asiento REBU</span>"
+
+#. module: perso_cfon
+#: model_terms:ir.ui.view,arch_db:perso_cfon.view_move_form_inherit_gap
+msgid "<span class=\"o_stat_text\">Reversal REBU</span>"
+msgstr "<span class=\"o_stat_text\">Rectificativa REBU</span>"
+
+#. module: perso_cfon
+#: model:ir.model,name:perso_cfon.model_account_move_reversal
+msgid "Account Move Reversal"
+msgstr "Revocación de movimiento en cuenta"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/models/purchase.py:0
+#: code:addons/perso_cfon/wizard/sale_make_invoice_advance.py:0
+#, python-format
+msgid "Cannot create invoice from REBU and not REBU orders"
+msgstr "No puede crear facturas REBU de pedidis no REBU"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/models/account.py:0
+#, python-format
+msgid "Cannot create secondary entry. Missing REBU tax in product"
+msgstr ""
+"No se puede crear el asiento recundario. Falta el impuesto REBU en el "
+"producto"
+
+#. module: perso_cfon
+#: model:ir.model,name:perso_cfon.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: perso_cfon
+#: model:ir.model,name:perso_cfon.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ajustes de configuración"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/models/account.py:0
+#, python-format
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/models/account.py:0
+#: code:addons/perso_cfon/models/product.py:0
+#: code:addons/perso_cfon/models/purchase.py:0
+#: code:addons/perso_cfon/models/sale.py:0
+#: model:ir.model.fields,field_description:perso_cfon.field_account_bank_statement_line__is_rebu
+#: model:ir.model.fields,field_description:perso_cfon.field_account_move__is_rebu
+#: model:ir.model.fields,field_description:perso_cfon.field_account_move_line__is_rebu
+#: model:ir.model.fields,field_description:perso_cfon.field_account_payment__is_rebu
+#: model:ir.model.fields,field_description:perso_cfon.field_product_product__is_rebu
+#: model:ir.model.fields,field_description:perso_cfon.field_product_template__is_rebu
+#: model:ir.model.fields,field_description:perso_cfon.field_purchase_order__is_rebu
+#: model:ir.model.fields,field_description:perso_cfon.field_purchase_order_line__is_rebu
+#: model:ir.model.fields,field_description:perso_cfon.field_sale_order__is_rebu
+#, python-format
+msgid "Is REBU"
+msgstr "Es REBU"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/models/account.py:0
+#: model:ir.model.fields,field_description:perso_cfon.field_account_bank_statement_line__is_rebu_entry
+#: model:ir.model.fields,field_description:perso_cfon.field_account_move__is_rebu_entry
+#: model:ir.model.fields,field_description:perso_cfon.field_account_payment__is_rebu_entry
+#, python-format
+msgid "Is REBU Entry"
+msgstr "Es asiento REBU"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/models/res_config_settings.py:0
+#: model:ir.model.fields,field_description:perso_cfon.field_res_config_settings__rebu_journal_id
+#, python-format
+msgid "Journal"
+msgstr "Diario"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/models/account.py:0
+#: model:ir.model,name:perso_cfon.model_account_move
+#, python-format
+msgid "Journal Entry"
+msgstr "Asiento contable"
+
+#. module: perso_cfon
+#: model:ir.model,name:perso_cfon.model_account_move_line
+msgid "Journal Item"
+msgstr "Apunte contable"
+
+#. module: perso_cfon
+#: model_terms:ir.ui.view,arch_db:perso_cfon.res_config_settings_view_form_inherit_gap
+msgid "Journal for REBU entries"
+msgstr "Diario para asientos de REBU"
+
+#. module: perso_cfon
+#: model_terms:ir.ui.view,arch_db:perso_cfon.res_config_settings_view_form_inherit_gap
+msgid "Journal for REBU operations"
+msgstr "Diario para operaciones REBU"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/models/purchase.py:0
+#: model:ir.model.fields,field_description:perso_cfon.field_purchase_order_line__lot_price_assigned
+#, python-format
+msgid "Lot price is assigned"
+msgstr ""
+
+#. module: perso_cfon
+#: model:ir.model,name:perso_cfon.model_stock_lot
+msgid "Lot/Serial"
+msgstr "Lote/Número de serie"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/models/account.py:0
+#: model:ir.model.fields,field_description:perso_cfon.field_account_bank_statement_line__origin_rebu_move_id
+#: model:ir.model.fields,field_description:perso_cfon.field_account_move__origin_rebu_move_id
+#: model:ir.model.fields,field_description:perso_cfon.field_account_payment__origin_rebu_move_id
+#, python-format
+msgid "Original Invoice"
+msgstr "Factura Origen"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/models/account.py:0
+#: model:ir.model.fields,field_description:perso_cfon.field_account_bank_statement_line__rebu_reversal_origin_id
+#: model:ir.model.fields,field_description:perso_cfon.field_account_move__rebu_reversal_origin_id
+#: model:ir.model.fields,field_description:perso_cfon.field_account_payment__rebu_reversal_origin_id
+#, python-format
+msgid "Original REBU"
+msgstr "REBU Origen"
+
+#. module: perso_cfon
+#: model:ir.model,name:perso_cfon.model_product_template
+msgid "Product"
+msgstr "Producto"
+
+#. module: perso_cfon
+#: model:ir.model,name:perso_cfon.model_purchase_order
+msgid "Purchase Order"
+msgstr "Pedido de compra"
+
+#. module: perso_cfon
+#: model:ir.model,name:perso_cfon.model_purchase_order_line
+msgid "Purchase Order Line"
+msgstr "Línea de pedido de compra"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/models/stock.py:0
+#: model:ir.model.fields,field_description:perso_cfon.field_stock_lot__purchase_price
+#, python-format
+msgid "Purchase Product Price"
+msgstr "Precio de compra del producto"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/models/account.py:0
+#: model:ir.model.fields,field_description:perso_cfon.field_account_bank_statement_line__rebu_entry_id
+#: model:ir.model.fields,field_description:perso_cfon.field_account_move__rebu_entry_id
+#: model:ir.model.fields,field_description:perso_cfon.field_account_payment__rebu_entry_id
+#, python-format
+msgid "REBU Entry"
+msgstr "Asiento REBU"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/models/res_company.py:0
+#: model:ir.model.fields,field_description:perso_cfon.field_res_company__rebu_journal_id
+#, python-format
+msgid "REBU Journal for entries"
+msgstr "Diario para asientos de REBU"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/models/account.py:0
+#, python-format
+msgid "REBU Origin"
+msgstr "REBU Origen"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/models/account.py:0
+#, python-format
+msgid "REBU Reversal"
+msgstr "Rectificativa REBU"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/models/product.py:0
+#: model:ir.model.fields,field_description:perso_cfon.field_product_product__rebu_tax_id
+#: model:ir.model.fields,field_description:perso_cfon.field_product_template__rebu_tax_id
+#, python-format
+msgid "REBU Tax"
+msgstr "Impuesto para REBU"
+
+#. module: perso_cfon
+#: model:ir.model.fields,field_description:perso_cfon.field_account_move_reversal__rebu_move_ids
+msgid "Rebu Move"
+msgstr "REBU"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/models/account.py:0
+#: model:ir.model.fields,field_description:perso_cfon.field_account_bank_statement_line__rebu_reversal_id
+#: model:ir.model.fields,field_description:perso_cfon.field_account_move__rebu_reversal_id
+#: model:ir.model.fields,field_description:perso_cfon.field_account_payment__rebu_reversal_id
+#, python-format
+msgid "Reversal REBU"
+msgstr "Rectificativa REBU"
+
+#. module: perso_cfon
+#: model:ir.model,name:perso_cfon.model_sale_advance_payment_inv
+msgid "Sales Advance Payment Invoice"
+msgstr "Ventas. Anticipo pago factura"
+
+#. module: perso_cfon
+#: model:ir.model,name:perso_cfon.model_sale_order
+msgid "Sales Order"
+msgstr "Pedido de venta"
+
+#. module: perso_cfon
+#. odoo-python
+#: code:addons/perso_cfon/wizard/account_move_reversal.py:0
+#, python-format
+msgid "This entry has been %s"
+msgstr "Este asiento se ha %s"
+
+#. module: perso_cfon
+#: model:ir.model,name:perso_cfon.model_stock_picking
+msgid "Transfer"
+msgstr "Albarán"
+
+#. module: perso_cfon
+#: model:account.report.line,name:perso_cfon.nmod_390_casilla_227
+msgid ""
+"[227] Operaciones en régimen especial de bienes usados, objetos de arte, "
+"antigüedades y objetos de colección"
+msgstr ""
+
+#. module: perso_cfon
+#: model:account.report.line,name:perso_cfon.nmod_303_casilla_97
+msgid ""
+"[97] Operaciones en régimen especial de bienes usados, objetos de arte, "
+"antigüedades y objetos de colección"
+msgstr ""
+
+#. module: perso_cfon
+#: model:account.account.tag,name:perso_cfon.balance_mod303_casilla_97
+msgid "mod303[97]"
+msgstr ""
+
+#. module: perso_cfon
+#: model:account.account.tag,name:perso_cfon.balance_mod390_casilla_227
+msgid "mod390[227]"
+msgstr ""

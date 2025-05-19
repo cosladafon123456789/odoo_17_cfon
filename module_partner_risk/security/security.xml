@@ -1,0 +1,9 @@
+<odoo>
+    <data>
+
+        <record id="partner_risk_security" model="res.groups">
+            <field name="name">Allow edit partner risk fields</field>
+        </record>        
+
+    </data>
+</odoo>

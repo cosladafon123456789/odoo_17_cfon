@@ -1,0 +1,21 @@
+id,sequence,description,invoice_label,type_tax_use,name,description@es,amount,amount_type,tax_group_id,analytic,l10n_es_type,l10n_es_exempt_reason,l10n_es_bien_inversion,tax_scope,include_base_amount,repartition_line_ids/repartition_type,repartition_line_ids/tag_ids,repartition_line_ids/document_type,repartition_line_ids/account_id,repartition_line_ids/factor_percent,invoice_label@es,children_tax_ids
+account_tax_template_s_iva0_b,,VAT Exempt (Goods),VAT Exempt,sale,0% EXEMPT Bienes,IVA Exento (Bienes),0.0,percent,tax_group_iva_0,,exento,,,,,base,,invoice,,,IVA Exento Bienes,
+,,,,,,,,,,,,,,,,tax,,invoice,account_common_472,,,
+,,,,,,,,,,,,,,,,base,,refund,,,,
+,,,,,,,,,,,,,,,,tax,,refund,account_common_472,,,
+account_tax_template_s_iva0_s,,VAT Exempt (Services),VAT Exempt,sale,0% EXEMPT Servicios,IVA Exento (Servicios),0.0,percent,tax_group_iva_0,,exento,,,,,base,,invoice,,,IVA Exento Servicios,
+,,,,,,,,,,,,,,,,tax,,invoice,account_common_472,,,
+,,,,,,,,,,,,,,,,base,,refund,,,,
+,,,,,,,,,,,,,,,,tax,,refund,account_common_472,,,
+account_tax_template_p_iva4_ibi_group,,VAT 4% import DUA BI,,purchase,4% EX G Group DUA BI,IVA 4% Importaciones DUA bienes de inversión,0.0,group,tax_group_iva_0,,,,,consu,,base,,invoice,,,,"account_tax_template_p_iva_isub,account_tax_template_p_iva4_ibi"
+,,,,,,,,,,,,,,,,tax,,invoice,,,,
+,,,,,,,,,,,,,,,,base,,refund,,,,
+,,,,,,,,,,,,,,,,tax,,refund,,,,
+account_tax_template_p_iva10_ibi_group,,VAT 10% import DUA BI,,purchase,10% EX G Group DUA BI,IVA 10% Importaciones DUA bienes de inversión,0.0,group,tax_group_iva_0,,,,,consu,,base,,invoice,,,,"account_tax_template_p_iva_isub,account_tax_template_p_iva10_ibi"
+,,,,,,,,,,,,,,,,tax,,invoice,,,,
+,,,,,,,,,,,,,,,,base,,refund,,,,
+,,,,,,,,,,,,,,,,tax,,refund,,,,
+account_tax_template_p_iva21_ibi_group,,VAT 21% import DUA BI,,purchase,21% EX G DUA BI,IVA 21% Importaciones DUA bienes de inversión,0.0,group,tax_group_iva_0,,,,,consu,,base,,invoice,,,,"account_tax_template_p_iva_isub,account_tax_template_p_iva21_ibi"
+,,,,,,,,,,,,,,,,tax,,invoice,,,,
+,,,,,,,,,,,,,,,,base,,refund,,,,
+,,,,,,,,,,,,,,,,tax,,refund,,,,
