@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_purchase_order_form_inherit_warranty" model="ir.ui.view">
+        <field name="name">purchase.order.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_ref']" position="after">
+                <field name="warranty_period" string="Warranty Period" readonly="state in ['cancel', 'done', 'purchase']"/> 
+                <field name="warranty_expiry_date"/>              
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='taxes_id']" position="after">
+                <field name="expiry_date"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

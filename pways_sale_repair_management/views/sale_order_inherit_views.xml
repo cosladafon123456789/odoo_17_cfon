@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="inherit_res_partner_form" model="ir.ui.view">
+        <field name="name">sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_quotation_send']"  position="before">
+                <button name="button_recieved"
+                        string="Received"
+                        type="object"
+                        invisible="delivery_check == False or delivery_done == True"
+                        class="btn-primary"/>
+
+                <button name="button_create_repair_order"
+                        string="Create Repair"
+                        type="object"
+                        invisible="delivery_done != True"
+                        class="btn-primary"
+                        data-hotkey="q"/>
+
+                <button name="button_replace"
+                        string="Replace"
+                        type="object"
+                        invisible="delivery_done != True"
+                        class="btn-primary"/>
+
+                <button name="button_refund"
+                        string="Refund"
+                        type="object"
+                        invisible="delivery_done != True"
+                        class="btn-primary"/>
+
+                <button name="button_return_to_customer"
+                        string="Return to Customer"
+                        type="object"
+                        invisible="delivery_done != True"
+                        class="btn-primary"/>
+
+                <button name="button_rma"
+                        string="RMA"
+                        type="object"
+                        invisible="delivery_done != True"
+                        class="btn-primary"/>
+            </xpath>
+            <xpath expr="//button[@name='action_view_delivery']" position="after">
+                <button name="button_view_replace_orders"
+                    type="object"
+                    class="oe_stat_button"
+                    invisible="replace_count == 0"
+                    icon="fa-wrench">
+                    <field name="replace_count" widget="statinfo" string="Replace Order"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="is_warranty" readonly="state in ['cancel', 'sale', 'sent']"></field>
+                <field name="warranty_period" invisible="not is_warranty" string="Warranty Period" readonly="state in ['cancel', 'sale', 'sent']"/> 
+                <field name="warranty_expiry_date" invisible="not is_warranty"/>              
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_template_id']" position="before">
+                <field name="create_repair_order" widget="many2many_custom_widget"/>
+            </xpath>
+        </field>
+    </record>
+
+
+
+</odoo>
