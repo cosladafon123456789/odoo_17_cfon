@@ -11,6 +11,11 @@
                         type="object"
                         invisible="delivery_check == False or delivery_done == True"
                         class="btn-primary"/>
+                    
+                <!-- <button name="button_all_action"
+                        string="All Action"
+                        type="object"
+                        class="btn-primary"/> -->
 
                 <button name="button_create_repair_order"
                         string="Create Repair"
@@ -53,9 +58,9 @@
                 </button>
             </xpath>
             <xpath expr="//field[@name='partner_id']" position="after">
-                <field name="is_warranty" readonly="state in ['cancel', 'sale', 'sent']"></field>
+                <!-- <field name="is_warranty" readonly="state in ['cancel', 'sale', 'sent']"></field>
                 <field name="warranty_period" invisible="not is_warranty" string="Warranty Period" readonly="state in ['cancel', 'sale', 'sent']"/> 
-                <field name="warranty_expiry_date" invisible="not is_warranty"/>
+                <field name="warranty_expiry_date" invisible="not is_warranty"/> -->
                 <field name="delivery_check" invisible="1"/>
                 <field name="delivery_done" invisible="1"/>
             </xpath>
