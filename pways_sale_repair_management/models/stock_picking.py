@@ -61,7 +61,5 @@ class RepairOrder(models.Model):
 class ResPartnerInherit(models.Model):
     _inherit = 'res.partner'
 
-    warranty_period = fields.Selection(
-        [('30', '30 Days'), ('60', '60 Days'), ('90', '90 Days')],
-        string='Warranty Period')
+    warranty_period = fields.Float(string='Warranty Period (Days)')
 

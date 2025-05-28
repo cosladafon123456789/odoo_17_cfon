@@ -7,36 +7,33 @@ from datetime import timedelta
 
 
 class PurchaseOrderInherit(models.Model):
-    _inherit = 'purchase.order'
+	_inherit = 'purchase.order'
 
-    is_warranty = fields.Boolean('Warranty')
-    warranty_period = fields.Selection(
-        [('30', '30 Days'), ('60', '60 Days'), ('90', '90 Days')],
-        string='Warranty Period',
-        # compute='_compute_warranty_period',
-        store=True
-    )
-    warranty_expiry_date = fields.Date(
-        string='Expiry Date',
-        compute='_compute_warranty_expiry',
-        store=True
-    )
+	is_warranty = fields.Boolean('Warranty')
+	warranty_period = fields.Float(
+		string='Warranty Period (Days)',
+		compute='_compute_warranty_period',
+		store=True
+	)
+	warranty_expiry_date = fields.Date(
+		string='Expiry Date',
+		compute='_compute_warranty_expiry',
+		store=True
+	)
 
-    # @api.depends('partner_id', 'partner_id.warranty_period')
-    # def _compute_warranty_period(self):
-    #     for po in self:
-    #         po.warranty_period = po.partner_id.warranty_period
+	@api.depends('partner_id', 'partner_id.warranty_period')
+	def _compute_warranty_period(self):
+		for po in self:
+			po.warranty_period = po.partner_id.warranty_period or 0.0
 
-    @api.depends('warranty_period', 'date_order')
-    def _compute_warranty_expiry(self):
-        for po in self:
-            if po.warranty_period and po.date_order:
-                days = int(po.warranty_period)
-                # date_order is a datetime; convert to date if needed
-                order_date = fields.Date.to_date(po.date_order)
-                po.warranty_expiry_date = order_date + timedelta(days=days)
-            else:
-                po.warranty_expiry_date = False
+	@api.depends('warranty_period', 'date_order')
+	def _compute_warranty_expiry(self):
+		for po in self:
+			if po.warranty_period and po.date_order:
+				order_date = fields.Date.to_date(po.date_order)
+				po.warranty_expiry_date = order_date + timedelta(days=po.warranty_period)
+			else:
+				po.warranty_expiry_date = False
 
 
 class PurchaseOrderLineInherit(models.Model):

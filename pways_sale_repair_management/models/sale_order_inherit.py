@@ -15,6 +15,17 @@ class SaleOrder(models.Model):
 	delivery_check = fields.Boolean("Check Delivery", compute='_compute_delivery_check')
 	delivery_done = fields.Boolean('Delivery Done', default=False)
 	is_warranty = fields.Boolean('Warranty')
+	repair_status = fields.Selection(
+	[
+		('received', 'Received'),
+		('replace', 'Replace'),
+		('refund', 'Refund'),
+		('return_to_customer', 'Return to Customer'),
+		('rma', 'RMA')
+	],
+	string='Repair Status'
+	)
+
 	# warranty_period = fields.Selection(
 	#     [('30', '30 Days'), ('60', '60 Days'), ('90', '90 Days')],
 	#     string='Warranty Period',
@@ -35,6 +46,7 @@ class SaleOrder(models.Model):
 	#             po.warranty_expiry_date = False
 
 	def button_recieved(self):
+		self.repair_status = 'received'
 		self.delivery_done = True
 		return True
 

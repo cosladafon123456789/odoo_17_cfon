@@ -112,6 +112,7 @@ class RepairActionWizard(models.TransientModel):
 
 		msg_body = _('Your Products are in Warranty, Sent Successfully to RMA %s') % in_order.name
 		sale.message_post(body=msg_body)
+		sale.repair_status = 'rma'
 
 		return True
 
@@ -251,6 +252,7 @@ class RepairActionWizard(models.TransientModel):
 
 			msg_body_out = _('Order Successfully Returned to Customer OUT Picking %s') % picking_out.name
 			sale.message_post(body=msg_body_out)
+			sale.repair_status = 'return_to_customer'
 
 		return True
 
@@ -334,6 +336,7 @@ class RepairActionWizard(models.TransientModel):
 				action['context'] = {'default_move_type':  moves_to_redirect.mapped('move_type').pop()}
 
 		sale.message_post(body=_('Customer Credit Note Created.'))
+		sale.repair_status = 'refund'
 		return action
 
 
@@ -475,6 +478,7 @@ class RepairActionWizard(models.TransientModel):
 
 			msg_body_out = _('Order Successfully Returned to Customer OUT Picking %s') % picking_out.name
 			sale.message_post(body=msg_body_out)
+			sale.repair_status = 'replace'
 
 		return True
 
