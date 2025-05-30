@@ -1,0 +1,911 @@
+# -*- coding: utf-8 -*-
+from odoo import api, fields, models, _, SUPERUSER_ID
+from collections import defaultdict
+from odoo.exceptions import ValidationError
+from datetime import date
+from datetime import timedelta
+from collections import defaultdict
+
+
+class SaleOrder(models.Model):
+	_inherit = "sale.order"
+
+	repair_check_count = fields.Integer(string="Count", compute="_compute_repair_check_count")
+	replace_count = fields.Integer(string="Replace Count", compute="_compute_replace_count")
+	delivery_check = fields.Boolean("Check Delivery", compute='_compute_delivery_check')
+	delivery_done = fields.Boolean('Delivery Done', default=False)
+	is_warranty = fields.Boolean('Warranty')
+	repair_status = fields.Selection(
+	[
+		('received', 'Recibido'),
+		('replace', 'Reemplazar'),
+		('refund', 'Reembolsar'),
+		('return_to_customer', 'Devolver Al Cliente'),
+		('rma', 'RMA')
+	],
+	string='Repair Status'
+	)
+
+	# warranty_period = fields.Selection(
+	#     [('30', '30 Days'), ('60', '60 Days'), ('90', '90 Days')],
+	#     string='Warranty Period',
+	#     store=True)
+	# warranty_expiry_date = fields.Date(
+	#     string='Expiry Date',
+	#     compute='_compute_warranty_expiry',
+	#     store=True)
+
+	# @api.depends('warranty_period', 'date_order')
+	# def _compute_warranty_expiry(self):
+	#     for po in self:
+	#         if po.warranty_period and po.date_order:
+	#             days = int(po.warranty_period)
+	#             order_date = fields.Date.to_date(po.date_order)
+	#             po.warranty_expiry_date = order_date + timedelta(days=days)
+	#         else:
+	#             po.warranty_expiry_date = False
+
+	def button_recieved(self):
+		self.repair_status = 'received'
+		self.delivery_done = True
+		msg_body = _('The customer has received the products.')
+		self.message_post(body=msg_body)
+		return True
+
+	# def button_replace(self):
+	# 	self.ensure_one()
+	# 	repair_lines = self.order_line.filtered(lambda l: l.create_repair_order)
+		
+	# 	if not repair_lines:
+	# 		raise ValidationError("No lines are selected to create replace order.")
+		
+	# 	wizard = self.env['replace.order.wizard'].create({
+	# 	})
+		
+	# 	for line in repair_lines:
+	# 		self.env['replace.order.line.wizard'].create({
+	# 			'replace_order_id': wizard.id,
+	# 			'product_id': line.product_id.id,
+	# 		})
+
+	# 	return {
+	# 		'name': 'Create Replace Order',
+	# 		'type': 'ir.actions.act_window',
+	# 		'res_model': 'replace.order.wizard',
+	# 		'view_mode': 'form',
+	# 		'res_id': wizard.id,
+	# 		'target': 'new',
+	# 	}
+
+	def button_replace(self):
+		self.ensure_one()
+
+		repair_lines = self.order_line.filtered(lambda l: l.create_repair_order)
+		if not repair_lines:
+			raise ValidationError(_("No lines are selected to create replace order."))
+
+		wizard = self.env['repair.action.wizard'].create({
+			'action_type': 'replace',
+			'order_id': self.id,
+		})
+
+		deliveries = self.picking_ids.filtered(
+			lambda p: p.picking_type_id.code == 'outgoing' and p.state == 'done'
+		)
+
+		lot_lines = deliveries.mapped('move_line_ids').filtered(
+			lambda ml: ml.product_id.tracking != 'none' and ml.lot_id
+		)
+
+		product_lot_qty_map = defaultdict(float)
+		for ml in lot_lines:
+			product_lot_qty_map[(ml.product_id.id, ml.lot_id.id, ml.move_id.sale_line_id.id, ml.move_id.id)] += ml.quantity
+		print('Step 3 - Product/Lot/Qty map:', product_lot_qty_map)
+		lot_wise_dict = {}
+		for line in self.order_line:
+			if line.qty_delivered_method == 'stock_move':
+				outgoing_moves, incoming_moves = line._get_outgoing_incoming_moves()
+				print(incoming_moves)
+				out_move_lines = outgoing_moves.mapped('move_line_ids')
+				in_move_lines = incoming_moves.mapped('move_line_ids')
+				for move_line in out_move_lines:
+					if move_line.move_id.state == 'done' and move_line.lot_id:
+						lot = move_line.lot_id
+						print("out", lot, move_line.quantity)
+						lot_wise_dict[lot.id] = lot_wise_dict.get(lot.id, 0.0) + move_line.quantity
+
+				for move_line in in_move_lines:
+					if move_line.move_id.state == 'done' and move_line.lot_id:
+						print("Incoming Lines", move_line)
+						lot = move_line.lot_id
+						if lot_wise_dict.get(lot.id, False):
+							lot_wise_dict[lot.id] -= move_line.quantity
+		created = False
+		for (product_id, lot_id, line_id, move_id), qty in product_lot_qty_map.items():
+			print('lot_id, lot_wise_dict',lot_id, lot_wise_dict)
+			quantity = lot_wise_dict[lot_id]
+			print('quantity***************',quantity)
+			if quantity > 0:
+				quant = self.env['stock.quant'].search([
+					('product_id', '=', product_id),
+					('lot_id', '=', lot_id),
+					('location_id.usage', '=', 'customer'),
+					('quantity', '>=', qty)
+				], limit=1)
+				print('Checking quant:', quant)
+
+				if quant:
+					repair_action_line = self.env['repair.action.line.wizard'].create({
+						'repair_action_id': wizard.id,
+						'product_id': product_id,
+						'lot_id': lot_id,
+						'sale_line_id': line_id,
+						'move_id': move_id, 
+						'quantity': quantity,
+					})
+					print('repair_action_line>>>>>>>>>>',repair_action_line)
+					created = True
+
+		if not created:
+			raise ValidationError(_("You don't have products to create Replace"))
+
+		# product_lot_qty_map = defaultdict(float)
+		# for ml in lot_lines:
+		# 	product_lot_qty_map[(ml.product_id.id, ml.lot_id.id)] += ml.quantity
+
+		# product_order = [line.product_id.id for line in self.order_line if line.create_repair_order]
+
+		# sorted_items = sorted(
+		# 	product_lot_qty_map.items(),
+		# 	key=lambda x: product_order.index(x[0][0]) if x[0][0] in product_order else float('inf')
+		# )
+
+		# for (product_id, lot_id), qty in sorted_items:
+		# 	if product_id in product_order:
+		# 		quant = self.env['stock.quant'].search([
+		# 			('product_id', '=', product_id),
+		# 			('lot_id', '=', lot_id),
+		# 			('location_id.usage', '=', 'customer'),
+		# 			('quantity', '>=', qty)
+		# 		], limit=1)
+		# 		print('quant>>>>>>>>>>>>>',quant)
+
+		# 		if quant:
+		# 			self.env['repair.action.line.wizard'].create({
+		# 				'repair_action_id': wizard.id,
+		# 				'product_id': product_id,
+		# 				'lot_id': lot_id,
+		# 				'quantity': qty,
+		# 			})
+
+		return {
+			'name': 'All Action Order',
+			'type': 'ir.actions.act_window',
+			'res_model': 'repair.action.wizard',
+			'view_mode': 'form',
+			'res_id': wizard.id,
+			'target': 'new',
+			'context': {
+				'default_order_id': self.id,
+				'default_action_type': 'replace',
+			}
+		}
+
+
+	# def button_all_action(self):
+	# 	self.ensure_one()
+
+	# 	repair_lines = self.order_line.filtered(lambda l: l.create_repair_order)
+	# 	if not repair_lines:
+	# 		raise ValidationError("No lines are selected to create replace order.")
+
+	# 	wizard = self.env['repair.action.wizard'].create({
+	# 		'action_type': 'refund',
+	# 		'order_id': self.id,
+	# 	})
+
+	# 	deliveries = self.picking_ids.filtered(
+	# 		lambda p: p.picking_type_id.code == 'outgoing' and p.state == 'done'
+	# 	)
+
+	# 	lot_lines = deliveries.mapped('move_line_ids').filtered(
+	# 		lambda ml: ml.product_id.tracking != 'none' and ml.lot_id
+	# 	)
+
+	# 	product_lot_qty_map = defaultdict(float)
+	# 	for ml in lot_lines:
+	# 		product_lot_qty_map[(ml.product_id.id, ml.lot_id.id)] += ml.quantity
+
+	# 	product_order = [line.product_id.id for line in self.order_line if line.create_repair_order]
+
+	# 	sorted_items = sorted(
+	# 		product_lot_qty_map.items(),
+	# 		key=lambda x: product_order.index(x[0][0]) if x[0][0] in product_order else float('inf')
+	# 	)
+
+	# 	for (product_id, lot_id), qty in sorted_items:
+	# 		if product_id in product_order:
+	# 			quant = self.env['stock.quant'].search([
+	# 				('product_id', '=', product_id),
+	# 				('lot_id', '=', lot_id),
+	# 				('location_id.usage', '=', 'customer'),
+	# 				('quantity', '>=', qty)
+	# 			], limit=1)
+	# 			print('quant>>>>>>>>>>>>>',quant)
+
+	# 			if quant:
+	# 				self.env['repair.action.line.wizard'].create({
+	# 					'repair_action_id': wizard.id,
+	# 					'product_id': product_id,
+	# 					'lot_id': lot_id,
+	# 					'quantity': qty,
+	# 				})
+
+	# 	return {
+	# 		'name': 'All Action Order',
+	# 		'type': 'ir.actions.act_window',
+	# 		'res_model': 'repair.action.wizard',
+	# 		'view_mode': 'form',
+	# 		'res_id': wizard.id,
+	# 		'target': 'new',
+	# 		'context': {
+	# 			'default_order_id': self.id,
+	# 			'default_action_type': 'refund',
+	# 		}
+	# 	}
+
+
+
+	# def _prepare_default_reversal(self, move):
+	# 	reverse_date = date.today()
+	# 	account_data = self.env['account.move'].search([('invoice_origin', '=', self.name),('move_type', '=', 'out_invoice')])
+	# 	mixed_payment_term = move.invoice_payment_term_id.id if move.invoice_payment_term_id.early_pay_discount_computation == 'mixed' else None
+	# 	return {
+	# 		'ref': _('Reversal of: %(move_name)s, (Refund)', move_name=move.name),
+	# 		'date': reverse_date,
+	# 		'invoice_date_due': reverse_date,
+	# 		'invoice_date': move.is_invoice(include_receipts=True) and (reverse_date or move.date) or False,
+	# 		'journal_id': account_data.journal_id.id,
+	# 		'invoice_payment_term_id': mixed_payment_term,
+	# 		'invoice_user_id': move.invoice_user_id.id,
+	# 		'auto_post': 'at_date' if reverse_date > fields.Date.context_today(self) else 'no',
+	# 	}
+
+	# def reverse_moves(self, is_modify=False):
+	# 	self.ensure_one()
+	# 	moves = self.invoice_ids
+
+	# 	# Create default values.
+	# 	default_values_list = []
+	# 	for move in moves:
+	# 		default_values_list.append(self._prepare_default_reversal(move))
+
+	# 	batches = [
+	# 		[self.env['account.move'], [], True],   # Moves to be cancelled by the reverses.
+	# 		[self.env['account.move'], [], False],  # Others.
+	# 	]
+	# 	for move, default_vals in zip(moves, default_values_list):
+	# 		is_auto_post = default_vals.get('auto_post') != 'no'
+	# 		is_cancel_needed = not is_auto_post and is_modify
+	# 		batch_index = 0 if is_cancel_needed else 1
+	# 		batches[batch_index][0] |= move
+	# 		batches[batch_index][1].append(default_vals)
+
+	# 	# Handle reverse method.
+	# 	moves_to_redirect = self.env['account.move']
+	# 	for moves, default_values_list, is_cancel_needed in batches:
+	# 		new_moves = moves._reverse_moves(default_values_list, cancel=is_cancel_needed)
+	# 		moves._message_log_batch(
+	# 			bodies={move.id: _('This entry has been %s', reverse._get_html_link(title=_("reversed"))) for move, reverse in zip(moves, new_moves)}
+	# 		)
+
+	# 		if is_modify:
+	# 			moves_vals_list = []
+	# 			for move in moves.with_context(include_business_fields=True):
+	# 				moves_vals_list.append(move.copy_data({'date': reverse_date})[0])
+	# 			new_moves = self.env['account.move'].create(moves_vals_list)
+
+	# 		moves_to_redirect |= new_moves
+
+	# 	# self.new_move_ids = moves_to_redirect
+
+	# 	# Create action.
+	# 	action = {
+	# 		'name': _('Reverse Moves'),
+	# 		'type': 'ir.actions.act_window',
+	# 		'res_model': 'account.move',
+	# 	}
+	# 	if len(moves_to_redirect) == 1:
+	# 		action.update({
+	# 			'view_mode': 'form',
+	# 			'res_id': moves_to_redirect.id,
+	# 			'context': {'default_move_type':  moves_to_redirect.move_type},
+	# 		})
+	# 	else:
+	# 		action.update({
+	# 			'view_mode': 'tree,form',
+	# 			'domain': [('id', 'in', moves_to_redirect.ids)],
+	# 		})
+	# 		if len(set(moves_to_redirect.mapped('move_type'))) == 1:
+	# 			action['context'] = {'default_move_type':  moves_to_redirect.mapped('move_type').pop()}
+	# 	msg_body = _('Customer Credit Note Created.')
+	# 	self.message_post(body=msg_body)
+	# 	return action
+	
+	def button_refund(self):
+		self.ensure_one()
+
+		repair_lines = self.order_line.filtered(lambda l: l.create_repair_order)
+		if not repair_lines:
+			raise ValidationError(_("No lines are selected to create Refund."))
+
+		wizard = self.env['repair.action.wizard'].create({
+			'action_type': 'refund',
+			'order_id': self.id,
+		})
+
+		deliveries = self.picking_ids.filtered(
+			lambda p: p.picking_type_id.code == 'outgoing' and p.state == 'done'
+		)
+
+		lot_lines = deliveries.mapped('move_line_ids').filtered(
+			lambda ml: ml.product_id.tracking != 'none' and ml.lot_id
+		)
+
+		product_lot_qty_map = defaultdict(float)
+		for ml in lot_lines:
+			product_lot_qty_map[(ml.product_id.id, ml.lot_id.id, ml.move_id.sale_line_id.id, ml.move_id.id)] += ml.quantity
+		print('Step 3 - Product/Lot/Qty map:', product_lot_qty_map)
+		lot_wise_dict = {}
+		for line in self.order_line:
+			if line.qty_delivered_method == 'stock_move':
+				outgoing_moves, incoming_moves = line._get_outgoing_incoming_moves()
+				print(incoming_moves)
+				out_move_lines = outgoing_moves.mapped('move_line_ids')
+				in_move_lines = incoming_moves.mapped('move_line_ids')
+				for move_line in out_move_lines:
+					if move_line.move_id.state == 'done' and move_line.lot_id:
+						lot = move_line.lot_id
+						print("out", lot, move_line.quantity)
+						lot_wise_dict[lot.id] = lot_wise_dict.get(lot.id, 0.0) + move_line.quantity
+
+				for move_line in in_move_lines:
+					if move_line.move_id.state == 'done' and move_line.lot_id:
+						print("Incoming Lines", move_line)
+						lot = move_line.lot_id
+						if lot_wise_dict.get(lot.id, False):
+							lot_wise_dict[lot.id] -= move_line.quantity
+		created = False
+		for (product_id, lot_id, line_id, move_id), qty in product_lot_qty_map.items():
+			print('lot_id, lot_wise_dict',lot_id, lot_wise_dict)
+			quantity = lot_wise_dict[lot_id]
+			print('quantity***************',quantity)
+			if quantity > 0:
+				print("product_id, Lot , Quantity, ",product_id, lot_id,quantity )
+				quant = self.env['stock.quant'].search([
+					('product_id', '=', product_id),
+					('lot_id', '=', lot_id),
+					('location_id.usage', '=', 'customer'),
+					('quantity', '>=', quantity)
+				], limit=1)
+				print('Checking quant:', quant)
+
+				if quant:
+					repair_action_line = self.env['repair.action.line.wizard'].create({
+						'repair_action_id': wizard.id,
+						'product_id': product_id,
+						'lot_id': lot_id,
+						'sale_line_id': line_id,
+						'move_id': move_id, 
+						'quantity': quantity,
+					})
+					print('repair_action_line>>>>>>>>>>',repair_action_line)
+					created = True
+
+		if not created:
+			raise ValidationError(_("You don't have products to create Refund."))
+
+		# product_lot_qty_map = defaultdict(float)
+		# for ml in lot_lines:
+		# 	product_lot_qty_map[(ml.product_id.id, ml.lot_id.id)] += ml.quantity
+
+		# product_order = [line.product_id.id for line in self.order_line if line.create_repair_order]
+
+		# sorted_items = sorted(
+		# 	product_lot_qty_map.items(),
+		# 	key=lambda x: product_order.index(x[0][0]) if x[0][0] in product_order else float('inf')
+		# )
+
+		# for (product_id, lot_id), qty in sorted_items:
+		# 	if product_id in product_order:
+		# 		quant = self.env['stock.quant'].search([
+		# 			('product_id', '=', product_id),
+		# 			('lot_id', '=', lot_id),
+		# 			('location_id.usage', '=', 'customer'),
+		# 			('quantity', '>=', qty)
+		# 		], limit=1)
+		# 		print('quant>>>>>>>>>>>>>',quant)
+
+		# 		if quant:
+		# 			self.env['repair.action.line.wizard'].create({
+		# 				'repair_action_id': wizard.id,
+		# 				'product_id': product_id,
+		# 				'lot_id': lot_id,
+		# 				'quantity': qty,
+		# 			})
+
+		return {
+			'name': 'All Action Order',
+			'type': 'ir.actions.act_window',
+			'res_model': 'repair.action.wizard',
+			'view_mode': 'form',
+			'res_id': wizard.id,
+			'target': 'new',
+			'context': {
+				'default_order_id': self.id,
+				'default_action_type': 'refund',
+			}
+		}
+	
+	# def action_return_to_customer(self):
+	# 	"""In Order"""
+	# 	stock_picking_model = self.env['stock.picking']
+
+	# 	so_picking_id = stock_picking_model.search(
+	# 		[('sale_id', '=', self.id)],
+	# 		limit=1
+	# 	)
+
+	# 	# --- Incoming Picking (In Order) ---
+	# 	picking_type_in = self.env['stock.picking.type'].search(
+	# 		[('code', '=', 'incoming')], limit=1)
+	
+	# 	for line in self.order_line.filtered('create_repair_order'):
+	# 		line_data = [(0, 0, {
+	# 			'product_id': line.product_id.id,
+	# 			'product_uom_qty': line.product_uom_qty,
+	# 			'product_uom': line.product_uom.id,
+	# 			'location_id': so_picking_id.location_dest_id.id,
+	# 			'location_dest_id': so_picking_id.location_id.id,
+	# 			'name': line.product_id.name,
+	# 			'sale_line_id': line.id,
+	# 		})]
+	# 		vals_in = {
+	# 			'sale_id': self.id,
+	# 			'origin': self.name,
+	# 			'move_ids_without_package': line_data,
+	# 			'partner_id': self.partner_id.id,
+	# 			'location_id': so_picking_id.location_dest_id.id,
+	# 			'location_dest_id': so_picking_id.location_id.id,
+	# 			'picking_type_id': picking_type_in.id,
+	# 			'group_id': self.procurement_group_id.id,
+	# 		}
+	# 		print('vals_in////////////',vals_in)
+	# 		print("Self ><><><><>>>>>>>>>>>>>>>>",self.name)
+	# 		in_order = stock_picking_model.create(vals_in)
+	# 		if self.procurement_group_id:
+	# 			in_order.write({'group_id': self.procurement_group_id.id})
+	# 		print(in_order.group_id.id)
+	# 		msg_body = _('Order Successfully Returned to Customer IN Order %s',in_order.name)
+	# 		self.message_post(body=msg_body)
+			
+	# 	# --- Outgoing Picking (OUt Order) ---
+	# 	picking_type_out = self.env['stock.picking.type'].search(
+	# 		[('code', '=', 'outgoing')], limit=1)
+	# 	for line in self.order_line.filtered('create_repair_order'):
+	# 		line_data = [(0, 0, {
+	# 			'product_id': line.product_id.id,
+	# 			'product_uom_qty': line.product_uom_qty,
+	# 			'product_uom': line.product_uom.id,
+	# 			'location_id': so_picking_id.location_id.id,
+	# 			'location_dest_id': so_picking_id.location_dest_id.id,
+	# 			'name': line.product_id.name,
+	# 			'sale_line_id': line.id,
+	# 		})]
+	# 		vals_out = {
+	# 			'sale_id': self.id,
+	# 			'origin': self.name,
+	# 			'move_ids_without_package': line_data,
+	# 			'partner_id': self.partner_id.id,
+	# 			'location_id': so_picking_id.location_id.id,
+	# 			'location_dest_id': so_picking_id.location_dest_id.id,
+	# 			'picking_type_id': picking_type_out.id,
+	# 			'group_id': self.procurement_group_id.id,
+	# 		}
+	# 		print('vals_out\\\\\\\\\\\\\\',vals_out)
+	# 		out_order = stock_picking_model.create(vals_out)
+	# 		if self.procurement_group_id:
+	# 			out_order.write({'group_id': self.procurement_group_id.id})
+	# 		print(out_order.group_id.id)
+	# 		msg_body = _('Order Successfully Returned to Customer Out Order %s',out_order.name)
+	# 		self.message_post(body=msg_body)
+	# 		print('called  action------------->>>>>')
+			
+	# 	return True
+	
+
+	def button_return_to_customer(self):
+		self.ensure_one()
+
+		repair_lines = self.order_line.filtered(lambda l: l.create_repair_order)
+		if not repair_lines:
+			raise ValidationError(_("No lines are selected to create Return order to Customer."))
+
+		wizard = self.env['repair.action.wizard'].create({
+			'action_type': 'return_to_customer',
+			'order_id': self.id,
+		})
+
+		deliveries = self.picking_ids.filtered(
+			lambda p: p.picking_type_id.code == 'outgoing' and p.state == 'done'
+		)
+
+		lot_lines = deliveries.mapped('move_line_ids').filtered(
+			lambda ml: ml.product_id.tracking != 'none' and ml.lot_id
+		)
+
+		product_lot_qty_map = defaultdict(float)
+		for ml in lot_lines:
+			product_lot_qty_map[(ml.product_id.id, ml.lot_id.id, ml.move_id.sale_line_id.id, ml.move_id.id)] += ml.quantity
+		print('Step 3 - Product/Lot/Qty map:', product_lot_qty_map)
+		lot_wise_dict = {}
+		for line in self.order_line:
+			if line.qty_delivered_method == 'stock_move':
+				outgoing_moves, incoming_moves = line._get_outgoing_incoming_moves()
+				print(incoming_moves)
+				out_move_lines = outgoing_moves.mapped('move_line_ids')
+				in_move_lines = incoming_moves.mapped('move_line_ids')
+				for move_line in out_move_lines:
+					if move_line.move_id.state == 'done' and move_line.lot_id:
+						lot = move_line.lot_id
+						print("out", lot, move_line.quantity)
+						lot_wise_dict[lot.id] = lot_wise_dict.get(lot.id, 0.0) + move_line.quantity
+
+				for move_line in in_move_lines:
+					if move_line.move_id.state == 'done' and move_line.lot_id:
+						print("Incoming Lines", move_line)
+						lot = move_line.lot_id
+						if lot_wise_dict.get(lot.id, False):
+							lot_wise_dict[lot.id] -= move_line.quantity
+		created = False
+		for (product_id, lot_id, line_id, move_id), qty in product_lot_qty_map.items():
+			print('lot_id, lot_wise_dict',lot_id, lot_wise_dict)
+			quantity = lot_wise_dict[lot_id]
+			print('quantity***************',quantity)
+			if quantity > 0:
+				print("product_id, Lot , Quantity, ",product_id, lot_id,quantity )
+				quant = self.env['stock.quant'].search([
+					('product_id', '=', product_id),
+					('lot_id', '=', lot_id),
+					('location_id.usage', '=', 'customer'),
+					('quantity', '>=', quantity)
+				], limit=1)
+				print('Checking quant:', quant)
+
+				if quant:
+					repair_action_line = self.env['repair.action.line.wizard'].create({
+						'repair_action_id': wizard.id,
+						'product_id': product_id,
+						'lot_id': lot_id,
+						'sale_line_id': line_id,
+						'move_id': move_id, 
+						'quantity': quantity,
+					})
+					print('repair_action_line>>>>>>>>>>',repair_action_line)
+					created = True
+
+		if not created:
+			raise ValidationError(_("You don't have products to Return."))
+
+		# product_lot_qty_map = defaultdict(float)
+		# for ml in lot_lines:
+		# 	product_lot_qty_map[(ml.product_id.id, ml.lot_id.id)] += ml.quantity
+
+		# product_order = [line.product_id.id for line in self.order_line if line.create_repair_order]
+
+		# sorted_items = sorted(
+		# 	product_lot_qty_map.items(),
+		# 	key=lambda x: product_order.index(x[0][0]) if x[0][0] in product_order else float('inf')
+		# )
+
+		# for (product_id, lot_id), qty in sorted_items:
+		# 	if product_id in product_order:
+		# 		quant = self.env['stock.quant'].search([
+		# 			('product_id', '=', product_id),
+		# 			('lot_id', '=', lot_id),
+		# 			('location_id.usage', '=', 'customer'),
+		# 			('quantity', '>=', quantity)
+		# 		], limit=1)
+		# 		print('quant>>>>>>>>>>>>>',quant)
+
+		# 		if quant:
+		# 			self.env['repair.action.line.wizard'].create({
+		# 				'repair_action_id': wizard.id,
+		# 				'product_id': product_id,
+		# 				'lot_id': lot_id,
+		# 				'quantity': qty,
+		# 			})
+
+		return {
+			'name': 'All Action Order',
+			'type': 'ir.actions.act_window',
+			'res_model': 'repair.action.wizard',
+			'view_mode': 'form',
+			'res_id': wizard.id,
+			'target': 'new',
+			'context': {
+				'default_order_id': self.id,
+				'default_action_type': 'return_to_customer',
+			}
+		}
+
+	# def action_rma(self):
+	# 	stock_picking_model = self.env['stock.picking']
+
+	# 	so_picking_id = stock_picking_model.search(
+	# 		[('sale_id', '=', self.id)], limit=1)
+
+	# 	rma_location = self.env['stock.warehouse'].search(
+	# 		[('company_id', '=', self.env.company.id)], limit=1).rma_location
+
+	# 	if not rma_location:
+	# 		raise ValidationError(_("You need to fill RMA Location in Warehouse"))
+
+	# 	delivery = self.picking_ids.filtered(
+	# 		lambda p: p.picking_type_id.code == 'outgoing' and p.state == 'done')
+
+	# 	tracked_products = delivery.mapped('move_ids_without_package').mapped('product_id').filtered(
+	# 		lambda p: p.tracking != 'none')
+
+	# 	lot_lines = delivery.mapped('move_line_ids').filtered(
+	# 		lambda ml: ml.product_id in tracked_products and ml.lot_id)
+	# 	lots = lot_lines.mapped('lot_id')
+	# 	print('lots>>>>>>>>>>>>>',lots)
+
+	# 	expired_lots = lots.filtered(
+	# 		lambda l: l.expiration_date and l.expiration_date.date() <= date.today())
+	# 	print('expired_lots>>>>>>>>>>>>>>>',expired_lots)
+		
+	# 	valid_lots = lots.filtered(
+	# 		lambda l: l.expiration_date and l.expiration_date.date() >= date.today())
+	# 	print('valid_lots>>>>>>>>>>>>>>>>>>>>>',valid_lots)
+
+	# 	expired_products = expired_lots.mapped('product_id')
+	# 	valid_products = valid_lots.mapped('product_id')
+	# 	print('valid_products',valid_products)
+
+	# 	# if expired_products:
+	# 	#     product_names = ', '.join(expired_products.mapped('display_name'))
+	# 	#     raise ValidationError(_("The following products have expired lots: %s") % product_names)
+
+	# 	if valid_products:
+	# 		raise ValidationError(_("You don't have any product under validity."))
+
+	# 	valid_product_names = ', '.join(valid_products.mapped('display_name'))
+	# 	print(f"The following products are under Validity: {valid_product_names}")
+
+	# 	picking_type_in = self.env['stock.picking.type'].search(
+	# 		[('code', '=', 'incoming')], limit=1)
+
+	# 	line_data = []
+	# 	for line in self.order_line.filtered('create_repair_order'):
+	# 		if line.product_id in valid_products:
+	# 			lot = valid_lots.filtered(lambda l: l.product_id == line.product_id)[:1]
+	# 			line_data.append((0, 0, {
+	# 				'product_id': line.product_id.id,
+	# 				'product_uom_qty': line.product_uom_qty,
+	# 				'product_uom': line.product_uom.id,
+	# 				'location_id': so_picking_id.location_dest_id.id,
+	# 				'location_dest_id': rma_location.id,
+	# 				'name': line.product_id.name,
+	# 				'sale_line_id': line.id,
+	# 				'lot_ids': lot.id if lot else False,
+	# 				'quantity': line.product_uom_qty,
+	# 			}))
+
+	# 	if line_data:
+	# 		vals_in = {
+	# 			'sale_id': self.id,
+	# 			'origin': self.name,
+	# 			'move_ids_without_package': line_data,
+	# 			'partner_id': self.partner_id.id,
+	# 			'location_id': so_picking_id.location_dest_id.id,
+	# 			'location_dest_id': rma_location.id,
+	# 			'picking_type_id': picking_type_in.id,
+	# 			'group_id': self.procurement_group_id.id,
+	# 		}
+	# 		in_order = stock_picking_model.create(vals_in)
+
+	# 		if self.procurement_group_id:
+	# 			in_order.write({'group_id': self.procurement_group_id.id})
+
+	# 		msg_body = _('Your Products are in Warranty, Sent Successfully to RMA %s') % in_order.name
+	# 		self.message_post(body=msg_body)
+
+	# 	return True
+
+
+	def button_rma(self):
+		self.ensure_one()
+
+		repair_lines = self.order_line.filtered(lambda l: l.create_repair_order)
+		if not repair_lines:
+			raise ValidationError(_("No lines are selected to create RMA."))
+
+		wizard = self.env['repair.action.wizard'].create({
+			'action_type': 'rma',
+			'order_id': self.id,
+		})
+
+		deliveries = self.picking_ids.filtered(
+			lambda p: p.picking_type_id.code == 'outgoing' and p.state == 'done'
+		)
+
+		# Step 1: Lot-tracked lines
+		tracked_lot_lines = deliveries.mapped('move_line_ids').filtered(
+			lambda ml: ml.product_id.tracking != 'none' and ml.lot_id and ml.move_id.sale_line_id.id in repair_lines.ids
+		)
+		print('Step 1 - Tracked lot lines:', tracked_lot_lines)
+
+		if not tracked_lot_lines:
+			raise ValidationError(_("You don't have products to create RMA."))
+
+		# Step 2: Filter by expiration date
+		warranty_lines = tracked_lot_lines.filtered(
+			lambda ml: ml.lot_id.expiration_date and ml.lot_id.expiration_date.date() >= date.today()
+		)
+		print('Step 2 - Warranty valid lines:', warranty_lines)
+
+		if not warranty_lines:
+			raise ValidationError(_("You don't have products under warranty to create RMA."))
+
+		# Step 3: Match stock.quants
+		product_lot_qty_map = defaultdict(float)
+		for ml in warranty_lines:
+			product_lot_qty_map[(ml.product_id.id, ml.lot_id.id, ml.move_id.sale_line_id.id, ml.move_id.id)] += ml.quantity
+		print('Step 3 - Product/Lot/Qty map:', product_lot_qty_map)
+		lot_wise_dict = {}
+		for line in self.order_line:
+			if line.qty_delivered_method == 'stock_move':
+				outgoing_moves, incoming_moves = line._get_outgoing_incoming_moves()
+				print(incoming_moves)
+				out_move_lines = outgoing_moves.mapped('move_line_ids')
+				in_move_lines = incoming_moves.mapped('move_line_ids')
+				for move_line in out_move_lines:
+					if move_line.move_id.state == 'done' and move_line.lot_id:
+						lot = move_line.lot_id
+						print("out", lot, move_line.quantity)
+						lot_wise_dict[lot.id] = lot_wise_dict.get(lot.id, 0.0) + move_line.quantity
+
+				for move_line in in_move_lines:
+					if move_line.move_id.state == 'done' and move_line.lot_id:
+						print("Incoming Lines", move_line)
+						lot = move_line.lot_id
+						if lot_wise_dict.get(lot.id, False):
+							lot_wise_dict[lot.id] -= move_line.quantity
+		created = False
+		for (product_id, lot_id, line_id, move_id), qty in product_lot_qty_map.items():
+			print('lot_id, lot_wise_dict',lot_id, lot_wise_dict)
+			quantity = lot_wise_dict[lot_id]
+			print('quantity***************',quantity)
+			if quantity > 0:
+				print('product_id lot quant',product_id, lot_id, quantity)
+				quant = self.env['stock.quant'].sudo().search([
+					('product_id', '=', product_id),
+					('lot_id', '=', lot_id),
+					('location_id.usage', '=', 'customer'),
+					('quantity', '>=', quantity)
+				], limit=1)
+				print('Checking quant:', quant)
+
+				if quant:
+					repair_action_line = self.env['repair.action.line.wizard'].create({
+						'repair_action_id': wizard.id,
+						'product_id': product_id,
+						'lot_id': lot_id,
+						'sale_line_id': line_id,
+						'move_id': move_id, 
+						'quantity': quantity,
+					})
+					print('repair_action_line>>>>>>>>>>',repair_action_line)
+					created = True
+
+		if not created:
+			raise ValidationError(_("You don't have products to create RMA.(quant)"))
+
+
+		# for line in order_line:
+		# 	if line.qty_delivered_method == 'stock_move':
+		# 		qty = 0.0
+		# 		outgoing_moves, incoming_moves = line._get_outgoing_incoming_moves()
+		# 		out_move_lines = outgoing_moves.mapped('move_line_ids')
+		# 		in_move_lines = incoming_moves.mapped('move_line_ids')
+		# 		lot_wise_dict = {
+		# 		}
+		# 		for line in out_move_lines:
+		# 			if line.move_id.state == 'done':
+		# 				lot_wise_dict[line.lot_id] += line.quantity
+		# 		for line in in_move_lines:
+		# 			if line.move_id.state == 'done':
+		# 				if line.lot_id.id in lot_wise_dict.keys():
+		# 					lot_wise_dict[line.lot_id.id] -= line.quantity
+
+		# created = False
+		# for (product_id, lot_id, line_id), qty in product_lot_qty_map.items():
+		# 	quant = self.env['stock.quant'].search([
+		# 		('product_id', '=', product_id),
+		# 		('lot_id', '=', lot_id),
+		# 		('location_id.usage', '=', 'customer'),
+		# 		('quantity', '>=', qty)
+		# 	], limit=1)
+		# 	print('Checking quant:', quant)
+
+		# 	if quant:
+		# 		self.env['repair.action.line.wizard'].create({
+		# 			'repair_action_id': wizard.id,
+		# 			'product_id': product_id,
+		# 			'lot_id': lot_id,
+		# 			'sale_line_id': line_id,
+		# 			'quantity': qty,
+		# 		})
+		# 		created = True
+
+		return {
+			'name': 'All Action Order',
+			'type': 'ir.actions.act_window',
+			'res_model': 'repair.action.wizard',
+			'view_mode': 'form',
+			'res_id': wizard.id,
+			'target': 'new',
+			'context': {
+				'default_order_id': self.id,
+				'default_action_type': 'rma',
+			}
+		}
+
+
+	def _compute_delivery_check(self):
+		for rec in self:
+			delivery_check = False  # Default value
+
+			receipts = self.env['stock.picking'].search([('sale_id', '=', rec.id)])
+			# account = self.env['account.move'].search([('invoice_origin', '=', rec.name),('move_type', '=', 'out_invoice')])
+
+			if receipts and all(p.state == 'done' for p in receipts):
+				delivery_check = True
+
+			rec.delivery_check = delivery_check
+
+
+	def button_create_repair_order(self):
+		has_create_repair_order = any(line.create_repair_order for line in self.order_line)
+		if not has_create_repair_order:
+			raise ValidationError(_("No lines are selected to create repair order."))
+
+		action = self.env["ir.actions.actions"]._for_xml_id("pways_sale_repair_management.create_repair_order_action")
+		return action
+
+	def button_view_rapir_orders(self):
+		activities = self.env['repair.order'].sudo().search([('sale_order_id', '=', self.id)])
+		action = self.env["ir.actions.actions"]._for_xml_id("repair.action_repair_order_tree")
+		action['domain'] = [('id', 'in', activities.ids)]
+		return action
+
+	def _compute_repair_check_count(self):
+		count_of_repair = self.env['repair.order'].search_count([('sale_order_id', '=', self.id)])
+		self.repair_check_count = count_of_repair
+
+	def button_view_replace_orders(self):
+		activities = self.env['stock.picking'].sudo().search([('replace_id', '=', self.id)])
+		action = self.env["ir.actions.actions"]._for_xml_id("stock.view_picking_form")
+		action['domain'] = [('id', 'in', activities.ids)]
+		return action
+
+	def _compute_replace_count(self):
+		count_of_repair = self.env['stock.picking'].search_count([('replace_id', '=', self.id)])
+		self.replace_count = count_of_repair
+
+class SaleOrderLine(models.Model):
+	_inherit = "sale.order.line"
+
+	create_repair_order = fields.Boolean(string="Repair" , copy=False)
