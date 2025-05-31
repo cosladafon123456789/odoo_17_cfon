@@ -12,6 +12,7 @@ class RepairActionWizard(models.TransientModel):
 
 	default_location_id = fields.Many2one('stock.location', 'Default Location', domain=[("usage", "=", "internal")])
 	line_ids = fields.One2many('repair.action.line.wizard', 'repair_action_id', string="Products")
+	replace_line_ids = fields.One2many('replace.action.line.wizard', 'replace_action_id', string="Replace Products")
 	action_type = fields.Selection(
 		[
 			('replace', 'Replace'),
@@ -22,21 +23,19 @@ class RepairActionWizard(models.TransientModel):
 		string="Action Type")
 	order_id = fields.Many2one('sale.order', string="Order")
 
-
 	def action_rma(self):
 		stock_picking_model = self.env['stock.picking']
 		stock_move_line_model = self.env['stock.move.line']
-		active_id = self.env.context.get('active_id')
-		sale = self.env['sale.order'].browse(active_id)
-
-		so_picking_id = stock_picking_model.search(
-			[('sale_id', '=', sale.id)], limit=1)
-
 		rma_location = self.env['stock.warehouse'].search(
 			[('company_id', '=', self.env.company.id)], limit=1).rma_location
 
 		if not rma_location:
 			raise ValidationError(_("You need to fill RMA Location in Warehouse"))
+		active_id = self.env.context.get('active_id')
+		sale = self.env['sale.order'].browse(active_id)
+
+		so_picking_id = stock_picking_model.search(
+			[('sale_id', '=', sale.id)], limit=1)
 
 		delivery = sale.picking_ids.filtered(
 			lambda p: p.picking_type_id.code == 'outgoing' and p.state == 'done')
@@ -60,7 +59,7 @@ class RepairActionWizard(models.TransientModel):
 			[('code', '=', 'incoming')], limit=1)
 
 		move_lines_data = {}
-		for ml in lot_lines:
+		for ml in self.line_ids:
 			key = (ml.product_id.id, ml.lot_id.id)
 			move_lines_data[key] = move_lines_data.get(key, 0.0) + ml.quantity
 
@@ -68,7 +67,7 @@ class RepairActionWizard(models.TransientModel):
 			'sale_id': sale.id,
 			'origin': sale.name,
 			'partner_id': sale.partner_id.id,
-			'location_id': so_picking_id.location_dest_id.id,
+			'location_id': delivery.location_dest_id.id,
 			'location_dest_id': rma_location.id,
 			'picking_type_id': picking_type_in.id,
 			'group_id': sale.procurement_group_id.id,
@@ -79,50 +78,52 @@ class RepairActionWizard(models.TransientModel):
 		for (product_id, lot_id), qty in move_lines_data.items():
 			product_qty_map[product_id] += qty
 
-		move_records = {}
-		for line in sale.order_line.filtered('create_repair_order'):
-			if line.product_id.id in product_qty_map and line.product_id in valid_products:
-				move = self.env['stock.move'].create({
+		moves = self.env['stock.move']
+		for line in self.line_ids:
+			if line.product_id.id not in moves.mapped('product_id').ids:
+				moves |= self.env['stock.move'].create({
 					'name': line.product_id.name,
 					'product_id': line.product_id.id,
-					'product_uom_qty': product_qty_map[line.product_id.id],
-					'product_uom': line.product_uom.id,
+					'product_uom_qty': line.quantity	,
+					'product_uom': line.sale_line_id.product_uom.id,
 					'location_id': so_picking_id.location_dest_id.id,
 					'location_dest_id': rma_location.id,
 					'picking_id': in_order.id,
-					'sale_line_id': line.id,
+					'origin_returned_move_id': line.move_id.id,
+					'sale_line_id': line.sale_line_id.id,
+					'to_refund': True
 				})
-				move_records[line.product_id.id] = move
-
-		for (product_id, lot_id), qty in move_lines_data.items():
-			move = move_records.get(product_id)
-			if move:
-				self.env['stock.move.line'].create({
-					'move_id': move.id,
-					'product_id': product_id,
-					'product_uom_id': move.product_uom.id,
-					'quantity': qty,
-					'location_id': move.location_id.id,
-					'location_dest_id': move.location_dest_id.id,
-					'lot_id': lot_id,
-				})
+			find_move = moves.filtered(lambda x: x.product_id == line.product_id)
+			print(find_move)
+			move_line = self.env['stock.move.line'].create({
+				'move_id': find_move.id,
+				'product_id': line.product_id.id,
+				'product_uom_id': line.product_id.uom_id.id,
+				'picking_id': find_move.picking_id.id, 
+				'quantity': line.quantity,
+				'location_id': find_move.location_id.id,
+				'location_dest_id': find_move.location_dest_id.id,
+				'lot_name': line.lot_id.name,
+				'lot_id': line.lot_id.id,
+			})
+			print(move_line)
 
 		if sale.procurement_group_id:
 			in_order.write({'group_id': sale.procurement_group_id.id})
+		in_order.action_confirm()
+		in_order.button_validate() 
 
-		msg_body = _('Your Products are in Warranty, Sent Successfully to RMA %s') % in_order.name
+		msg_body = _('Tus productos están en garantía y se enviaron correctamente al RMA : %s') % in_order.name
 		sale.message_post(body=msg_body)
 		sale.repair_status = 'rma'
 
 		return True
 
-
-
 	def action_return_to_customer(self):
 		active_id = self.env.context.get('active_id')
 		sale = self.env['sale.order'].browse(active_id)
 		if not sale:
-			raise ValidationError("No active sale order found in context.")
+			raise ValidationError(_("No active sale order found in context."))
 
 		stock_picking_model = self.env['stock.picking']
 
@@ -130,15 +131,18 @@ class RepairActionWizard(models.TransientModel):
 			[('sale_id', '=', sale.id)], limit=1)
 
 		if not so_picking_id:
-			raise ValidationError("No related picking found for sale order.")
+			raise ValidationError(_("No related picking found for sale order."))
 
-		# Incoming picking type (return to customer in order)
 		picking_type_in = self.env['stock.picking.type'].search(
 			[('code', '=', 'incoming')], limit=1)
 
-		# Outgoing picking type (return to customer out order)
 		picking_type_out = self.env['stock.picking.type'].search(
 			[('code', '=', 'outgoing')], limit=1)
+
+		move_lines_data = {}
+		for ml in self.line_ids:
+			key = (ml.product_id.id, ml.lot_id.id)
+			move_lines_data[key] = move_lines_data.get(key, 0.0) + ml.quantity
 
 		# --- Incoming Picking (In Order) ---
 		if picking_type_in:
@@ -153,49 +157,47 @@ class RepairActionWizard(models.TransientModel):
 			}
 			picking_in = stock_picking_model.create(picking_in_vals)
 
-			for line in sale.order_line.filtered('create_repair_order'):
-				move_vals = {
-					'picking_id': picking_in.id,
+		product_qty_map = defaultdict(float)
+		for (product_id, lot_id), qty in move_lines_data.items():
+			product_qty_map[product_id] += qty
+
+		moves = self.env['stock.move']
+		for line in self.line_ids:
+			if line.product_id.id not in moves.mapped('product_id').ids:
+				moves |= self.env['stock.move'].create({
+					'name': line.product_id.name,
 					'product_id': line.product_id.id,
-					'product_uom_qty': line.product_uom_qty,
-					'product_uom': line.product_uom.id,
+					'product_uom_qty': line.quantity,
+					'product_uom': line.sale_line_id.product_uom.id,
 					'location_id': so_picking_id.location_dest_id.id,
 					'location_dest_id': so_picking_id.location_id.id,
-					'name': line.product_id.display_name,
-					'sale_line_id': line.id,
-				}
-				move = self.env['stock.move'].create(move_vals)
-
-				# Find existing move lines in original picking with lot for this product
-				orig_move_lines = so_picking_id.move_line_ids.filtered(
-					lambda ml: ml.product_id == line.product_id and ml.lot_id)
-
-				if orig_move_lines:
-					for ml in orig_move_lines:
-						self.env['stock.move.line'].create({
-							'move_id': move.id,
-							'product_id': ml.product_id.id,
-							'product_uom_id': ml.product_uom_id.id,
-							'location_id': so_picking_id.location_dest_id.id,
-							'location_dest_id': so_picking_id.location_id.id,
-							'lot_id': ml.lot_id.id,
-							'quantity': ml.quantity,
-						})
-				else:
-					self.env['stock.move.line'].create({
-						'move_id': move.id,
-						'product_id': line.product_id.id,
-						'product_uom_id': line.product_uom.id,
-						'location_id': so_picking_id.location_dest_id.id,
-						'location_dest_id': so_picking_id.location_id.id,
-						'quantity': line.product_uom_qty,
-					})
+					'picking_id': picking_in.id,
+					'origin_returned_move_id': line.move_id.id,
+					'sale_line_id': line.sale_line_id.id,
+					'to_refund': True
+				})
+			find_move = moves.filtered(lambda x: x.product_id == line.product_id)
+			print(find_move)
+			move_line = self.env['stock.move.line'].create({
+				'move_id': find_move.id,
+				'product_id': line.product_id.id,
+				'product_uom_id': line.product_id.uom_id.id,
+				'picking_id': find_move.picking_id.id, 
+				'quantity': line.quantity,
+				'location_id': find_move.location_id.id,
+				'location_dest_id': find_move.location_dest_id.id,
+				'lot_name': line.lot_id.name,
+				'lot_id': line.lot_id.id,
+			})
+			print(move_line)
 
 			if sale.procurement_group_id:
 				picking_in.write({'group_id': sale.procurement_group_id.id})
+			picking_in.action_confirm()
+			picking_in.button_validate()
 
-			msg_body_in = _('Order Successfully Returned to Customer IN Picking %s') % picking_in.name
-			sale.message_post(body=msg_body_in)
+		msg_body_in = _('Orden devuelta con éxito a la persona cliente, IN Picking : %s') % picking_in.name
+		sale.message_post(body=msg_body_in)
 
 		# --- Outgoing Picking (Out Order) ---
 		if picking_type_out:
@@ -210,49 +212,44 @@ class RepairActionWizard(models.TransientModel):
 			}
 			picking_out = stock_picking_model.create(picking_out_vals)
 
-			for line in sale.order_line.filtered('create_repair_order'):
-				move_vals = {
-					'picking_id': picking_out.id,
+		moves = self.env['stock.move']
+		for line in self.line_ids:
+			if line.product_id.id not in moves.mapped('product_id').ids:
+				moves |= self.env['stock.move'].create({
+					'name': line.product_id.name,
 					'product_id': line.product_id.id,
-					'product_uom_qty': line.product_uom_qty,
-					'product_uom': line.product_uom.id,
+					'product_uom_qty': line.quantity,
+					'product_uom': line.sale_line_id.product_uom.id,
 					'location_id': so_picking_id.location_id.id,
 					'location_dest_id': so_picking_id.location_dest_id.id,
-					'name': line.product_id.display_name,
-					'sale_line_id': line.id,
-				}
-				move = self.env['stock.move'].create(move_vals)
-
-				orig_move_lines = so_picking_id.move_line_ids.filtered(
-					lambda ml: ml.product_id == line.product_id and ml.lot_id)
-
-				if orig_move_lines:
-					for ml in orig_move_lines:
-						self.env['stock.move.line'].create({
-							'move_id': move.id,
-							'product_id': ml.product_id.id,
-							'product_uom_id': ml.product_uom_id.id,
-							'location_id': so_picking_id.location_id.id,
-							'location_dest_id': so_picking_id.location_dest_id.id,
-							'lot_id': ml.lot_id.id,
-							'quantity': ml.quantity,
-						})
-				else:
-					self.env['stock.move.line'].create({
-						'move_id': move.id,
-						'product_id': line.product_id.id,
-						'product_uom_id': line.product_uom.id,
-						'location_id': so_picking_id.location_id.id,
-						'location_dest_id': so_picking_id.location_dest_id.id,
-						'quantity	': line.product_uom_qty,
-					})
+					'picking_id': picking_out.id,
+					'origin_returned_move_id': line.move_id.id,
+					'sale_line_id': line.sale_line_id.id,
+					'to_refund': True
+				})
+			find_move = moves.filtered(lambda x: x.product_id == line.product_id)
+			print(find_move)
+			move_line = self.env['stock.move.line'].create({
+				'move_id': find_move.id,
+				'product_id': line.product_id.id,
+				'product_uom_id': line.product_id.uom_id.id,
+				'picking_id': find_move.picking_id.id, 
+				'quantity': line.quantity,
+				'location_id': find_move.location_dest_id.id,
+				'location_dest_id': find_move.location_id.id,
+				'lot_name': line.lot_id.name,
+				'lot_id': line.lot_id.id,
+			})
+			print(move_line)
 
 			if sale.procurement_group_id:
 				picking_out.write({'group_id': sale.procurement_group_id.id})
+			picking_out.action_confirm()
+			picking_out.button_validate()
 
-			msg_body_out = _('Order Successfully Returned to Customer OUT Picking %s') % picking_out.name
-			sale.message_post(body=msg_body_out)
-			sale.repair_status = 'return_to_customer'
+		msg_body_out = _('Orden devuelta con éxito a la persona cliente, OUT Picking : %s') % picking_out.name
+		sale.message_post(body=msg_body_out)
+		sale.repair_status = 'return_to_customer'
 
 		return True
 
@@ -280,16 +277,20 @@ class RepairActionWizard(models.TransientModel):
 		self.ensure_one()
 		active_id = self.env.context.get('active_id')
 		sale = self.env['sale.order'].browse(active_id)
-		moves = sale.invoice_ids
+		moves = sale.invoice_ids.filtered(
+			lambda p: p.move_type == 'out_invoice' and p.state == 'posted')
+		# moves = sale.invoice_ids.search(
+		# 	[('move_type', '=', 'out_invoice'),('payment_state','=', 'paid')], limit=1)
+		
+		print('moves>>>>>>>>>>>>',moves.name)
 
-		# Create default values.
 		default_values_list = []
 		for move in moves:
 			default_values_list.append(self._prepare_default_reversal(move))
 
 		batches = [
-			[self.env['account.move'], [], True],   # Moves to be cancelled by the reverses.
-			[self.env['account.move'], [], False],  # Others.
+			[self.env['account.move'], [], True],
+			[self.env['account.move'], [], False],
 		]
 		for move, default_vals in zip(moves, default_values_list):
 			is_auto_post = default_vals.get('auto_post') != 'no'
@@ -298,7 +299,6 @@ class RepairActionWizard(models.TransientModel):
 			batches[batch_index][0] |= move
 			batches[batch_index][1].append(default_vals)
 
-		# Handle reverse method.
 		moves_to_redirect = self.env['account.move']
 		for moves, default_values_list, is_cancel_needed in batches:
 			new_moves = moves._reverse_moves(default_values_list, cancel=is_cancel_needed)
@@ -315,7 +315,6 @@ class RepairActionWizard(models.TransientModel):
 
 			moves_to_redirect |= new_moves
 
-		# Create action.
 		action = {
 			'name': _('Reverse Moves'),
 			'type': 'ir.actions.act_window',
@@ -335,8 +334,11 @@ class RepairActionWizard(models.TransientModel):
 			if len(set(moves_to_redirect.mapped('move_type'))) == 1:
 				action['context'] = {'default_move_type':  moves_to_redirect.mapped('move_type').pop()}
 
-		sale.message_post(body=_('Customer Credit Note Created.'))
-		sale.repair_status = 'refund'
+		if moves_to_redirect:
+			for move in moves_to_redirect:
+				move.action_post()
+				sale.message_post(body=_('Nota de crédito del cliente creada : %s') % move.name)
+			sale.repair_status = 'refund'
 		return action
 
 
@@ -348,7 +350,7 @@ class RepairActionWizard(models.TransientModel):
 		active_id = self.env.context.get('active_id')
 		sale = self.env['sale.order'].browse(active_id)
 		if not sale:
-			raise ValidationError("No active sale order found in context.")
+			raise ValidationError(_("No active sale order found in context."))
 
 		stock_picking_model = self.env['stock.picking']
 
@@ -356,15 +358,18 @@ class RepairActionWizard(models.TransientModel):
 			[('sale_id', '=', sale.id)], limit=1)
 
 		if not so_picking_id:
-			raise ValidationError("No related picking found for sale order.")
+			raise ValidationError(_("No related picking found for sale order."))
 
-		# Incoming picking type (return to customer in order)
 		picking_type_in = self.env['stock.picking.type'].search(
 			[('code', '=', 'incoming')], limit=1)
 
-		# Outgoing picking type (return to customer out order)
 		picking_type_out = self.env['stock.picking.type'].search(
 			[('code', '=', 'outgoing')], limit=1)
+
+		move_lines_data = {}
+		for ml in self.line_ids:
+			key = (ml.product_id.id, ml.lot_id.id)
+			move_lines_data[key] = move_lines_data.get(key, 0.0) + ml.quantity
 
 		# --- Incoming Picking (In Order) ---
 		if picking_type_in:
@@ -379,110 +384,122 @@ class RepairActionWizard(models.TransientModel):
 			}
 			picking_in = stock_picking_model.create(picking_in_vals)
 
-			for line in sale.order_line.filtered('create_repair_order'):
-				move_vals = {
-					'picking_id': picking_in.id,
+		product_qty_map = defaultdict(float)
+		for (product_id, lot_id), qty in move_lines_data.items():
+			product_qty_map[product_id] += qty
+
+		moves = self.env['stock.move']
+		for line in self.line_ids:
+			if line.product_id.id not in moves.mapped('product_id').ids:
+				moves |= self.env['stock.move'].create({
+					'name': line.product_id.name,
 					'product_id': line.product_id.id,
-					'product_uom_qty': line.product_uom_qty,
-					'product_uom': line.product_uom.id,
+					'product_uom_qty': line.quantity,
+					'product_uom': line.sale_line_id.product_uom.id,
 					'location_id': so_picking_id.location_dest_id.id,
 					'location_dest_id': self.default_location_id.id,
-					'name': line.product_id.display_name,
-					'sale_line_id': line.id,
-				}
-				move = self.env['stock.move'].create(move_vals)
-
-				# Find existing move lines in original picking with lot for this product
-				orig_move_lines = so_picking_id.move_line_ids.filtered(
-					lambda ml: ml.product_id == line.product_id and ml.lot_id)
-
-				if orig_move_lines:
-					for ml in orig_move_lines:
-						self.env['stock.move.line'].create({
-							'move_id': move.id,
-							'product_id': ml.product_id.id,
-							'product_uom_id': ml.product_uom_id.id,
-							'location_id': so_picking_id.location_dest_id.id,
-							'location_dest_id': self.default_location_id.id,
-							'lot_id': ml.lot_id.id,
-							'quantity': ml.quantity,
-						})
-				else:
-					self.env['stock.move.line'].create({
-						'move_id': move.id,
-						'product_id': line.product_id.id,
-						'product_uom_id': line.product_uom.id,
-						'location_id': so_picking_id.location_dest_id.id,
-						'location_dest_id': self.default_location_id.id,
-						'quantity': line.product_uom_qty,
-					})
+					'picking_id': picking_in.id,
+					'origin_returned_move_id': line.move_id.id,
+					'sale_line_id': line.sale_line_id.id,
+					'to_refund': True
+				})
+			find_move = moves.filtered(lambda x: x.product_id == line.product_id)
+			print(find_move)
+			move_line = self.env['stock.move.line'].create({
+				'move_id': find_move.id,
+				'product_id': line.product_id.id,
+				'product_uom_id': line.product_id.uom_id.id,
+				'picking_id': find_move.picking_id.id, 
+				'quantity': line.quantity,
+				'location_id': find_move.location_id.id,
+				'location_dest_id': self.default_location_id.id,
+				'lot_name': line.lot_id.name,
+				'lot_id': line.lot_id.id,
+			})
+			print(move_line)
 
 			if sale.procurement_group_id:
 				picking_in.write({'group_id': sale.procurement_group_id.id})
+			picking_in.action_confirm()
+			picking_in.button_validate()
 
-			msg_body_in = _('Order Successfully Returned to Customer IN Picking %s') % picking_in.name
-			sale.message_post(body=msg_body_in)
+		msg_body_in = _('Orden reemplazada con éxito, IN Picking : %s') % picking_in.name
+		sale.message_post(body=msg_body_in)
 
-		# --- Outgoing Picking (Out Order) ---
-		if picking_type_out:
-			picking_out_vals = {
-				'sale_id': sale.id,
-				'origin': sale.name,
-				'partner_id': sale.partner_id.id,
-				'location_id': self.default_location_id.id,
-				'location_dest_id': so_picking_id.location_dest_id.id,
-				'picking_type_id': picking_type_out.id,
-				'group_id': sale.procurement_group_id.id,
-			}
-			picking_out = stock_picking_model.create(picking_out_vals)
+		# move_lines_data_out = {}
+		# for ml in self.line_ids:
+		# 	key = (ml.product_id.id, ml.lot_id.id)
+		# 	move_lines_data_out[key] = move_lines_data_out.get(key, 0.0) + ml.quantity
 
-			for line in sale.order_line.filtered('create_repair_order'):
-				move_vals = {
-					'picking_id': picking_out.id,
-					'product_id': line.product_id.id,
-					'product_uom_qty': line.product_uom_qty,
-					'product_uom': line.product_uom.id,
-					'location_id': self.default_location_id.id,
-					'location_dest_id': so_picking_id.location_dest_id.id,
-					'name': line.product_id.display_name,
-					'sale_line_id': line.id,
-				}
-				move = self.env['stock.move'].create(move_vals)
+		if not self.replace_line_ids:
+			raise ValidationError(_("You Don't selected Products to Replace."))
 
-				orig_move_lines = so_picking_id.move_line_ids.filtered(
-					lambda ml: ml.product_id == line.product_id and ml.lot_id)
+		for line in self.replace_line_ids:
+			line_date = self.order_id.order_line.create({
+				'order_id': sale.id,
+				'product_id': line.product_id.id,
+				'product_uom_qty': line.quantity,
+			})
+			print('line_date******************',line_date)
 
-				if orig_move_lines:
-					for ml in orig_move_lines:
-						self.env['stock.move.line'].create({
-							'move_id': move.id,
-							'product_id': ml.product_id.id,
-							'product_uom_id': ml.product_uom_id.id,
-							'location_id': self.default_location_id.id,
-							'location_dest_id': so_picking_id.location_dest_id.id,
-							'lot_id': ml.lot_id.id,
-							'quantity': ml.quantity,
-						})
-				else:
-					self.env['stock.move.line'].create({
-						'move_id': move.id,
-						'product_id': line.product_id.id,
-						'product_uom_id': line.product_uom.id,
-						'location_id': self.default_location_id.id,
-						'location_dest_id': so_picking_id.location_dest_id.id,
-						'quantity	': line.product_uom_qty,
-					})
 
-			if sale.procurement_group_id:
-				picking_out.write({'group_id': sale.procurement_group_id.id})
+		# # --- Outgoing Picking (Out Order) ---
+		# if picking_type_out:
+		# 	picking_out_vals = {
+		# 		'sale_id': sale.id,
+		# 		'origin': sale.name,
+		# 		'partner_id': sale.partner_id.id,
+		# 		'location_id': self.default_location_id.id,
+		# 		'location_dest_id': so_picking_id.location_dest_id.id,
+		# 		'picking_type_id': picking_type_out.id,
+		# 		'group_id': sale.procurement_group_id.id,
+		# 	}
+		# 	picking_out = stock_picking_model.create(picking_out_vals)
 
-			msg_body_out = _('Order Successfully Returned to Customer OUT Picking %s') % picking_out.name
-			sale.message_post(body=msg_body_out)
+		# product_qty_map = defaultdict(float)
+		# for (product_id, lot_id), qty in move_lines_data_out.items():
+		# 	product_qty_map[product_id] += qty
+
+		# moves = self.env['stock.move']
+		# for line in self.line_ids:
+		# 	if line.product_id.id not in moves.mapped('product_id').ids:
+		# 		moves |= self.env['stock.move'].create({
+		# 			'name': line.product_id.name,
+		# 			'product_id': line.product_id.id,
+		# 			'product_uom_qty': line.quantity,
+		# 			'product_uom': line.sale_line_id.product_uom.id,
+		# 			'location_id': so_picking_id.location_dest_id.id,
+		# 			'location_dest_id': so_picking_id.location_dest_id.id,
+		# 			'picking_id': picking_out.id,
+		# 			'origin_returned_move_id': line.move_id.id,
+		# 			'sale_line_id': line.sale_line_id.id,
+		# 			'to_refund': True
+		# 		})
+		# 	find_move = moves.filtered(lambda x: x.product_id == line.product_id)
+		# 	print(find_move)
+		# 	move_line = self.env['stock.move.line'].create({
+		# 		'move_id': find_move.id,
+		# 		'product_id': line.product_id.id,
+		# 		'product_uom_id': line.product_id.uom_id.id,
+		# 		'picking_id': find_move.picking_id.id, 
+		# 		'quantity': line.quantity,
+		# 		'location_id': find_move.location_id.id,
+		# 		'location_dest_id': so_picking_id.location_dest_id.id,
+		# 		'lot_name': line.lot_id.name,
+		# 		'lot_id': line.lot_id.id,
+		# 	})
+		# 	print(move_line)
+		
+		# 	if sale.procurement_group_id:
+		# 		picking_out.write({'group_id': sale.procurement_group_id.id})
+		# 	picking_out.action_confirm()
+		# 	picking_out.button_validate()
+
+		# 	msg_body_out = _('Orden reemplazada con éxito, OUT Picking : %s') % picking_out.name
+		# 	sale.message_post(body=msg_body_out)
 			sale.repair_status = 'replace'
-
+		
 		return True
-
-
 
 	def action_return_order(self):
 		self.reverse_moves()
@@ -500,16 +517,20 @@ class RepairActionWizard(models.TransientModel):
 			limit=1
 		)
 		if not incoming:
-			raise ValueError("No matching incoming picking found for the sale order.")
+			raise ValueError(_("No matching incoming picking found for the sale order."))
 		incoming.ensure_one()
 
 		picking_type_in = self.env['stock.picking.type'].search(
 			[('code', '=', 'incoming')], limit=1
 		)
 		if not picking_type_in or not picking_type_in.sequence_id:
-			raise ValueError("Incoming picking type or sequence is not properly configured.")
+			raise ValueError(_("Incoming picking type or sequence is not properly configured."))
 
-		# Create return picking
+		move_lines_data = {}
+		for ml in self.line_ids:
+			key = (ml.product_id.id, ml.lot_id.id)
+			move_lines_data[key] = move_lines_data.get(key, 0.0) + ml.quantity
+
 		return_picking_vals = {
 			'sale_id': sale.id,
 			'origin': sale.name,
@@ -520,60 +541,51 @@ class RepairActionWizard(models.TransientModel):
 		}
 		return_picking = stock_picking_model.create(return_picking_vals)
 
-		# Add moves and move lines
-		for line in sale.order_line.filtered('create_repair_order'):
-			move = self.env['stock.move'].create({
-				'picking_id': return_picking.id,
-				'product_id': line.product_id.id,
-				'product_uom_qty': line.product_uom_qty,
-				'product_uom': line.product_uom.id,
-				'location_id': incoming.location_dest_id.id,
-				'location_dest_id': self.default_location_id.id,
-				'name': line.product_id.name,
-				'sale_line_id': line.id,
-			})
+		product_qty_map = defaultdict(float)
+		for (product_id, lot_id), qty in move_lines_data.items():
+			product_qty_map[product_id] += qty
 
-			# Try to copy original lot info from incoming move lines
-			orig_move_lines = incoming.move_line_ids.filtered(
-				lambda ml: ml.product_id == line.product_id and ml.lot_id)
-
-			if orig_move_lines:
-				for orig_line in orig_move_lines:
-					self.env['stock.move.line'].create({
-						'move_id': move.id,
-						'product_id': orig_line.product_id.id,
-						'product_uom_id': orig_line.product_uom_id.id,
-						'quantity': orig_line.quantity,
-						'location_id': incoming.location_dest_id.id,
-						'location_dest_id': self.default_location_id.id,
-						'lot_id': orig_line.lot_id.id,
-					})
-			else:
-				# No lots, create one basic move line
-				self.env['stock.move.line'].create({
-					'move_id': move.id,
+		moves = self.env['stock.move']
+		for line in self.line_ids:
+			if line.product_id.id not in moves.mapped('product_id').ids:
+				moves |= self.env['stock.move'].create({
+					'name': line.product_id.name,
 					'product_id': line.product_id.id,
-					'product_uom_id': line.product_uom.id,
-					'quantity': line.product_uom_qty,
+					'product_uom_qty': line.quantity,
+					'product_uom': line.sale_line_id.product_uom.id,
 					'location_id': incoming.location_dest_id.id,
 					'location_dest_id': self.default_location_id.id,
+					'picking_id': return_picking.id,
+					'origin_returned_move_id': line.move_id.id,
+					'sale_line_id': line.sale_line_id.id,
+					'to_refund': True
 				})
+			find_move = moves.filtered(lambda x: x.product_id == line.product_id)
+			print(find_move)
+			move_line = self.env['stock.move.line'].create({
+				'move_id': find_move.id,
+				'product_id': line.product_id.id,
+				'product_uom_id': line.product_id.uom_id.id,
+				'picking_id': find_move.picking_id.id, 
+				'quantity': line.quantity,
+				'location_id': find_move.location_id.id,
+				'location_dest_id': self.default_location_id.id,
+				'lot_name': line.lot_id.name,
+				'lot_id': line.lot_id.id,
+			})
+			print(move_line)
+		return_picking.action_confirm()
+		return_picking.button_validate()
 
-		# Post message
 		self.env['mail.message'].sudo().create({
 			"message_type": 'comment',
 			'model': 'sale.order',
 			'res_id': sale.id,
-			"body": _('Order Successfully Returned Out Order %s') % return_picking.name
+			"body": _('Pedido devuelto con éxito, IN Order : %s') % return_picking.name
 		})
+		sale.repair_status = 'refund'	
 
 		return True
-
-
-
-
-
-
 
 
 class RepairActionLineWizard(models.TransientModel):
@@ -583,7 +595,21 @@ class RepairActionLineWizard(models.TransientModel):
 	repair_action_id = fields.Many2one(
 		'repair.action.wizard',
 		string="Repair Action",
-		ondelete='cascade'
+	)
+	product_id = fields.Many2one('product.product', string="Product")
+	quantity = fields.Float(string="Quantity")
+	lot_id = fields.Many2one('stock.lot', string="Lot/Serial Number")
+	sale_line_id = fields.Many2one("sale.order.line", "Line")
+	move_id = fields.Many2one("stock.move", "Move")
+
+
+class ReplaceActionLineWizard(models.TransientModel):
+	_name = 'replace.action.line.wizard'
+	_description = "Replace Action Line Wizard"
+
+	replace_action_id = fields.Many2one(
+		'repair.action.wizard',
+		string="Replace Action",
 	)
 	product_id = fields.Many2one('product.product', string="Product")
 	quantity = fields.Float(string="Quantity")

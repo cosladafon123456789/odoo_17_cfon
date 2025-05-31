@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    "name" : "Sale Service Management",
+    "name" : "Sale Service Management - May 31, 2025",
     "version" : "17.0",
     "category" : "Sales",
     'summary': """Repair management typically includes the following key activities:

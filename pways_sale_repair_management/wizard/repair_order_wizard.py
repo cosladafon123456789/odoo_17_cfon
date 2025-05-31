@@ -20,21 +20,25 @@ class RepairOrderWizard(models.TransientModel):
         for rec in sale_order_active_id.order_line:
             if rec.create_repair_order:
                 vals = {
-                    # "description": self.description_1,
+                    "internal_notes": (
+                        f"<strong>Description :</strong> {self.description_1 or ''}<br/><br/>"
+                        f"<strong>Quotation Notes :</strong> {self.description_2 or ''}"
+                    ),
                     "sale_order_id": sale_order_active_id.id,
                     "product_id": rec.product_id.id,
                     "product_qty": rec.product_uom_qty,
                     "partner_id": sale_order_active_id.partner_id.id,
-                    # "quotation_notes": self.description_2,
+                    # "internal_notes": self.description_2,
                     "sale_order_line_id": rec.id,
                     # "invoice_method": "after_repair",
                     "picking_type_id" : picking_data.id,
                 }
+                print('vals>>>>>>>>>>>>>>>>>>>>',vals)
 
                 # Check picking_type and sequence
                 picking_type = self.env["stock.picking.type"].search([], limit=1)
                 if not picking_type or not picking_type.sequence_id:
-                    raise ValueError("Picking type or sequence ID is not properly configured.")
+                    raise ValueError(_("Picking type or sequence ID is not properly configured."))
 
                 vals["name"] = picking_type.sequence_id.next_by_id()
 
@@ -43,8 +47,9 @@ class RepairOrderWizard(models.TransientModel):
                 "message_type": 'comment', 
                 'model': 'sale.order', 
                 'res_id': sale_order_active_id.id, 
-                "body": _('Repair Order Successfully Created %s',repair_order.name)
+                "body": _('Orden de reparación creada con éxito : %s',repair_order.name)
                 })
+                sale_order_active_id.repair_status = 'repair'
 
         # Fetch created repair orders
         activities = self.env["repair.order"].sudo().search([("sale_order_id.name", "=", sale_order_active_id.name)])

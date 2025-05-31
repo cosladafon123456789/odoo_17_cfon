@@ -74,7 +74,7 @@
         </field>
     </record>
 
-    <record id="inherit_view_sale_order_tree_quotation" model="ir.ui.view">
+    <!-- <record id="inherit_view_sale_order_tree_quotation" model="ir.ui.view">
         <field name="name">sale.order.tree.inherit</field>
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
@@ -89,7 +89,7 @@
                     widget="badge"/>
             </xpath>
         </field>
-    </record>
+    </record> -->
 
     <record id="inherit_view_sale_order_tree_order" model="ir.ui.view">
         <field name="name">sale.order.tree.inherit</field>
@@ -99,10 +99,11 @@
             <xpath expr="//field[@name='invoice_status']" position="after">
                 <field name="repair_status"
                     decoration-success="repair_status == 'replace'"
-                    decoration-info="repair_status == 'received'"
+                    decoration-muted="repair_status == 'received'"
                     decoration-primary="repair_status == 'rma'"
                     decoration-warning="repair_status == 'return_to_customer'"
                     decoration-danger="repair_status == 'refund'"
+                    decoration-info="repair_status == 'repair'"
                     widget="badge"/>
             </xpath>
         </field>
