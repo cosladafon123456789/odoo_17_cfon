@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-
-pways_repair_parts.access_lot_repair_order_wizard,access_lot_repair_order_wizard,pways_repair_parts.model_lot_repair_order_wizard,base.group_user,1,1,1,1
-
-pways_repair_parts.access_lot_expiry_dates,access_lot_expiry_dates,pways_repair_parts.model_lot_expiry_dates,base.group_user,1,1,1,1
