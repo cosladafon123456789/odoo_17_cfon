@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="inherit_sale_repair_expiry_dates_form" model="ir.ui.view">
+        <field name="name">sale.order.lot.expiry.data.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+             <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="before">
+                <field name="lot_date_ids" widget="many2many_tags" string='Garantia Hasta"'/>
+                <field name="lot_ids" widget="many2many_tags" string='Lots'/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_stock_lot_form_inherit_pways" model="ir.ui.view">
+        <field name="name">stock.lot.inherit</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="button_create_lot_repair"
+                            string="Crear Reparacion"
+                            type="object"
+                            class="btn-primary">
+                    </button>
+                    <button name="button_create_rma"
+                            string="Crear RMA"
+                            type="object"
+                            class="btn-primary">
+                    </button>
+                </header>
+            </xpath>
+
+            <xpath expr="//button[@name='action_view_po']" position="after">
+                <button name="button_view_repair"
+                    type="object"
+                    class="oe_stat_button"
+                    invisible="repair_count == 0"
+                    icon="fa-truck">
+                    <field name="repair_count" widget="statinfo" string="Repairs"/>
+                </button>
+                <button name="button_view_rma"
+                    type="object"
+                    class="oe_stat_button"
+                    invisible="rma_count == 0"
+                    icon="fa-truck">
+                    <field name="rma_count" widget="statinfo" string="Pickings"/>
+                </button>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

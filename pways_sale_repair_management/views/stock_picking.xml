@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="inherit_stock_piking_form" model="ir.ui.view">
+        <field name="name">stock.picking.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_see_move_scrap']" position="before">
+                <button name="button_view_sale_order"
+                    type="object"
+                    class="oe_stat_button"
+                    invisible="sale_order_count == 0"
+                    icon="fa-dollar">
+                    <field name="sale_order_count" widget="statinfo" string="Sale order"/>
+                </button>
+                
+                <button name="button_view_repair_order"
+                    type="object"
+                    class="oe_stat_button"
+                    invisible="repair_order_count == 0"
+                    icon="fa-wrench">
+                    <field name="repair_order_count" widget="statinfo" string="Repair order"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="inherit_stock_view_warehouse" model="ir.ui.view">
+        <field name="name">stock.warehouse.inherit</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='wh_output_stock_loc_id']" position="after">
+                <field name="rma_location"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="inherit_view_move_tree" model="ir.ui.view">
+        <field name="name">stock.move.tree.inherit</field>
+        <field name="model">stock.move</field>
+        <field name="inherit_id" ref="stock.view_move_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="date_force_expiry"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="inherit_view_move_line_tree" model="ir.ui.view">
+        <field name="name">stock.move.line.tree.inherit</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_move_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='location_dest_id']" position="after">
+                <field name="expiration_date"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="inherit_repair_order_form" model="ir.ui.view">
+        <field name="name">repair.order.form</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="repair.view_repair_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='picking_id']" position="before">
+                  <field name="sale_order_line_id"/>
+            </xpath>
+
+            <xpath expr="//button[@name='action_view_sale_order']" position="before">
+                <button name="button_view_picking"
+                    type="object"
+                    class="oe_stat_button"
+                    invisible="picking_count == 0"
+                    icon="fa-truck">
+                    <field name="picking_count" widget="statinfo" string="Pickings"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="inherit_base_view_partner_form" model="ir.ui.view">
+        <field name="name">res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="warranty_period" string="Warranty Period"/>                
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

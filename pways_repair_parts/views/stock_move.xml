@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+     <record id="action_menu_part_purchase_order" model="ir.actions.act_window">
+            <field name="name">Part Purchases</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.order</field>                
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('is_part', '=', True)]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                   part purchase orders
+                </p>
+            </field>
+        </record>
+
+
+     <menuitem id="menu_part_purchase_orders" name="Part Purchases" parent="purchase.menu_procurement_management" action="action_menu_part_purchase_order"  sequence="200"/>
+
+    <record id="repair_stock_view_warehouse_inherit" model="ir.ui.view">
+        <field name="name">repair.stock.warehouse.inherit1</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='wh_output_stock_loc_id']" position="after">
+                <field name="repair_loc_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_repair_order_form_inherit" model="ir.ui.view">
+        <field name="name">repair.order.inherit</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="repair.view_repair_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_repair_start']" position="after">
+                <button name="action_create_purchase_orders"
+                        string="Crear orden de compra"
+                        type="object"
+                        class="btn-primary">
+                </button>
+            </xpath>
+            <xpath expr="//button[@name='action_view_sale_order']" position="after">
+                <button name="button_view_purchase"
+                    type="object"
+                    class="oe_stat_button"
+                    invisible="purchase_count == 0"
+                    icon="fa-truck">
+                    <field name="purchase_count" widget="statinfo" string="Purchases"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='move_ids']/tree/field[@name='product_id']" position="after">
+                <field name="qty_available"/>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="vendor_ids" widget="many2many_tags"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

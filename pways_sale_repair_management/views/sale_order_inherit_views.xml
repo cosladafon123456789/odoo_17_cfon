@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+        <record id="action_menu_rma_pickigs" model="ir.actions.act_window">
+            <field name="name">RMA Pickings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.picking</field>                
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('is_rma', '=', True)]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                   RMA Pickings
+                </p>
+            </field>
+        </record>
+
+
+     <menuitem id="menu_rma_pickigs" name="RMA Pickings" parent="sale.sale_order_menu" action="action_menu_rma_pickigs"  sequence="200"/>
+
+
+    <record id="inherit_res_partner_form" model="ir.ui.view">
+        <field name="name">sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_quotation_send']"  position="before">
+                <button name="button_recieved"
+                    string="Recibido"
+                    type="object"
+                    invisible="state != 'sale' or delivery_check == False or delivery_done == True"
+                    class="btn-primary"/>
+            </xpath>
+            <xpath expr="//button[@name='action_quotation_send']"  position="after">
+                <button name="button_return_exclusive"
+                        string="Exclusion de Garantia"
+                        type="object"
+                         invisible="state != 'sale' or delivery_done == False"
+                        class="btn-primary"/>
+
+                <button name="button_create_repair_order"
+                        string="Crear Reparacion"
+                        type="object"
+                        invisible="state != 'sale' or delivery_done == False"
+                        class="btn-primary"
+                        data-hotkey="q"/>
+
+                <button name="button_replace"
+                        string="Reemplazar"
+                        type="object"
+                         invisible="state != 'sale' or delivery_done == False"
+                        class="btn-primary"/>
+
+                <button name="button_refund"
+                        string="Reembolsar"
+                        type="object"
+                        invisible="state != 'sale' or delivery_done == False"
+                        class="btn-primary"/>
+
+                <button name="button_return_to_customer"
+                        string="Devolver Al Cliente"
+                        type="object"
+                         invisible="state != 'sale' or delivery_done == False"
+                        class="btn-primary"/>
+
+                <button name="button_rma"
+                        string="RMA"
+                        type="object"
+                         invisible="state != 'sale' or delivery_done == False"
+                        class="btn-primary"/>
+            </xpath>
+            
+            <xpath expr="//button[@name='action_view_delivery']" position="after">
+                <button name="button_view_replace_orders"
+                    type="object"
+                    class="oe_stat_button"
+                    invisible="replace_count == 0"
+                    icon="fa-wrench">
+                    <field name="replace_count" widget="statinfo" string="Replace Order"/>
+                </button>
+                 <button name="button_view_rma_orders"
+                    type="object"
+                    class="oe_stat_button"
+                    invisible="rma_count == 0"
+                    icon="fa-ticket">
+                    <field name="rma_count" widget="statinfo" string="RMA Order"/>
+                </button>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="repair_status_ids" widget='many2many_tags' readonly="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='user_id']" position="after">
+                <!-- <field name="is_warranty" readonly="state in ['cancel', 'sale', 'sent']"></field>
+                <field name="warranty_period" invisible="not is_warranty" string="Warranty Period" readonly="state in ['cancel', 'sale', 'sent']"/> 
+                <field name="warranty_expiry_date" invisible="not is_warranty"/> -->
+                <field name="delivery_check" readonly="1"/>
+                <field name="delivery_done" readonly="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_template_id']" position="before">
+                <field name="create_repair_order" widget="many2many_custom_widget"/>
+            </xpath>
+          
+
+        </field>
+    </record>
+
+    <!-- <record id="inherit_view_sale_order_tree_quotation" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_status']" position="after">
+                <field name="repair_status"
+                    decoration-success="repair_status == 'replace'"
+                    decoration-info="repair_status == 'received'"
+                    decoration-primary="repair_status == 'rma'"
+                    decoration-warning="repair_status == 'return_to_customer'"
+                    decoration-danger="repair_status == 'refund'"
+                    widget="badge"/>
+            </xpath>
+        </field>
+    </record> -->
+
+    <record id="inherit_view_sale_order_tree_order" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_status']" position="after">
+                <field name="repair_status_ids" widget="many2many_tags" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="repair_status_action" model="ir.actions.act_window">
+        <field name="name">Repair Status</field>
+        <field name="res_model">repair.status</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="repair_status_menu"
+        name="Repair Status"
+        parent="sale.menu_sale_general_settings"
+        action="repair_status_action"
+        sequence="1"/>
+
+</odoo>
