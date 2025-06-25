@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record id="view_order_form_inherit_delivered_qty" model="ir.ui.view">
+	    <field name="name">sale.order.form.inherit.delivered.qty</field>
+	    <field name="model">sale.order</field>
+	    <field name="inherit_id" ref="sale.view_order_form"/>
+	    <field name="arch" type="xml">
+	        <xpath expr="//field[@name='payment_term_id']" position="after">
+	            <field name="latest_delivery_date" readonly="1" invisible="1"/>
+	        </xpath>
+	    </field>
+	</record>
+
+	<record id="view_qutation_filter_latest_delivery" model="ir.ui.view">
+	    <field name="name">sale.quotaion.search.inherit.latest.delivery</field>
+	    <field name="model">sale.order</field>
+	    <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+	    <field name="arch" type="xml">
+	        <xpath expr="//filter[@name='draft']" position="after">
+	            <filter string="Delivered Today"
+	                    name="delivered_today"
+	                    domain="[('latest_delivery_date', '=', (context_today()))]"/>
+	        </xpath>
+	    </field>
+	</record>
+	
+	<record id="view_order_filter_latest_delivery" model="ir.ui.view">
+	    <field name="name">sale.order.search.inherit.latest.delivery</field>
+	    <field name="model">sale.order</field>
+	    <field name="inherit_id" ref="sale.sale_order_view_search_inherit_sale"/>
+	    <field name="arch" type="xml">
+	        <xpath expr="//filter[@name='upselling']" position="before">
+	            <filter string="Delivered Today"
+	                    name="delivered_today"
+	                    domain="[('latest_delivery_date', '=', (context_today()))]"/>
+	        </xpath>
+	    </field>
+	</record>
+</odoo>
