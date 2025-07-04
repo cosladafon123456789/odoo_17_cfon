@@ -7,7 +7,7 @@
     'website': "http://www.preciseways.com",
     'category': 'Purchase',
     'version': '17.0',
-    'depends': ['purchase', 'sale', 'sale_stock', 'pways_repair_parts'],
+    'depends': ['purchase', 'sale_management', 'sale_stock'],
     'data': [
         'data/ir_sequence.xml',
         'security/ir.model.access.csv',
@@ -20,5 +20,6 @@
     'price': 0.0,
     'currency': 'EUR',
     'license': 'OPL-1',
+    'images':['static/description/banner.png'],
 
 }
