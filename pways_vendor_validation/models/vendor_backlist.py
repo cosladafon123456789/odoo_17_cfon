@@ -1,5 +1,6 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
+from datetime import datetime, timedelta
 
 
 class VendorBacklist(models.Model):
@@ -82,12 +83,34 @@ class PurchaseOrder(models.Model):
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    latest_delivery_date = fields.Date(
+    latest_delivery_date = fields.Datetime(
         string='Latest Delivery Date (Till Today)',
         compute='_compute_latest_delivery_date',
         store=True
     )
+    order_minutes = fields.Float(
+        string='Order Minutes',
+        compute='_compute_order_minutes',
+        search='_search_order_minutes')
+    picking_user_id = fields.Many2one(
+        'res.users',
+        string='Picking Done By',
+        compute='_compute_picking_done_user',
+        store=True)
+    custome_sale_id = fields.Many2one('custome.sale.order', string="Custome Sale Order")
 
+    @api.depends('picking_ids.state')
+    def _compute_picking_done_user(self):
+        for order in self:
+            # Find the first done picking for this sale order
+            done_pickings = order.picking_ids.filtered(lambda p: p.state == 'done')
+            if done_pickings:
+                # Get the user who validated the first done picking (write_uid)
+                order.picking_user_id = done_pickings[0].write_uid
+            else:
+                order.picking_user_id = False
+
+    
     @api.depends('order_line.move_ids.date')
     def _compute_latest_delivery_date(self):
         today = fields.Date.today()
@@ -102,3 +125,53 @@ class SaleOrder(models.Model):
                     if not latest_date or max_date > latest_date:
                         latest_date = max_date
             order.latest_delivery_date = latest_date
+
+
+    @api.depends('order_line.move_ids.date', 'order_line.move_ids.state')
+    def _compute_order_minutes(self):
+        now = fields.Datetime.now()
+        for order in self:
+            # Get all done moves and their dates
+            done_moves = order.order_line.mapped('move_ids').filtered(lambda m: m.state == 'done' and m.date)
+            if done_moves:
+                # Use the latest done move date
+                latest_done_date = max(done_moves.mapped('date'))
+                delta = now - latest_done_date
+                order.order_minutes = delta.total_seconds() / 60.0
+            else:
+                order.order_minutes = 0.0
+
+    def _search_order_minutes(self, operator, value):
+        """
+        Search for sale orders whose latest done delivery (stock move) happened
+        within the specified minutes.
+        """
+        now = fields.Datetime.now()
+        target_datetime = now - timedelta(minutes=value)
+
+        # Reverse operator to use on 'move_ids.date'
+        reverse_map = {
+            '<=': '>=',
+            '<':  '>',
+            '>=': '<=',
+            '>':  '<',
+            '=':  '=',
+            '!=': '!=',
+        }
+
+        move_date_operator = reverse_map.get(operator)
+        if not move_date_operator:
+            raise ValueError(f"Unsupported operator for order_minutes: {operator}")
+
+        # Domain to find sale orders with at least one `done` move
+        return [
+            ('order_line.move_ids.state', '=', 'done'),
+            ('order_line.move_ids.date', move_date_operator, target_datetime)
+        ]
+
+
+class StockPicking(models.Model):
+    _inherit = 'stock.picking'
+
+
+    custome_order_id = fields.Many2one('custome.sale.order',string='CustomeSaleOrder')
