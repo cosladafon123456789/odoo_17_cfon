@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_vendor_backlist,access_vendor_backlist,model_vendor_backlist,base.group_user,1,1,1,1
+access_custome_sale_order,access_custome_sale_order,model_custome_sale_order,base.group_user,1,1,1,1

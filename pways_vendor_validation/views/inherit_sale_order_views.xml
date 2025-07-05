@@ -6,9 +6,10 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='payment_term_id']" position="after">
-                <field name="latest_delivery_date" readonly="1" invisible="0"/>
-               <field name="order_minutes" readonly="1" invisible="0"/>
-               <field name="picking_user_id" readonly="1" invisible="0"/>
+                <field name="latest_delivery_date" readonly="1" invisible="1"/>
+               <field name="order_minutes" readonly="1" invisible="1"/>
+               <field name="picking_user_id" readonly="1" invisible="1"/>
+               <field name="custome_sale_id" readonly="1" invisible="1"/>
             </xpath>
         </field>
     </record>
@@ -78,14 +79,14 @@
     </record>
 
     <menuitem id="menu_sale_order_recent_grouped"
-          name="Sale Orders Minute"
-          parent="sale.sale_order_menu"
+          name="ordenes de venta minuto"
+          parent="sale.menu_sale_report"
           action="action_sale_order_recent_grouped"
           sequence="100"/>
 
     <menuitem id="menu_sale_order_recent_hour"
-          name="Sale Orders Hour"
-          parent="sale.sale_order_menu"
+          name="ordenes de venta hora"
+          parent="sale.menu_sale_report"
           action="action_sale_order_recent_hour"
           sequence="200"/>
 

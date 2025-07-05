@@ -13,6 +13,7 @@
         'security/ir.model.access.csv',
         'views/vendor_backlist_views.xml',
         'views/inherit_sale_order_views.xml',
+        'views/custome_sale_order_view.xml',
     ],
     
     'installable': True,

@@ -96,8 +96,8 @@ class SaleOrder(models.Model):
         'res.users',
         string='Picking Done By',
         compute='_compute_picking_done_user',
-        store=True
-    )
+        store=True)
+    custome_sale_id = fields.Many2one('custome.sale.order', string="Custome Sale Order")
 
     @api.depends('picking_ids.state')
     def _compute_picking_done_user(self):
@@ -170,36 +170,8 @@ class SaleOrder(models.Model):
         ]
 
 
-    # @api.depends('order_line.move_ids.date')
-    # def _compute_order_minutes(self):
-    #     now = fields.Datetime.now()
-    #     for order in self:
-    #         if order.create_date:
-    #             delta = now - order.create_date
-    #             order.order_minutes = delta.total_seconds() / 60
-    #         else:
-    #             order.order_minutes = 0.0
+class StockPicking(models.Model):
+    _inherit = 'stock.picking'
 
 
-    # def _search_order_minutes(self, operator, value):
-    #     """ Search on computed field 'order_minutes' """
-    #     # Calculate the corresponding create_date based on 'value' minutes ago
-    #     now = fields.Datetime.now()
-    #     target_datetime = now - timedelta(minutes=value)
-
-    #     # Reverse operator: since we're searching 'order_minutes <= 30',
-    #     # we search 'create_date >= now - 30 minutes'
-    #     reverse_map = {
-    #         '<=': '>=',
-    #         '<':  '>',
-    #         '>=': '<=',
-    #         '>':  '<',
-    #         '=':  '=',
-    #         '!=': '!=',
-    #     }
-
-    #     create_date_operator = reverse_map.get(operator)
-    #     if not create_date_operator:
-    #         raise ValueError(f"Unsupported operator for order_minutes: {operator}")
-
-    #     return [('create_date', create_date_operator, target_datetime)]
+    custome_order_id = fields.Many2one('custome.sale.order',string='CustomeSaleOrder')
