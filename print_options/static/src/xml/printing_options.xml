@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="printing_options.ButtonOptions">
+        <Dialog size="'sm'" title="title">
+            <div style="text-align:center;">
+                <div class="btn-group" role="group">
+                    <button class="btn btn-primary" t-on-click="() => this.executePdfAction('print')">
+                        <i class="fa fa-print me-2"/>
+                        <span>Print</span>
+                    </button>
+                    <button class="btn btn-primary" t-on-click="() => this.executePdfAction('save')">
+                        <i class="fa fa-download me-2"/>
+                        <span>Save</span>
+                    </button>
+                    <button class="btn btn-primary" t-on-click="() => this.executePdfAction('view')">
+                        <i class="fa fa-file-text me-2"/>
+                        <span>View</span>
+                    </button>
+                </div>
+            </div>
+        </Dialog>
+    </t>
+</templates>
