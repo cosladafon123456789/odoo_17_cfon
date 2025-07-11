@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="inherit_repair_order" model="ir.ui.view">
+        <field name="name">repair.order.form</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="repair.view_repair_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='picking_id']" position="after">
+                  <field name="order_minutes" invisible="1"/>
+                  <field name="done_date" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="repair_order_search_filter_inherit" model="ir.ui.view">
+        <field name="name">repair.order.search.inherit.order_minutes</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="repair.view_repair_order_form_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='partner']" position="after">
+                <filter string="Done in Last 30 Minutes"
+                    name="done_last_30_min"
+                    domain="[('order_minutes', '&lt;=', 30)]"/>
+                <filter string="Done in Last 1 Hour"
+                    name="done_last_1_hour"
+                    domain="[('order_minutes', '&lt;=', 60)]"/>
+                <filter string="Done Today"
+                    name="done_today"
+                    domain="[('order_minutes', '&lt;=', 1440)]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_repair_order_minute" model="ir.actions.act_window">
+        <field name="name">Repair Orders Minute</field>
+        <field name="res_model">repair.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {
+                "search_default_done_last_30_min": 1,
+            }
+        </field>
+    </record>
+
+    <record id="action_repair_order_hour" model="ir.actions.act_window">
+        <field name="name">Repair Orders Hour</field>
+        <field name="res_model">repair.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {
+                "search_default_done_last_1_hour": 1,
+            }
+        </field>
+    </record>
+
+    <record id="action_repair_order_day" model="ir.actions.act_window">
+        <field name="name">Repair Orders Day</field>
+        <field name="res_model">repair.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">
+            {
+                "search_default_done_today": 1,
+            }
+        </field>
+    </record>
+
+    <menuitem id="menu_repair_order_minute"
+        name="Repair Orders Minute"
+        parent="repair.repair_menu_reporting"
+        action="action_repair_order_minute"
+        sequence="100"/>
+
+    <menuitem id="menu_repair_order_hour"
+        name="Repair Orders Hour"
+        parent="repair.repair_menu_reporting"
+        action="action_repair_order_hour"
+        sequence="200"/>
+    
+    <menuitem id="menu_repair_order_day"
+        name="Repair Orders Day"
+        parent="repair.repair_menu_reporting"
+        action="action_repair_order_day"
+        sequence="300"/>
+</odoo>
