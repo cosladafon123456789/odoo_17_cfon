@@ -1,0 +1,16 @@
+<odoo>
+    <record id="view_stock_lot_form_inherit_standard_label_v4" model="ir.ui.view">
+        <field name="name">stock.lot.form.standard.label.v4</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="print_serial_label"
+                        type="object"
+                        string="Imprimir Etiqueta N° Serie"
+                        class="btn-primary"
+                        context="{'report_type': 'qweb-pdf'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
