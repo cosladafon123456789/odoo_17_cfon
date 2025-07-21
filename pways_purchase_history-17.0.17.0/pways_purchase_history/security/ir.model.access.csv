@@ -1,4 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-pways_purchase_history.access_purchase_history_line,access_purchase_history_line,pways_purchase_history.model_purchase_history_line,base.group_user,1,1,1,1
-pways_purchase_history.access_product_history,access_product_history,pways_purchase_history.model_product_history,base.group_user,1,1,1,1
-pways_purchase_history.access_purchase_history_lines,access_purchase_history_lines,pways_purchase_history.model_purchase_history_lines,base.group_user,1,1,1,1
