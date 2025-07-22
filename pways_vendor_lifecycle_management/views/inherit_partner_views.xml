@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record id="view_partner_form_inherit_vendor_rating" model="ir.ui.view">
+	    <field name="name">res.partner.form.vendor.rating</field>
+	    <field name="model">res.partner</field>
+	    <field name="inherit_id" ref="base.view_partner_form"/>
+	    <field name="arch" type="xml">
+	        <xpath expr="//field[@name='vat']" position="after">
+	            <field name="vendor_final_rating" widget="rating"/>
+	        </xpath>
+	    </field>
+	</record>
+
+	<record id="view_res_partner_form_inherit_vendor_eval_button" model="ir.ui.view">
+	    <field name="name">res.partner.form.vendor.evaluation.inline.button</field>
+	    <field name="model">res.partner</field>
+	    <field name="inherit_id" ref="base.view_partner_form"/>
+	    <field name="arch" type="xml">
+	        <xpath expr="//field[@name='vendor_final_rating']" position="after">
+	            <button name="action_open_vendor_evaluation"
+	                    string="Open Evaluations"
+	                    type="object"
+	                    class="btn-primary"
+	                    icon="fa-external-link-alt"
+	                    groups="purchase.group_purchase_manager"/>
+	        </xpath>
+	    </field>
+	</record>
+
+	<record id="view_purchase_order_form_inherit_vendor_rating" model="ir.ui.view">
+	    <field name="name">purchase.order.form.vendor.rating</field>
+	    <field name="model">purchase.order</field>
+	    <field name="inherit_id" ref="purchase.purchase_order_form"/>
+	    <field name="arch" type="xml">
+	        <xpath expr="//field[@name='partner_ref']" position="after">
+	            <field name="vendor_final_rating" widget="rating" readonly="1"/>
+	        </xpath>
+	    </field>
+	</record>
+</odoo>

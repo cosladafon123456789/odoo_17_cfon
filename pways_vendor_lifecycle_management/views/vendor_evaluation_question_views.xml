@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Tree View for Questions -->
+    <record id="view_vendor_evaluation_question_list" model="ir.ui.view">
+        <field name="name">vendor.evaluation.question.tree</field>
+        <field name="model">vendor.evaluation.question</field>
+        <field name="arch" type="xml">
+            <tree string="Evaluation Questions">
+                <field name="name"/>
+                <field name="date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Questions -->
+    <record id="view_vendor_evaluation_question_form" model="ir.ui.view">
+        <field name="name">vendor.evaluation.question.form</field>
+        <field name="model">vendor.evaluation.question</field>
+        <field name="arch" type="xml">
+            <form string="Evaluation Question">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Questions">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action to open the view -->
+    <record id="action_vendor_evaluation_question" model="ir.actions.act_window">
+        <field name="name">Evaluation Questions</field>
+        <field name="res_model">vendor.evaluation.question</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu Items -->
+   
+    <menuitem id="menu_vendor_question"
+              name="Evaluation Questions"
+              parent="purchase.menu_purchase_config"
+              action="action_vendor_evaluation_question"/>
+
+</odoo>

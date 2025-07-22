@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vendor_evaluation,access_vendor_evaluation,model_vendor_evaluation,base.group_user,1,1,1,1
+access_vendor_evaluation_question,access_vendor_evaluation_question,model_vendor_evaluation_question,base.group_user,1,1,1,1
+access_vendor_evaluation_question_line,access_vendor_evaluation_question_line,model_vendor_evaluation_question_line,base.group_user,1,1,1,1
+access_vendor_evaluation_line,access_vendor_evaluation_line,model_vendor_evaluation_line,base.group_user,1,1,1,1
