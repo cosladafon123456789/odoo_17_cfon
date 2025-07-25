@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_helpdesk_ticket_form_origin_tag_final" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.origin.tag.final</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[.//field[@name='linked_sale_order_id']]" position="inside">
+                <field name="sale_origin_tag"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
