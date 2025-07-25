@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_helpdesk_ticket_form_origin_tag" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.sale.order.origin.tag</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group" position="after">
+                <group string="Información del Pedido">
+                    <field name="sale_origin_tag"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
