@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id,perm_read,perm_write,perm_create,perm_unlink
+access_send_to_location_wizard,access_send_to_location_wizard,model_send_to_location_wizard,,1,1,1,1
+access_stock_production_lot,access_stock_production_lot,model_stock_production_lot,,1,0,0,0
