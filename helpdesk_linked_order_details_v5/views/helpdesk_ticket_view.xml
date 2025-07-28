@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-  <record id="view_helpdesk_ticket_form_linked_order_details_v5" model="ir.ui.view">
-    <field name="name">helpdesk.ticket.form.linked.order.details.v5</field>
-    <field name="model">helpdesk.ticket</field>
-    <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
-    <field name="arch" type="xml">
-      <xpath expr="//form/sheet" position="inside">
-        <group string="Productos del Pedido Asociado">
-          <field name="linked_order_line_ids" nolabel="1">
-            <tree string="Productos del pedido" editable="false">
-              <field name="order_name"/>
-              <field name="date_order" string="Fecha de Compra"/>
-              <field name="product_id"/>
-              <field name="serial_number" string="Nº Serie"/>
-            </tree>
-          </field>
-        </group>
-      </xpath>
-    </field>
-  </record>
+    <record id="view_helpdesk_ticket_inherited_order_lines" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.inherit.order.lines</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='linked_sale_order_id']" position="after">
+                <field name="x_studio_origen" readonly="1"/>
+
+                <group string="Productos del pedido asociado" col="3">
+                    <field name="linked_order_line_ids" mode="tree" nolabel="1">
+                        <tree string="Productos del pedido" editable="bottom">
+                            <field name="date_order"/>
+                            <field name="product_id"/>
+                            <field name="serial_number"/>
+                        </tree>
+                    </field>
+                </group>
+            </xpath>
+        </field>
+    </record>
 </odoo>
