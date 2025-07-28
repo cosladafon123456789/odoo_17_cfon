@@ -1,10 +1,10 @@
 {
-    "name": "Sale Order Dynamic Send to Location",
-    "version": "1.2",
+    "name": "Sale Order Send to Locations",
+    "version": "1.3",
     "depends": ["sale", "stock"],
     "author": "ChatGPT",
     "category": "Sales",
-    "description": "Adds a wizard to choose the destination inventory location from a sale order.",
+    "description": "Send products from Sale Orders to internal stock locations with optional IMEI tracking.",
     "data": [
         "security/ir.model.access.csv",
         "views/sale_order_view.xml",
