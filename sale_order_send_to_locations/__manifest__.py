@@ -1,13 +1,14 @@
 {
-    "name": "Sale Order Send to Locations",
-    "version": "1.0",
+    "name": "Sale Order Dynamic Send to Location",
+    "version": "1.1",
     "depends": ["sale", "stock"],
     "author": "ChatGPT",
     "category": "Sales",
-    "description": "Adds a dropdown to Sale Order to send items to specific inventory locations.",
+    "description": "Adds a wizard to choose the destination inventory location from a sale order.",
     "data": [
-        "views/sale_order_view.xml"
+        "views/sale_order_view.xml",
+        "views/send_to_location_wizard_view.xml"
     ],
     "installable": True,
-    "application": False,
+    "application": False
 }
