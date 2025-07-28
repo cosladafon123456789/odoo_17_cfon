@@ -56,13 +56,12 @@ class SendToLocationWizard(models.TransientModel):
                     ml.lot_id = lots[i].id if i < len(lots) else None
             else:
                 for ml in move.move_line_ids:
-                    ml.qty_done = line.product_uom_qty
+                    ml.qty_done = move.product_uom_qty
 
         picking.action_confirm()
         picking.action_assign()
         picking.button_validate()
 
-        # Agregar mensaje al chatter de la orden de venta
         self.sale_id.message_post(body=f"📦 Productos enviados automáticamente a <b>{self.location_id.display_name}</b> con albarán <a href='#' data-oe-model='stock.picking' data-oe-id='{picking.id}'>{picking.name}</a>.")
 
         return {
