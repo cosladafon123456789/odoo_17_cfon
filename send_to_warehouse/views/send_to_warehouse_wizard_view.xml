@@ -1,0 +1,23 @@
+<odoo>
+  <record id="view_send_to_warehouse_wizard" model="ir.ui.view">
+    <field name="name">send.to.warehouse.wizard.form</field>
+    <field name="model">send.to.warehouse.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Enviar a Almacén">
+        <group>
+          <field name="warehouse_id"/>
+        </group>
+        <footer>
+          <button string="Enviar" type="object" name="confirm_transfer" class="btn-primary"/>
+          <button string="Cancelar" class="btn-secondary" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+  <act_window id="action_send_to_warehouse_wizard"
+              name="Enviar a Almacén"
+              res_model="send.to.warehouse.wizard"
+              view_mode="form"
+              target="new"
+              view_id="view_send_to_warehouse_wizard"/>
+</odoo>
