@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from markupsafe import Markup
 
 class HelpdeskTicketLinkedOrderLine(models.Model):
     _name = 'helpdesk.ticket.linked.order.line'
@@ -16,9 +17,14 @@ class HelpdeskTicket(models.Model):
 
     linked_order_line_ids = fields.One2many(
         'helpdesk.ticket.linked.order.line', 'ticket_id',
-        string='Productos del Pedido',
         compute='_compute_linked_order_lines',
         store=False
+    )
+
+    linked_order_product_summary = fields.Html(
+        string='Resumen de productos del pedido',
+        compute='_compute_product_summary',
+        sanitize=False
     )
 
     @api.depends('linked_sale_order_id')
@@ -42,3 +48,17 @@ class HelpdeskTicket(models.Model):
                         })
                         created_ids.append(new_line.id)
             ticket.linked_order_line_ids = [(6, 0, created_ids)]
+
+    @api.depends('linked_order_line_ids')
+    def _compute_product_summary(self):
+        for ticket in self:
+            html = ""
+            for line in ticket.linked_order_line_ids:
+                html += f"""
+                    <div style='margin-bottom:8px;'>
+                        <strong>🗓 Fecha:</strong> {line.date_order.strftime('%d/%m/%Y %H:%M:%S') if line.date_order else ''}<br/>
+                        <strong>📦 Producto:</strong> {line.product_id.display_name}<br/>
+                        <strong>🔢 Nº Serie:</strong> {line.serial_number or '-'}
+                    </div>
+                """
+            ticket.linked_order_product_summary = Markup(html)
