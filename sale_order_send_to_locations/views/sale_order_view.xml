@@ -9,13 +9,11 @@
                 <button name="action_send_to_telemalaga"
                         type="object"
                         string="Enviar a TELEMALAGA"
-                        class="btn btn-secondary"
-                        attrs="{'invisible': [('state', '!=', 'sale')]}"/>
+                        class="btn btn-secondary"/>
                 <button name="action_send_to_clinicphone"
                         type="object"
                         string="Enviar a CLINICPHONE"
-                        class="btn btn-secondary"
-                        attrs="{'invisible': [('state', '!=', 'sale')]}"/>
+                        class="btn btn-secondary"/>
             </xpath>
         </field>
     </record>
