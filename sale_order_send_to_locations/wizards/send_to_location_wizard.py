@@ -26,11 +26,13 @@ class SendToLocationWizard(models.TransientModel):
         })
 
         for line in self.sale_id.order_line:
-            if line.product_id.type != 'product':
+            product = line.product_id
+            if product.type != 'product':
                 continue
+
             move = self.env['stock.move'].create({
-                'name': line.name or line.product_id.name,
-                'product_id': line.product_id.id,
+                'name': line.name or product.name,
+                'product_id': product.id,
                 'product_uom_qty': line.product_uom_qty,
                 'product_uom': line.product_uom.id,
                 'location_id': picking.location_id.id,
@@ -40,12 +42,28 @@ class SendToLocationWizard(models.TransientModel):
 
             move._action_confirm()
             move._action_assign()
-            for ml in move.move_line_ids:
-                ml.qty_done = ml.product_uom_qty
+
+            if product.tracking != 'none':
+                lots = self.env['stock.production.lot'].search([
+                    ('product_id', '=', product.id)
+                ], limit=int(line.product_uom_qty))
+
+                if not lots:
+                    raise UserError(f"No hay lotes/IMEIs disponibles para el producto: {product.display_name}")
+
+                for i, ml in enumerate(move.move_line_ids):
+                    ml.qty_done = 1.0
+                    ml.lot_id = lots[i].id if i < len(lots) else None
+            else:
+                for ml in move.move_line_ids:
+                    ml.qty_done = line.product_uom_qty
 
         picking.action_confirm()
         picking.action_assign()
         picking.button_validate()
+
+        # Agregar mensaje al chatter de la orden de venta
+        self.sale_id.message_post(body=f"📦 Productos enviados automáticamente a <b>{self.location_id.display_name}</b> con albarán <a href='#' data-oe-model='stock.picking' data-oe-id='{picking.id}'>{picking.name}</a>.")
 
         return {
             'type': 'ir.actions.act_window',
