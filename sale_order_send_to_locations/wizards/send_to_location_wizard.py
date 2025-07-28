@@ -37,22 +37,11 @@ class SendToLocationWizard(models.TransientModel):
                 'location_dest_id': picking.location_dest_id.id,
                 'picking_id': picking.id,
             })
-            if line.lot_id:
-                self.env['stock.move.line'].create({
-                    'move_id': move.id,
-                    'product_id': line.product_id.id,
-                    'qty_done': line.product_uom_qty,
-                    'product_uom_id': line.product_uom.id,
-                    'location_id': picking.location_id.id,
-                    'location_dest_id': picking.location_dest_id.id,
-                    'lot_id': line.lot_id.id,
-                    'picking_id': picking.id,
-                })
-            else:
-                move._action_confirm()
-                move._action_assign()
-                for ml in move.move_line_ids:
-                    ml.qty_done = ml.product_uom_qty
+
+            move._action_confirm()
+            move._action_assign()
+            for ml in move.move_line_ids:
+                ml.qty_done = ml.product_uom_qty
 
         picking.action_confirm()
         picking.action_assign()
