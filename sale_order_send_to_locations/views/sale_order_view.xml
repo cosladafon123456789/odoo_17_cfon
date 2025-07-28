@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_custom_send_to" model="ir.ui.view">
+        <field name="name">sale.order.form.custom.send.to</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_view_invoice']" position="after">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+                        Enviar a
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a type="object" name="action_send_to_telemalaga" class="dropdown-item">
+                                TELEMALAGA
+                            </a>
+                        </li>
+                        <li>
+                            <a type="object" name="action_send_to_clinicphone" class="dropdown-item">
+                                CLINICPHONE
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
