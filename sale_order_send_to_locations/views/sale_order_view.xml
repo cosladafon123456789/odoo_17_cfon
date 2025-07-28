@@ -5,21 +5,17 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//button[@name='action_view_invoice']" position="after">
-                <div class="btn-group">
+            <xpath expr="//header" position="inside">
+                <div class="btn-group o_dropdown_button">
                     <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
                         Enviar a
                     </button>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" role="menu" style="display:block;">
                         <li>
-                            <a type="object" name="action_send_to_telemalaga" class="dropdown-item">
-                                TELEMALAGA
-                            </a>
+                            <button type="object" name="action_send_to_telemalaga" class="dropdown-item" string="TELEMALAGA"/>
                         </li>
                         <li>
-                            <a type="object" name="action_send_to_clinicphone" class="dropdown-item">
-                                CLINICPHONE
-                            </a>
+                            <button type="object" name="action_send_to_clinicphone" class="dropdown-item" string="CLINICPHONE"/>
                         </li>
                     </ul>
                 </div>
