@@ -6,19 +6,16 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <xpath expr="//header" position="inside">
-                <div class="btn-group o_dropdown_button">
-                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
-                        Enviar a
-                    </button>
-                    <ul class="dropdown-menu" role="menu" style="display:block;">
-                        <li>
-                            <button type="object" name="action_send_to_telemalaga" class="dropdown-item" string="TELEMALAGA"/>
-                        </li>
-                        <li>
-                            <button type="object" name="action_send_to_clinicphone" class="dropdown-item" string="CLINICPHONE"/>
-                        </li>
-                    </ul>
-                </div>
+                <button name="action_send_to_telemalaga"
+                        type="object"
+                        string="Enviar a TELEMALAGA"
+                        class="btn btn-secondary"
+                        attrs="{'invisible': [('state', '!=', 'sale')]}"/>
+                <button name="action_send_to_clinicphone"
+                        type="object"
+                        string="Enviar a CLINICPHONE"
+                        class="btn btn-secondary"
+                        attrs="{'invisible': [('state', '!=', 'sale')]}"/>
             </xpath>
         </field>
     </record>
