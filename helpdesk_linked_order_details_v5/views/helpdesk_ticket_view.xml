@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='linked_sale_order_id']" position="after">
-                <field name="x_studio_origen" readonly="1"/>
+                
 
                 <group string="Productos del pedido asociado" col="3">
                     <field name="linked_order_line_ids" mode="tree" nolabel="1">
