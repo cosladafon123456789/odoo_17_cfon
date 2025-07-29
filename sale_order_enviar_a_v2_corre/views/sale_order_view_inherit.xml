@@ -1,0 +1,16 @@
+<odoo>
+    <record id="view_order_form_inherit_enviar_a" model="ir.ui.view">
+        <field name="name">sale.order.form.enviar.a</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="open_enviar_a_wizard"
+                        string="Enviar A"
+                        type="object"
+                        class="oe_highlight"
+                        icon="fa-send"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
