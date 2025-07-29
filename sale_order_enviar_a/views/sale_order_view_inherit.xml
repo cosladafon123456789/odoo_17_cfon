@@ -4,7 +4,7 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//button[@name='action_create_rma']" position="after">
+            <xpath expr="//header" position="inside">
                 <button name="open_enviar_a_wizard"
                         string="Enviar A"
                         type="object"
