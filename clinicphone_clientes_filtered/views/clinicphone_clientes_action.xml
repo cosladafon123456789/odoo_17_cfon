@@ -1,0 +1,8 @@
+<odoo>
+    <record id="action_clinicphone_filtered_picking" model="ir.actions.act_window">
+        <field name="name">ClinicPhone Clientes</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('location_dest_id.complete_name','=','Partners/Vendors/CLINICPHONE')]</field>
+    </record>
+</odoo>

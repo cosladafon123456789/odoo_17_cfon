@@ -1,0 +1,7 @@
+<odoo>
+    <menuitem id="menu_clinicphone_filtered_picking_root"
+              name="ClinicPhone Clientes"
+              parent="stock.menu_warehouse_root"
+              action="action_clinicphone_filtered_picking"
+              sequence="25"/>
+</odoo>
