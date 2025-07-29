@@ -12,7 +12,14 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
 
-    imei_ids = fields.Many2many('stock.lot',string='IMEI Number', copy=False, domain="[('product_id', '=', product_id)]")
+    # imei_ids = fields.Many2many('stock.lot',string='IMEI Number', copy=False, domain="[('product_id', '=', product_id)]")
+    imei_ids = fields.Many2many('stock.lot',
+        'sale_order_line_imei_rel', 
+        'sale_line_id',
+        'lot_id',
+        string='IMEI Number',
+        copy=False,
+        domain="[('product_id', '=', product_id)]")
     tracking_number = fields.Char(string='Tracking Number')
     picking_status = fields.Char(string="Shipping status", compute='_compute_picking_status', store=False)
     source_id = fields.Many2one('utm.source',related="order_id.source_id",string="Channel (WEB)")
