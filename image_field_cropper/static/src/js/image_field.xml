@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-inherit="web.ImageField" t-inherit-mode="extension">
+        <xpath expr="//button[hasclass('o_select_file_button')]" position="after">       
+            <button
+                class="o_edit_file_button btn btn-light border-0 rounded-circle m-1 p-1"
+                data-tooltip="Cropper"
+                aria-label="Cropper"
+                t-on-click="onFilePhotoroomEdit">
+                <i class="fa fa-crop fa-fw"/>
+                </button>
+        </xpath>
+    </t>
+
+</templates>

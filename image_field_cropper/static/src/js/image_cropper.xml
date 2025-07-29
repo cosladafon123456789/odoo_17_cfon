@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="image_field_cropper.ImageCropperDialog">
+        <Dialog size="'xl'" title="'Image Cropper'">
+            <div class="container-fluid cropper">   
+                <div class="mb-3 row">                    
+                    <div class="col-md-12 mt16">
+                        <img id="image"  t-att-src="this.props.fileurl" alt="Picture" t-ref="imageRef"/>
+                    </div>         
+                </div>                
+            </div>
+            <t t-set-slot="footer">
+                <button class="btn btn-primary" t-on-click="onClickZoomIn">
+                    <i class="fa fa-search-plus"></i>
+                </button>
+                <button class="btn btn-primary" t-on-click="onClickZoomOut">
+                    <i class="fa fa-search-minus"></i>
+                </button>
+                <button class="btn btn-primary" t-on-click="onClickMoveLeft">
+                    <i class="fa fa-arrow-left"></i>
+                </button>
+                <button class="btn btn-primary" t-on-click="onClickMoveRight">
+                    <i class="fa fa-arrow-right"></i>
+                </button>
+                <button class="btn btn-primary" t-on-click="onClickMoveUp">
+                    <i class="fa fa-arrow-up"></i>
+                </button>
+                <button class="btn btn-primary" t-on-click="onClickMoveDown">
+                    <i class="fa fa-arrow-down"></i>
+                </button>
+                <button class="btn btn-primary" t-on-click="onClickUndo">
+                    <i class="fa fa-undo"></i>
+                </button>
+                <button class="btn btn-primary" t-on-click="onClickRedo">
+                    <i class="fa fa-redo fa-rotate-right"></i>
+                </button>
+                <button class="btn btn-primary" t-on-click="onClickFlipHorizontal">
+                    <i class="fa fa-arrows-h"></i>
+                </button>
+                <button class="btn btn-primary" t-on-click="onClickFlipVertical">
+                    <i class="fa fa-arrows-v"></i>
+                </button>
+                <button class="btn btn-primary" t-on-click="onClickCrop">
+                    <i class="fa fa-check"></i>
+                </button>
+                <button class="btn btn-primary" t-on-click="onClickClear">
+                    <i class="fa fa-times"></i>
+                </button>
+                <button class="btn btn-primary" t-on-click="onClickReload">
+                    <i class="fa fa-refresh"></i>
+                </button>
+                <button class="btn btn-primary" t-on-click="onClickConfirm">
+                    <i class="fa fa-floppy-o"></i>
+                </button>
+                <button class="btn btn-primary" t-on-click="props.close">
+                    <i class="fa fa-power-off"></i>
+                </button>
+            </t>
+        </Dialog>
+    </t>
+</templates>
