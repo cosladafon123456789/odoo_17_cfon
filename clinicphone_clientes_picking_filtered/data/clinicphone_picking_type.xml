@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Crear tipo de operación -->
+    <record id="picking_type_clinicphone_clientes" model="stock.picking.type">
+        <field name="name">ClinicPhone Clientes</field>
+        <field name="sequence_code">CLINIC</field>
+        <field name="code">internal</field>
+        <field name="warehouse_id" eval="False"/>
+        <field name="default_location_src_id" ref="stock.stock_location_stock"/>
+        <field name="default_location_dest_id" eval="96"/> <!-- ID de Partners/Vendors/CLINICPHONE -->
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- Acción personalizada con filtro -->
+    <record id="action_clinicphone_filtered_picking" model="ir.actions.act_window">
+        <field name="name">Traslados ClinicPhone</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('picking_type_id', '=', ref('picking_type_clinicphone_clientes')), ('location_dest_id', '=', 96)]</field>
+    </record>
+
+    <!-- Enlazar la acción personalizada con el tipo de operación -->
+    <record id="link_action_to_clinicphone_type" model="stock.picking.type">
+        <field name="id" eval="ref('picking_type_clinicphone_clientes')"/>
+        <field name="show_operations" eval="True"/>
+        <field name="show_reserved" eval="True"/>
+        <field name="use_existing_lots" eval="True"/>
+        <field name="action_id" ref="action_clinicphone_filtered_picking"/>
+    </record>
+</odoo>
