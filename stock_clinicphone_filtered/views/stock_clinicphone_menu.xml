@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_stock_picking_clinicphone" model="ir.actions.act_window">
+        <field name="name">ClinicPhone</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('location_dest_id', '=', 96), ('picking_type_id', '=', 51)]</field>
+        <field name="context">{'search_default_location_dest_id': 96, 'search_default_picking_type_id': 51}</field>
+    </record>
+
+    <menuitem id="menu_stock_picking_clinicphone"
+              name="Inventario ClinicPhone"
+              parent="stock.menu_warehouse_root"
+              action="action_stock_picking_clinicphone"
+              sequence="15"/>
+</odoo>
