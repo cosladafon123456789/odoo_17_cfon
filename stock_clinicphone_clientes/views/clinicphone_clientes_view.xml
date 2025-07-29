@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_clinicphone_clientes_quant" model="ir.actions.act_window">
+        <field name="name">ClinicPhone Clientes</field>
+        <field name="res_model">stock.quant</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('location_id', '=', 96)]</field>
+        <field name="context">{'search_default_location_id': 96}</field>
+    </record>
+
+    <menuitem id="menu_clinicphone_clientes"
+              name="ClinicPhone Clientes"
+              parent="stock.menu_root"
+              action="action_clinicphone_clientes_quant"
+              sequence="20"/>
+</odoo>
