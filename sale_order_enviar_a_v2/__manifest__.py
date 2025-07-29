@@ -4,6 +4,7 @@
     "author": "ChatGPT",
     "depends": ["sale", "stock"],
     "data": [
+        "security/ir.model.access.csv",
         "views/sale_order_view_inherit.xml",
         "views/enviar_a_wizard_view.xml"
     ],
