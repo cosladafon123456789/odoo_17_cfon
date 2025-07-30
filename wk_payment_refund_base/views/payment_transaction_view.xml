@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!-- Copyright (c) 2015-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- "License URL : <https://store.webkul.com/license.html/>" -->
+<odoo>
+    <record id="wk_payment_refund_transaction_form" model="ir.ui.view">
+        <field name="name">wk.payment.refund.transaction.form</field>
+        <field name="model">payment.transaction</field>
+        <field name="inherit_id" ref="payment.payment_transaction_form" />
+        <field name="arch" type="xml">
+            <field name="partner_lang" position="after">
+                <field name="operation" invisible="1"/>
+                <field name="wk_refund_reason" invisible="operation!='refund'" readonly="1" />
+            </field>
+        </field>
+    </record>
+</odoo>
