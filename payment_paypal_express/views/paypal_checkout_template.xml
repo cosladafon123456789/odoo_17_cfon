@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+<odoo>
+    <data>
+        <template id="paypal_checkout_form">
+            <input type="hidden" name="data_set" t-att-data-action-url="tx_url" data-remove-me=""/>
+            <input type='hidden' name='amount' t-att-value="amount"/>
+            <input type='hidden' name='invoice_num' t-att-value='reference'/>
+            <input type='hidden' name='so_reference' t-att-value='so_reference'/>
+            <input type='hidden' name='currency_code' t-att-value='currency_code'/>
+            <!-- Billing Information-->
+            <input type="hidden" name='billing_first_name' t-att-value="billing_first_name"/>
+            <input type="hidden" name='billing_last_name' t-att-value="billing_last_name"/>
+            <input type="hidden" name='billing_phone' t-att-value="billing_phone"/>
+            <input type="hidden" name='billing_email' t-att-value="billing_email"/>
+            <input type="hidden" name='billing_address_l1' t-att-value="billing_address_l1"/>
+            <input type="hidden" name='billing_area1' t-att-value='billing_area1'/>
+            <input type="hidden" name='billing_area2' t-att-value="billing_area2"/>
+            <input type="hidden" name='billing_zip_code' t-att-value="billing_zip_code"/>
+            <input type="hidden" name='billing_country_code' t-att-value='billing_country_code'/>
+            <!-- Shipping Information-->
+            <input type="hidden" name='shipping_partner_name' t-att-value="shipping_partner_name"/>
+            <input type="hidden" name='shipping_address_l1' t-att-value="shipping_address_l1"/>
+            <input type="hidden" name='shipping_area1' t-att-value="shipping_area1"/>
+            <input type="hidden" name='shipping_area2' t-att-value="shipping_area2"/>
+            <input type="hidden" name='shipping_zip_code' t-att-value="shipping_zip_code"/>
+            <input type="hidden" name='shipping_country_code' t-att-value='shipping_country_code'/>
+        </template>
+    </data>
+</odoo>

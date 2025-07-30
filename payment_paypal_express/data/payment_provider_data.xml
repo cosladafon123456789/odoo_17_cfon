@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+<odoo>
+    <data noupdate="1">
+      <record id="payment_paypal_express_method" model="payment.method">
+      <field name="name">Paypal Express Checkout</field>
+      <field name="code">paypal_express</field>
+      <field name="sequence">1</field>
+      <field name="image" type="base64" file="payment_paypal_express/static/src/img/paypal_icon.png"/>
+      <field name="support_tokenization">True</field>
+      <field name="support_express_checkout">True</field>
+      <field name="support_refund"></field>
+  </record>
+
+        <record id="payment_acquirer_paypal_express" model="payment.provider">
+            <field name="name">Paypal Express Checkout</field>
+            <field name="code">paypal_express</field>
+            <field name="paypal_client_id">sb</field>
+            <field name="module_id" ref="base.module_payment_paypal_express"/>
+            <field name="payment_method_ids"
+             eval="[Command.set([
+                       ref('payment_paypal_express.payment_paypal_express_method'),
+                   ])]"
+      />
+            <field name="image_128" type="base64" file="payment_paypal_express/static/src/img/paypal_icon.png"/>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="redirect_form_view_id" ref="paypal_checkout_form"/>
+            <field name="pre_msg"><![CDATA[
+                <p>A new pop-up will open on clicking pay now button.</p>]]>
+            </field>
+        </record>
+    </data>
+</odoo>

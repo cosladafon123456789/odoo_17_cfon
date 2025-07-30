@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+<odoo>
+    <data>
+        <record id="acquirer_form_for_paypal_checkout" model="ir.ui.view">
+            <field name="name">acquirer.form.paypal.checkout</field>
+            <field name="model">payment.provider</field>
+           <field name="inherit_id" ref="payment.payment_provider_form"/>
+            <field name="arch" type="xml">
+                <xpath expr='//group[@name="provider_credentials"]' position='after'>
+                    <group name="wk_paypal_client_id" invisible="code != 'paypal_express'">
+                        <field name="paypal_client_id" required="code == 'paypal_express'"/>
+                        <field name="disable_funding" placeholder="Eg:-card,credit,paylater"/>
+                        <div class="p-3 text-warning" colspan="2" nolabel="1">
+                          Note: You can refer to this link <span class="text-primary">https://developer.paypal.com/sdk/js/configuration/#link-disablefunding</span> to see other disable funding options.
+                        </div>
+                    </group>
+                </xpath>
+                <xpath expr='//group[@name="provider_config"]' position='after'>
+                    <div id="paypal_express_checkout" invisible="code != 'paypal_express'">
+                      <h2 style="margin-bottom: 0;padding: 0.25rem 16px;background-color: #e9ecef;font-size: 15px;font-weight: bold;">Paypal Express Checkout Configuration</h2>
+                      <div class="row mt16 o_settings_container" id="paypal_express_settings">
+                          <div class="col-12 col-lg-6 o_setting_box">
+                              <div class="o_setting_left_pane">
+                                  <field name="override_shipping"  help="Enable to change shipping details at PayPal end"/>
+                              </div>
+                              <div class="o_setting_right_pane">
+                                  <label for="override_shipping" string="Update Shipping Details from PayPal end"/>
+                                  <div class="text-muted">
+                                      ⇒ Enable this to update shipping details in odoo from PayPal end.
+                                  </div>
+                              </div>
+                              <div class="o_setting_left_pane">
+                                  <field name="override_billing"  help="Enable to change shipping details at PayPal end"/>
+                              </div>
+                              <div class="o_setting_right_pane">
+                                  <label for="override_billing" string="Update Billing Details from PayPal end"/>
+                                  <div class="text-muted">
+                                      ⇒ Enable this to update billing details in odoo from PayPal end.
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
