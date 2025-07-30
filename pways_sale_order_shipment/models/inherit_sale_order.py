@@ -28,7 +28,7 @@ class SaleOrderLine(models.Model):
     date_order = fields.Datetime(related="order_id.date_order", string="Order Date")
     is_validated = fields.Boolean(string='Validated')
     carrier_id = fields.Many2one('delivery.carrier',string='Transporista')
-    is_rebu = fields.Boolean(related="order_id.is_rebu",string='Es REBU')
+    is_rebu = fields.Boolean(string='Es REBU')
 
     @api.depends('order_id.picking_ids.state')
     def _compute_picking_status(self):
@@ -88,11 +88,41 @@ class SaleOrderLine(models.Model):
                 
                 if line.tracking_number:
                     picking.carrier_tracking_ref = line.tracking_number
+
+            # Check if all related moves in all pickings are done
+            for picking in order.picking_ids.filtered(lambda p: p.state not in ('done', 'cancel')):
+                for ml in picking.move_line_ids:
+                    if not ml.quantity:
+                        ml.quantity = ml.move_id.product_uom_qty or 1.0
+
+                all_ready = all(ml.quantity for ml in picking.move_line_ids)
+
+                if all_ready:
+                    picking.button_validate()
+                    print('Validated:', picking.name)
+
             
             line.is_validated = True
         
         return self.env.ref('pways_sale_order_shipment.report_imei_label_action').report_action(self)
 
+    @api.model
+    def create(self, vals):
+        line = super().create(vals)
+        if vals.get('is_rebu') and line.order_id:
+            line.order_id.is_rebu = True
+        return line
+
+    def write(self, vals):
+        result = super().write(vals)
+        for line in self:
+            if 'is_rebu' in vals and line.order_id:
+                # If any line is_rebu=True, mark order as rebu
+                if any(l.is_rebu for l in line.order_id.order_line):
+                    line.order_id.is_rebu = True
+                else:
+                    line.order_id.is_rebu = False
+        return result
 
 class StockMove(models.Model):
     _inherit = 'stock.move'
