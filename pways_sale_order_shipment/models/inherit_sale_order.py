@@ -2,10 +2,10 @@ from odoo import fields, models, api, exceptions, _
 from odoo.exceptions import ValidationError
 from datetime import timedelta
 
-class SaleOrder(models.Model):
-    _inherit = "sale.order"
+# class SaleOrder(models.Model):
+#     _inherit = "sale.order"
 
-    is_rebu = fields.Boolean(string='Es REBU')
+#     is_rebu = fields.Boolean(string='Es REBU')
 
 
 class SaleOrderLine(models.Model):
@@ -29,6 +29,8 @@ class SaleOrderLine(models.Model):
     is_validated = fields.Boolean(string='Validated')
     carrier_id = fields.Many2one('delivery.carrier',string='Transporista')
     is_rebu = fields.Boolean(string='Es REBU')
+    origen = fields.Char(related="order_id.x_studio_origen", string="Origen")
+    
 
     @api.depends('order_id.picking_ids.state')
     def _compute_picking_status(self):
@@ -99,7 +101,6 @@ class SaleOrderLine(models.Model):
 
                 if all_ready:
                     picking.button_validate()
-                    print('Validated:', picking.name)
 
             
             line.is_validated = True
