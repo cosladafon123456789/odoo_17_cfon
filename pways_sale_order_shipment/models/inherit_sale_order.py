@@ -30,7 +30,18 @@ class SaleOrderLine(models.Model):
     carrier_id = fields.Many2one('delivery.carrier',string='Transporista')
     is_rebu = fields.Boolean(string='Es REBU')
     origen = fields.Char(related="order_id.x_studio_origen", string="Origen")
+    imei_pdf_url = fields.Char(string="IMEI PDF Link", compute="_compute_imei_pdf_url")
+    country_id = fields.Many2one('res.country',string='Customer Country',related='order_id.partner_id.country_id')
     
+    @api.depends('is_validated')
+    def _compute_imei_pdf_url(self):
+        for line in self:
+            if line.is_validated:
+                line.imei_pdf_url = f"/report/pdf/pways_sale_order_shipment.report_imei_label_action/{line.id}"
+            else:
+                line.imei_pdf_url = False
+
+
 
     @api.depends('order_id.picking_ids.state')
     def _compute_picking_status(self):
@@ -62,6 +73,12 @@ class SaleOrderLine(models.Model):
 
     def action_validation(self):
         for line in self:
+            for move in line.move_ids:
+                picking = move.picking_id
+                if move.state == 'done' and picking and picking.state == 'done':
+                    line.tracking_number = picking.carrier_tracking_ref
+                    line.carrier_id = picking.carrier_id
+                    line.imei_ids = [(6, 0, move.move_line_ids.mapped('lot_id').ids)]
 
             if line.is_validated:
                 raise ValidationError("This line has already validated.")
@@ -91,7 +108,6 @@ class SaleOrderLine(models.Model):
                 if line.tracking_number:
                     picking.carrier_tracking_ref = line.tracking_number
 
-            # Check if all related moves in all pickings are done
             for picking in order.picking_ids.filtered(lambda p: p.state not in ('done', 'cancel')):
                 for ml in picking.move_line_ids:
                     if not ml.quantity:
@@ -102,10 +118,10 @@ class SaleOrderLine(models.Model):
                 if all_ready:
                     picking.button_validate()
 
-            
             line.is_validated = True
         
         return self.env.ref('pways_sale_order_shipment.report_imei_label_action').report_action(self)
+
 
     @api.model
     def create(self, vals):
@@ -124,6 +140,13 @@ class SaleOrderLine(models.Model):
                 else:
                     line.order_id.is_rebu = False
         return result
+
+    # @api.depends('move_ids.picking_id.carrier_tracking_ref')
+    # def _compute_tracking_number(self):
+    #     for line in self:
+    #         pickings = line.move_ids.mapped('picking_id').filtered(lambda p: p.state not in ('cancel'))
+    #         line.tracking_number = ', '.join(filter(None, pickings.mapped('carrier_tracking_ref')))
+
 
 class StockMove(models.Model):
     _inherit = 'stock.move'

@@ -2,7 +2,7 @@
 {
     'name': 'PWays Sale Order Shipment',
     'version': '17.0',
-    'summary': """Sale Order Shipment. 30/07/2025""",
+    'summary': """Sale Order Shipment. 01/08/2025""",
     'description': """ Sale Order Shipment""",
     'category': 'Sale Order',
     'author':'Preciseways',
