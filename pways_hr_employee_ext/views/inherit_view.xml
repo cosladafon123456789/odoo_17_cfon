@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- contract -->
+        <record id="view_hr_contract_form_exte" model="ir.ui.view">
+            <field name="name">hr.contract.form.exte</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header/field[@name='state'][2]" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+                <xpath expr="//group[@name='top_info_right']/field[@name='hr_responsible_id']" position="after">
+                    <field name="is_probation"/>
+                    <field name="probation_start_date" invisible="not is_probation" required="is_probation"/>
+                    <field name="probation_end_date" invisible="not is_probation" required="is_probation"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <!-- contract -->
+        <record id="view_hr_contract_form_exte_salary" model="ir.ui.view">
+            <field name="name">hr.contract.form.exte.salary</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract_salary.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header/button[@name='action_generate_offer']" position="after">
+                    <button name="action_draft" string="Reset To Draft" type="object" class="oe_highlight" invisible="state != 'cancel'"/>
+                    <button name="action_close" string="Expire" type="object" class="oe_highlight" invisible="state != 'open'"/>
+                    <button name="action_cancel" string="Cancel" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Employee -->
+        <record id="view_hr_maintenance_employee_form_exte" model="ir.ui.view">
+            <field name="name">hr.employee.form.exte</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_maintenance.hr_employee_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='equipment_count']" position="attributes">
+                    <attribute name="string">Assets</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

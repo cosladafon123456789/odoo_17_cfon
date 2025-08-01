@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_employee_view_form_pways2" model="ir.ui.view">
+        <field name="name">hr.employee.form.pways</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='personal_information']//field[@name='identification_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//group/field[@name='department_id']" position="after">
+                <field name="hr_hfm_department_id"/>
+            </xpath>
+            <xpath expr="//field[@name='coach_id']" position="after">
+                <!-- <field name="division" string="Division"/> -->
+                <field name="identification_id" string="Emirates ID Number"/>
+                <field name="visa_designation" string="Visa Designation"/>
+                <field name="company_mol_code" string="Company MOL Code"/>
+                <field name="category_id" string="Category 2"/>                
+            </xpath>
+            <xpath expr="//field[@name='private_car_plate']" position="after">
+                <field name="service_age" string="Service Age"/>
+                <field name="date_of_leaving" string="Date of Leaving"/>
+                <field name="air_ticket_start_date" string="Air Ticket Period" widget="daterange"
+                    options='{"end_date_field": "air_ticket_end_date", "always_range": "1"}'
+                    required="air_ticket_start_date or air_ticket_end_date"/>
+                <field name="air_ticket_end_date" invisible="1" required="air_ticket_start_date"/>
+
+            </xpath>
+            <xpath expr="//field[@name='birthday']" position="after">
+                <field name="age" string="Age"/>
+            </xpath>
+            <xpath expr="//group[@name='identification_group']/label[@for='barcode']" position="attributes">
+                <attribute name="string">Global ID</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="hr_employee_view_search_pways2" model="ir.ui.view">
+        <field name="name">hr.employee.search.pways</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_skills.hr_employee_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="barcode" string="Global ID"/>
+            </xpath>
+            <xpath expr="//group/filter[@name='group_category_ids']" position="after">
+                <filter name="group_barcode" string="Global ID" domain="[]" context="{'group_by': 'barcode'}"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="view_hr_maintenance_employee_form_exte" model="ir.ui.view">
+        <field name="name">hr.employee.form.exte</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_maintenance.hr_employee_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='equipment_count']" position="attributes">
+                <attribute name="string">Assets</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

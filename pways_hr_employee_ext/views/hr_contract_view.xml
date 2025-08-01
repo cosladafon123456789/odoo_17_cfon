@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_contract_form_exte" model="ir.ui.view">
+        <field name="name">hr.contract.form.exte</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/field[@name='state'][2]" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//group[@name='top_info_right']/field[@name='hr_responsible_id']" position="after">
+                <field name="is_probation"/>
+                <field name="probation_start_date" invisible="not is_probation" required="is_probation"/>
+                <field name="probation_end_date" invisible="not is_probation" required="is_probation"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <record id="view_hr_contract_form_exte_salary" model="ir.ui.view">
+        <field name="name">hr.contract.form.exte.salary</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract_salary.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_generate_offer']" position="attributes">
+                <attribute name="invisible">state != 'open'</attribute>
+            </xpath>            
+            <xpath expr="//header/button[@name='action_generate_offer']" position="after">
+                <button name="action_draft" string="Reset To Draft" type="object" class="oe_highlight" invisible="state != 'cancel'"/>
+                <button name="action_wait_approval" string="Waiting For Approval" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                <button name="action_open" string="Running" type="object" class="oe_highlight" invisible="state != 'approved'"/>
+                <button name="action_close" string="Expire" type="object" class="oe_highlight" invisible="state != 'open'"/>
+                <button name="action_cancel" string="Cancel" type="object" class="oe_highlight" invisible="state not in ('draft', 'wait_approval', 'open', 'cancel')"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

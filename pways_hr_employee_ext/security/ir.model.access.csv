@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_job_category,access_hr_job_category,model_hr_job_category,base.group_user,1,1,1,1
+access_hr_visa_designation_user,access.hr.visa.designation.user,model_hr_visa_designation,base.group_user,1,1,1,1
+access_hr_hfm_department,access_hr_hfm_department,model_hr_hfm_department,base.group_user,1,1,1,1

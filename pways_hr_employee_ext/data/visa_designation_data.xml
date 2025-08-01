@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data noupdate="1">
+		<record id="visa_designation_01" model="hr.visa.designation">
+			<field name="name">Accountant</field>
+		</record>
+		<record id="visa_designation_02" model="hr.visa.designation">
+			<field name="name">Accounting Clerk</field>
+		</record>
+		<record id="visa_designation_03" model="hr.visa.designation">
+			<field name="name">Admin Coordinator</field>
+		</record>
+		<record id="visa_designation_04" model="hr.visa.designation">
+			<field name="name">Aluminium Doors Maker</field>
+		</record>
+		<record id="visa_designation_05" model="hr.visa.designation">
+			<field name="name">Area Sales Manager</field>
+		</record>
+		<record id="visa_designation_06" model="hr.visa.designation">
+			<field name="name">Contracts Engineer</field>
+		</record>
+		<record id="visa_designation_07" model="hr.visa.designation">
+			<field name="name">Credit Analyst</field>
+		</record>
+		<record id="visa_designation_08" model="hr.visa.designation">
+			<field name="name">Electrician</field>
+		</record>
+		<record id="visa_designation_09" model="hr.visa.designation">
+			<field name="name">Electrician Technician</field>
+		</record>
+		<record id="visa_designation_10" model="hr.visa.designation">
+			<field name="name">Electrical Mechanic</field>
+		</record>
+		<record id="visa_designation_11" model="hr.visa.designation">
+			<field name="name">Electrical Technician</field>
+		</record>
+		<record id="visa_designation_12" model="hr.visa.designation">
+			<field name="name">Electronic Technician</field>
+		</record>
+		<record id="visa_designation_13" model="hr.visa.designation">
+			<field name="name">Executive Director</field>
+		</record>
+		<record id="visa_designation_14" model="hr.visa.designation">
+			<field name="name">Filing Clerk</field>
+		</record>
+		<record id="visa_designation_15" model="hr.visa.designation">
+			<field name="name">Finance Manager</field>
+		</record>
+		<record id="visa_designation_16" model="hr.visa.designation">
+			<field name="name">Financial Controller</field>
+		</record>
+		<record id="visa_designation_17" model="hr.visa.designation">
+			<field name="name">HR Officer</field>
+		</record>
+		<record id="visa_designation_18" model="hr.visa.designation">
+			<field name="name">Industrial Wiring Electrician</field>
+		</record>
+		<record id="visa_designation_19" model="hr.visa.designation">
+			<field name="name">Maintenance Mechanic Assistant</field>
+		</record>
+		<record id="visa_designation_20" model="hr.visa.designation">
+			<field name="name">Manager</field>
+		</record>
+		<record id="visa_designation_21" model="hr.visa.designation">
+			<field name="name">Mechanical Engineer</field>
+		</record>
+		<record id="visa_designation_22" model="hr.visa.designation">
+			<field name="name">Metal Sheet black smith</field>
+		</record>
+		<record id="visa_designation_23" model="hr.visa.designation">
+			<field name="name">Production supervisor</field>
+		</record>
+		<record id="visa_designation_24" model="hr.visa.designation">
+			<field name="name">Project Engineer</field>
+		</record>
+		<record id="visa_designation_25" model="hr.visa.designation">
+			<field name="name">Sales Executive</field>
+		</record>
+		<record id="visa_designation_26" model="hr.visa.designation">
+			<field name="name">Sales Manager</field>
+		</record>
+		<record id="visa_designation_27" model="hr.visa.designation">
+			<field name="name">Service Manager</field>
+		</record>
+		<record id="visa_designation_28" model="hr.visa.designation">
+			<field name="name">Site Supervisor</field>
+		</record>
+		<record id="visa_designation_29" model="hr.visa.designation">
+			<field name="name">Stall &amp; Market sales person</field>
+		</record>
+		<record id="visa_designation_30" model="hr.visa.designation">
+			<field name="name">Steel Door Maker</field>
+		</record>
+		<record id="visa_designation_31" model="hr.visa.designation">
+			<field name="name">Technical Manager</field>
+		</record>
+		<record id="visa_designation_32" model="hr.visa.designation">
+			<field name="name">Warehouse Manager</field>
+		</record>
+		<record id="visa_designation_33" model="hr.visa.designation">
+			<field name="name">Wiring Electrician General</field>
+		</record>
+	</data>
+</odoo>

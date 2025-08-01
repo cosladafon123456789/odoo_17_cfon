@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_account_analytic_account_form_exte" model="ir.ui.view">
+            <field name="name">analytic.analytic.account.form.exte</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[2]/h1" position="after">
+                    <label for="parent_analytic_id"/>
+                    <h2>
+                        <field name="parent_analytic_id" class="oe_inline"/>
+                    </h2>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
