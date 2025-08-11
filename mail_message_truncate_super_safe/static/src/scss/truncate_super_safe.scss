@@ -1,0 +1,26 @@
+\
+/* Vista colapsada: mostrar 6 líneas y fundido al final */
+.cf-details-wrap .cf-content {
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-height: 9.6em;
+  position: relative;
+}
+.cf-details-wrap:not([open]) .cf-content::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2.5em;
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+  pointer-events: none;
+}
+.cf-summary {
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+  margin-top: 4px;
+  list-style: none;
+}
+.cf-summary::-webkit-details-marker { display: none; }
