@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Form view: muestra los campos bajo "Pedido detectado" -->
+    <record id="view_helpdesk_ticket_form_inherit_days_since_purchase" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.days_since_purchase</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="Pedido detectado">
+                    <field name="days_since_purchase" readonly="1"/>
+                    <field name="purchase_status_text" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Tree/List view: añade columnas y decora filas según días -->
+    <record id="view_helpdesk_ticket_tree_inherit_days_since_purchase" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.tree.days_since_purchase</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <!-- Naranja si > 730 (GARANTIA EXPIRADA); Rojo si 22..730 (DESESTIMIENTO EXPIRADO) -->
+                <attribute name="decoration-warning">days_since_purchase &gt; 730</attribute>
+                <attribute name="decoration-danger">days_since_purchase &gt; 21 and days_since_purchase &lt;= 730</attribute>
+            </xpath>
+            <xpath expr="//tree" position="inside">
+                <field name="days_since_purchase"/>
+                <field name="purchase_status_text"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
