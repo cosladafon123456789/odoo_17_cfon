@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+        <record id="view_picking_form_cancel" model="ir.ui.view">
+            <field name="name">stock.picking.form.cancel</field>
+            <field name="model">stock.picking</field>
+            <field eval="500" name="priority" />
+            <field name="inherit_id" ref="stock.view_picking_form" />
+            <field name="arch" type="xml">
+                      <xpath expr="//div[@name='button_box']" position="after">
+                    <widget
+                    name="web_ribbon"
+                    title="Cancel requested"
+                    bg_color="bg-danger"
+                    invisible="not cancel_requested"
+                />
+                   </xpath>
+
+
+                <group name="other_infos" position="inside">
+                    <field name="cancel_requested" />
+                </group>
+            </field>
+        </record>
+
+        <record id="view_picking_tree_cancel" model="ir.ui.view">
+            <field name="name">stock.picking.tree.cancel</field>
+            <field name="model">stock.picking</field>
+            <field eval="500" name="priority" />
+            <field name="inherit_id" ref="stock.vpicktree" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="inside">
+                    <field name="cancel_requested" optional="show" />
+                </xpath>
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="decoration-danger">cancel_requested == True</attribute>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="view_picking_search_cancel" model="ir.ui.view">
+            <field name="name">stock.picking.search.cancel</field>
+            <field name="model">stock.picking</field>
+            <field eval="500" name="priority" />
+            <field name="inherit_id" ref="stock.view_picking_internal_search" />
+            <field name="arch" type="xml">
+                <filter name="draft" position="before">
+                    <filter
+                    string="Cancel requested"
+                    domain="[('cancel_requested', '=', True)]"
+                    name="cancel_requested"
+                />
+                    <separator />
+                </filter>
+            </field>
+        </record>
+
+        <record id="picking_view_kanban_inherit_cancel" model="ir.ui.view">
+            <field name="name">stock.picking.view.kanban.cancel</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.stock_picking_kanban" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='priority']" position="before">
+                    <field name="cancel_requested" invisible="1" />
+                    <div
+                    style="background-color: red; font-weight:bold; padding: 10px; color: white;"
+                    invisible="not cancel_requested"
+                >
+                        Cancel requested
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+</odoo>

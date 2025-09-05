@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+        <record id="view_order_form_cancel" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field eval="500" name="priority" />
+            <field name="inherit_id" ref="sale.view_order_form" />
+            <field name="arch" type="xml">
+                   <xpath expr="//div[@name='button_box']" position="after">
+                    <widget
+                    name="web_ribbon"
+                    title="Cancel requested"
+                    bg_color="bg-danger"
+                    invisible="not cancel_requested"
+                />
+                   </xpath>
+
+
+                <group name="sale_reporting" position="inside">
+                    <label for="cancel_requested" />
+                    <field name="cancel_requested" />
+                </group>
+            </field>
+        </record>
+
+        <record id="view_quotation_tree_cancel" model="ir.ui.view">
+            <field name="name">sale.order.tree</field>
+            <field name="model">sale.order</field>
+            <field eval="500" name="priority" />
+            <field name="inherit_id" ref="sale.view_quotation_tree" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="inside">
+                    <field name="cancel_requested" optional="show" />
+                </xpath>
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="decoration-danger">cancel_requested == True</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_order_tree_cancel" model="ir.ui.view">
+            <field name="name">sale.order.tree</field>
+            <field name="model">sale.order</field>
+            <field eval="500" name="priority" />
+            <field name="inherit_id" ref="sale.view_order_tree" />
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="inside">
+                    <field name="cancel_requested" optional="show" />
+                </xpath>
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="decoration-danger">cancel_requested == True</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_sales_order_filter_cancel" model="ir.ui.view">
+            <field name="name">sale.order.list.select.cancel</field>
+            <field name="model">sale.order</field>
+            <field eval="500" name="priority" />
+            <field name="inherit_id" ref="sale.view_sales_order_filter" />
+            <field name="arch" type="xml">
+                <filter name="my_sale_orders_filter" position="after">
+                    <separator />
+                    <filter
+                    string="Cancel requested"
+                    domain="[('cancel_requested', '=', True)]"
+                    name="cancel_requested"
+                />
+                </filter>
+            </field>
+        </record>
+
+</odoo>

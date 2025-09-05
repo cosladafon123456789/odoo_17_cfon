@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+        <record id="mail_template_cancel_order" model="mail.template">
+            <field name="name">Sale Order: Cancel requested</field>
+            <field name="model_id" ref="sale.model_sale_order" />
+            <field name="subject">Order cancel requested: {{ object.name }}</field>
+            <field name="email_from" />
+            <field name="email_to">{{ object.user_id.email_formatted }}</field>
+            <field name="auto_delete" eval="False" />
+            <field name="body_html" type="html">
+                <div>
+                    Cancel requested for order <t t-out="object.name or ''">SO00255</t>,
+                    Partner: <t t-out="object.partner_id.name or ''">Abigail Peterson</t>.<br /><br />
+                    Please take the required steps for order cancellation.
+                </div>
+            </field>
+        </record>
+
+</odoo>
