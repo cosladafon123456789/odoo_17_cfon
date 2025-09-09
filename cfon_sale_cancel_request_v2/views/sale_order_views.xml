@@ -1,0 +1,39 @@
+<odoo>
+  <record id="view_order_form_inherit_cfon_cancel" model="ir.ui.view">
+    <field name="name">sale.order.form.cfon.cancel</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="priority" eval="5"/>
+    <field name="arch" type="xml">
+      <xpath expr="//header//button[@name='action_cancel']" position="attributes">
+        <attribute name="groups">cfon_sale_cancel_request.group_cancel_approver</attribute>
+      </xpath>
+      <xpath expr="//header" position="inside">
+        <button name="action_request_cancel" type="object"
+                string="Solicitar cancelación"
+                class="btn-secondary"
+                groups="base.group_user"
+                attrs="{
+                  'invisible': ['|', ('state','in',['draft','cancel']),
+                                   ('cancel_request','=',True)]
+                }"/>
+      </xpath>
+      <xpath expr="//sheet" position="before">
+        <widget name="web_ribbon" title="Solicitud de cancelación"
+                bg_color="bg-danger" invisible="not cancel_request"/>
+      </xpath>
+    </field>
+  </record>
+
+  <record id="sale_order_search_inherit_cfon_cancel" model="ir.ui.view">
+    <field name="name">sale.order.search.cfon.cancel</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
+    <field name="arch" type="xml">
+      <xpath expr="//search" position="inside">
+        <filter name="cancel_req" string="Con solicitud de cancelación"
+                domain="[('cancel_request','=',True)]"/>
+      </xpath>
+    </field>
+  </record>
+</odoo>
