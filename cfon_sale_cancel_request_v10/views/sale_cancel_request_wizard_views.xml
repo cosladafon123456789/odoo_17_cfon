@@ -1,0 +1,25 @@
+<odoo>
+  <record id="view_sale_cancel_request_wizard_form" model="ir.ui.view">
+    <field name="name">sale.cancel.request.wizard.form</field>
+    <field name="model">sale.cancel.request.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Solicitar cancelación">
+        <group>
+          <field name="sale_id" readonly="1"/>
+        </group>
+        <group string="Motivo">
+          <field name="reason_choice"/>
+          <field name="reason_other" placeholder="Especifica el otro motivo..."
+                 modifiers='{"invisible": [["reason_choice","!=", "otro"]]}'/>
+        </group>
+        <group>
+          <field name="reason" readonly="1" string="Resumen del motivo"/>
+        </group>
+        <footer>
+          <button string="Enviar solicitud" type="object" name="action_submit" class="btn-primary"/>
+          <button string="Cerrar" class="btn-secondary" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+</odoo>
