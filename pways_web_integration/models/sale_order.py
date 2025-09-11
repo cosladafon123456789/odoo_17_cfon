@@ -14,9 +14,9 @@ class SaleOrder(models.Model):
 
 	def _notify_delivery_status(self, status=9):
 		# loginc for send request
-		url = self.env.company.url
-		if url and self.env.company.token:
-			headers = {"Content-Type": "application/json", "X-Webhook-Token": self.env.company.token}
+		url = self.env.company.web_url
+		if url and self.env.company.web_token:
+			headers = {"Content-Type": "application/json", "X-Webhook-Token": self.env.company.web_token}
 			payload = {
 				"orders": [{
 					"order_number": self.name,
@@ -24,7 +24,7 @@ class SaleOrder(models.Model):
 			}
 			try:
 				answer = requests.post(url, data=payload, headers=headers)
-				print(answer)
+				print("rrrrrrrrr", answer)
 				self.sync_status = "done"
 			except requests.exceptions.ConnectionError:
 				self.sync_status = "failure"
