@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'CFON - Subir facturas proveedor (PDF)',
-    'version': '17.0.1.0.1',
+    'version': '17.0.1.0.4',
     'license': 'LGPL-3',
     'author': 'ChatGPT for CFON',
     'website': 'https://www.cosladafon.com',
@@ -12,7 +12,9 @@
         'security/ir.model.access.csv',
         'views/wizard_views.xml',
         'views/account_move_views.xml',
-        'views/menu.xml',
+        'views/actions.xml',
+        'views/server_action.xml',
+        
     ],
     'assets': {},  # no assets needed
     'installable': True,
