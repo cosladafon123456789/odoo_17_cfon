@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add menu entry under Vendors -->
+    <menuitem id="menu_cfon_vendor_bill_upload_root"
+              name="Subir facturas (PDF)"
+              parent="account.menu_finance_entries_payable"
+              action="action_account_vendor_bill_upload_wizard"
+              sequence="5"/>
+</odoo>
