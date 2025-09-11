@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="folder_vendor_bills_ocr_pro" model="documents.folder">
+    <field name="name">Facturas Proveedor (OCR Gratis)</field>
+  </record>
+  <record id="action_ocr_process_document_pro" model="ir.actions.server">
+    <field name="name">Procesar por OCR (Gratis Pro)</field>
+    <field name="model_id" ref="documents.model_documents_document"/>
+    <field name="binding_model_id" ref="documents.model_documents_document"/>
+    <field name="state">code</field>
+    <field name="code">
+# Procesar todos los documentos seleccionados
+for doc in records:
+    env['invoice.ocr.engine'].process_document(doc)
+    </field>
+  </record>
+</odoo>
