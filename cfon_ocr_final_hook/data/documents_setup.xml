@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="folder_vendor_bills_ocr_pro" model="documents.folder">
+    <field name="name">Facturas Proveedor (OCR Gratis)</field>
+  </record>
+</odoo>

@@ -1,0 +1,18 @@
+# -*- coding: utf-8 -*-
+{'name': 'CFON OCR Facturas Proveedor (Hook)',
+ 'summary': 'OCR facturas proveedor con Documentos + plantillas.',
+ 'version': '17.0.7.0.0',
+ 'author': 'CFON',
+ 'website': 'https://example.com',
+ 'license': 'LGPL-3',
+ 'category': 'Accounting/Accounting',
+ 'depends': ['base', 'account', 'documents'],
+ 'data': ['security/ir.model.access.csv',
+          'views/ocr_template_views.xml',
+          'data/documents_setup.xml',
+          'data/ocr_templates.xml',
+          'data/ocr_templates_extra.xml',
+          'data/ocr_templates_last.xml'],
+ 'application': False,
+ 'installable': True,
+ 'external_dependencies': {'python': ['pdfminer.six', 'python-dateutil']}}
