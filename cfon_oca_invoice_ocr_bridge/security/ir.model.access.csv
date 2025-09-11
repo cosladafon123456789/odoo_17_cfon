@@ -1,4 +1,0 @@
-
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_cfon_ocr_import_wizard,access.cfon.ocr.import.wizard,model_cfon_ocr_import_wizard,account.group_account_invoice,1,1,1,0
-access_cfon_ocr_import_file,access.cfon.ocr.import.file,model_cfon_ocr_import_file,account.group_account_invoice,1,1,1,0
