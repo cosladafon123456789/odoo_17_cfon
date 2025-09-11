@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="tpl_generic_es" model="invoice.ocr.template">
+    <field name="name">Genérico ES</field>
+    <field name="priority">50</field>
+    <field name="language">spa</field>
+    <field name="date_format">%d/%m/%Y</field>
+    <field name="regex_invoice_number">(?i)(?:factura|n[ºo])\s*[:\-]?\s*([A-Z0-9\-\/\.]+)</field>
+    <field name="regex_date">(\d{2}/\d{2}/\d{4})</field>
+    <field name="regex_total">(?i)(?:total|importe\s*total)\s*[:\-]?\s*([\d\.,]+)</field>
+    <field name="regex_currency">(?i)\b(EUR|USD|GBP)\b|([€$£])</field>
+  </record>
+</odoo>
