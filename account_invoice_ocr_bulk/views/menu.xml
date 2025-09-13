@@ -1,0 +1,13 @@
+
+<odoo>
+    <!-- Menu entry under Accounting → Vendors -->
+    <menuitem id="menu_account_ocr_root" name="Subir facturas (OCR)" parent="account.menu_finance" sequence="120"/>
+    <record id="action_bulk_invoice_ocr_wizard" model="ir.actions.act_window">
+        <field name="name">Subir facturas (OCR)</field>
+        <field name="res_model">bulk.invoice.ocr.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="menu_account_ocr_wizard" name="Subir facturas (OCR)"
+              parent="menu_account_ocr_root" action="action_bulk_invoice_ocr_wizard" sequence="10"/>
+</odoo>
