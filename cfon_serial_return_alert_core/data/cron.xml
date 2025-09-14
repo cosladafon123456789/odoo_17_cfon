@@ -1,0 +1,14 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="ir_cron_cfon_check_serial_return_alerts_core" model="ir.cron">
+    <field name="name">CFON: Check Serial Return Alerts (Core)</field>
+    <field name="model_id" ref="stock.model_stock_lot"/>
+    <field name="state">code</field>
+    <field name="code">model.search([]).action_notify_if_needed()</field>
+    <field name="interval_number">1</field>
+    <field name="interval_type">days</field>
+    <field name="numbercall">-1</field>
+    <field name="active">True</field>
+  </record>
+</odoo>
