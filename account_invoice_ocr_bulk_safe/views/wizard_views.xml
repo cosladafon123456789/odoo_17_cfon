@@ -1,0 +1,29 @@
+
+<odoo>
+    <record id="view_bulk_invoice_ocr_wizard_form" model="ir.ui.view">
+        <field name="name">bulk.invoice.ocr.wizard.form</field>
+        <field name="model">bulk.invoice.ocr.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Subir facturas (OCR masivo)">
+                <group>
+                    <group>
+                        <field name="company_id"/>
+                        <field name="journal_id"/>
+                        <field name="default_partner_id"/>
+                    </group>
+                </group>
+                <separator string="Archivos a procesar"/>
+                <field name="file_ids" context="{'default_wizard_id': active_id}">
+                    <tree editable="bottom">
+                        <field name="filename"/>
+                        <field name="datas" filename="filename"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    <button name="action_process" string="Crear facturas en borrador" type="object" class="btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
