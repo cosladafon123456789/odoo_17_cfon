@@ -1,9 +1,0 @@
-<odoo>
-    <data>
-        <template id="assets_backend" name="OCR Upload Assets" inherit_id="web.assets_backend">
-            <xpath expr="." position="inside">
-                <script type="text/javascript" src="/cf_vendor_bill_ocr_upload/static/src/js/bill_ocr_button.js"/>
-            </xpath>
-        </template>
-    </data>
-</odoo>

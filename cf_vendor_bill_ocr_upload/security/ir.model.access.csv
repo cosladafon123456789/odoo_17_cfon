@@ -1,3 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_bill_ocr_upload_wizard,bill_ocr_upload_wizard,model_bill_ocr_upload_wizard,base.group_user,1,1,1,0
-access_invoice_parser_config,invoice_parser_config,model_invoice_parser_config,base.group_system,1,1,1,1
