@@ -1,0 +1,36 @@
+
+<odoo>
+    <!-- Add return_count to lot form and a smart button -->
+    <record id="view_production_lot_form_inherit_return_alert" model="ir.ui.view">
+        <field name="name">stock.production.lot.form.return.alert</field>
+        <field name="model">stock.production.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group>
+                    <field name="return_count" readonly="1"/>
+                    <field name="flagged_many_returns" invisible="1"/>
+                </group>
+                <widget name="web_ribbon" title="Retornado 2+ veces" attrs="{'invisible': [('flagged_many_returns','=',False)]}"/>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button type="object" name="action_open_moves_history" string="Movimientos" class="oe_stat_button"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Menu: Lots returned 2+ times and in stock -->
+    <record id="action_lots_many_returns" model="ir.actions.act_window">
+        <field name="name">Nº de serie/lote con 2+ devoluciones</field>
+        <field name="res_model">stock.production.lot</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('return_count','>=',2)]</field>
+        <field name="context">{'search_default_in_stock': 1}</field>
+    </record>
+
+    <menuitem id="menu_lots_many_returns"
+              parent="stock.menu_traceability"
+              name="Números de serie/lote 2+ devoluciones"
+              action="action_lots_many_returns"
+              sequence="55"/>
+</odoo>
