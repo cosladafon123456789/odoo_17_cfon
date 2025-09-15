@@ -1,0 +1,78 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Añadir campos a la vista de lote/serie -->
+    <record id="view_production_lot_form_inherit_return_alert_nopopup" model="ir.ui.view">
+        <field name="name">stock.lot.form.return.alert.nopopup</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group" position="inside">
+                <group string="Devoluciones" colspan="2">
+                    <field name="return_count" readonly="1"/>
+                    <field name="needs_review" readonly="1"/>
+                </group>
+            </xpath>
+            <xpath expr="//form/header" position="inside">
+                <button name="%(action_lot_return_moves_nopopup)d" type="action" class="oe_stat_button" icon="fa-undo">
+                    <field name="return_count" widget="statinfo" string="Devoluciones"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Acción: abrir líneas de movimiento de devolución para el lote activo -->
+    <record id="action_lot_return_moves_nopopup" model="ir.actions.act_window">
+        <field name="name">Devoluciones (este lote)</field>
+        <field name="res_model">stock.move.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[
+            ('lot_id','=', active_id),
+            ('state','=','done'),
+            ('move_id.origin_returned_move_id','!=', False),
+            ('move_id.picking_id.picking_type_code','=','incoming')
+        ]</field>
+    </record>
+
+    <!-- Añadir columna en el árbol -->
+    <record id="view_production_lot_tree_inherit_return_alert_nopopup" model="ir.ui.view">
+        <field name="name">stock.lot.tree.return.alert.nopopup</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_tree"/>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="inside">
+                <field name="return_count" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Filtro rápida para >=2 -->
+    <record id="view_production_lot_search_inherit_return_alert_nopopup" model="ir.ui.view">
+        <field name="name">stock.lot.search.return.alert.nopopup</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_filter"/>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='search_name']" position="after">
+                <filter string="Revisar (≥2 devoluciones)" name="needs_review" domain="[('needs_review','=',True)]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Acción y menú: Números de serie/lote en stock +2 dev -->
+    <record id="action_lots_two_plus_in_stock_nopopup" model="ir.actions.act_window">
+        <field name="name">Números de serie/lote en stock +2 dev</field>
+        <field name="res_model">stock.lot</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('needs_review','=', True), ('product_qty','&gt;', 0)]</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_lots_two_plus_in_stock_nopopup"
+              name="Números de serie/lote en stock +2 dev"
+              parent="stock.menu_stock_product_menu"
+              action="action_lots_two_plus_in_stock_nopopup"
+              sequence="45"/>
+</odoo>
