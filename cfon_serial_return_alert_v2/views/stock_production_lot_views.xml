@@ -1,0 +1,41 @@
+
+<odoo>
+    <!-- Add return_count and a stat button in lot -->
+    <record id="view_production_lot_form_inherit_return_alert_v2" model="ir.ui.view">
+        <field name="name">stock.production.lot.form.return.alert.v2</field>
+        <field name="model">stock.production.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/notebook" position="before">
+                <group>
+                    <field name="return_count" readonly="1" attrs="{'invisible': [('product_id.tracking','!=','serial')]}"/>
+                </group>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button type="object" name="action_open_moves_history" string="Movimientos" class="oe_stat_button">
+                    <field name="return_count" widget="statinfo" string="Devoluciones"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Menus/Actions -->
+    <record id="action_lots_many_returns" model="ir.actions.act_window">
+        <field name="name">Nº de serie/lote con 2+ devoluciones</field>
+        <field name="res_model">stock.production.lot</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('return_count','>=',2)]</field>
+    </record>
+
+    <record id="action_lots_many_returns_in_stock" model="ir.actions.act_window">
+        <field name="name">Nº de serie/lote en stock (2+ devoluciones)</field>
+        <field name="res_model">stock.production.lot</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('return_count','>=',2), ('product_qty','&gt;',0)]</field>
+        <field name="context">{'search_default_in_stock': 1}</field>
+    </record>
+
+    <menuitem id="menu_lots_many_returns_root" parent="stock.menu_traceability" name="Alertas de devoluciones" sequence="54"/>
+    <menuitem id="menu_lots_many_returns" parent="menu_lots_many_returns_root" name="Todos (2+ devoluciones)" action="action_lots_many_returns" sequence="1"/>
+    <menuitem id="menu_lots_many_returns_in_stock" parent="menu_lots_many_returns_root" name="En stock (2+ devoluciones)" action="action_lots_many_returns_in_stock" sequence="2"/>
+</odoo>
