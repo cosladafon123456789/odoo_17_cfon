@@ -1,0 +1,17 @@
+<odoo>
+    <record id="view_stock_production_lot_form_inherit" model="ir.ui.view">
+        <field name="name">stock.production.lot.form.return.alert</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group>
+                    <field name="return_count" readonly="1"/>
+                </group>
+                <div t-if="record.has_return_alert.value" class="alert alert-danger mt16">
+                    ⚠️ Este número de serie ha sido devuelto más de 2 veces
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
