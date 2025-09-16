@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="action_lots_2plus_returns_safe13" model="ir.actions.act_window">
+    <field name="name">SN/Lotes +2 devoluciones en stock</field>
+    <field name="res_model">stock.lot</field>
+    <field name="view_mode">tree,form</field>
+    <field name="domain">[('x_return_count','>=',2), ('x_on_hand_qty','&gt;',0)]</field>
+  </record>
+
+  <menuitem id="menu_lots_2plus_returns_safe13"
+            name="SN/Lotes en stock +2 dev"
+            parent="stock.menu_traceability"
+            action="action_lots_2plus_returns_safe13"
+            sequence="25"/>
+</odoo>
