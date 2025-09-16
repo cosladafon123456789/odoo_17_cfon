@@ -1,0 +1,11 @@
+{'name': "Serial Return Report (CFON)",
+'summary': "Informe de SN/Lotes con 2+ devoluciones y stock interno (solo report, sin tocar modelos).",
+'version': "17.0.0.1.0",
+'category': "Inventory/Reporting",
+'author': "CosladaFon (CFON) + ChatGPT",
+'license': "LGPL-3",
+'website': "https://cosladafon.com",
+'depends': ["stock"],
+'data': ["views/report_views.xml", "security/ir.model.access.csv"],
+'installable': true,
+'application': false}
