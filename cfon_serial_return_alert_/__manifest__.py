@@ -1,0 +1,12 @@
+# -*- coding: utf-8 -*-
+{'name': "Serial Return Alert",
+'summary': "Avisa cuando un número de serie/lote ha sido devuelto 2+ veces y muestra menú de control.",
+'version': "17.0.1.0.0",
+'category': "Inventory/Logistics",
+'author': "CosladaFon (CFON) + ChatGPT",
+'license': "LGPL-3",
+'website': "https://cosladafon.com",
+'depends': ["stock"],
+'data': ["views/stock_lot_views.xml", "views/stock_picking_views.xml", "security/ir.model.access.csv"],
+'installable': true,
+'application': false}

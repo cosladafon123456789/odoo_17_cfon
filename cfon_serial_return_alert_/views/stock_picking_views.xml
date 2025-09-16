@@ -1,0 +1,20 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Banner on picking form if any problem lots -->
+    <record id="view_picking_form_cfon_alert" model="ir.ui.view">
+        <field name="name">stock.picking.form.cfon.return.banner</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <div attrs="{'invisible': [('x_has_problem_lots','=',False)]}">
+                    <div class="alert alert-warning" role="alert">
+                        ⚠️ Este albarán contiene números de serie/lotes con &ge; 2 devoluciones previas.
+                        Revisa el contenido antes de validar.
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
