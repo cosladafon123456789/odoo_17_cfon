@@ -1,0 +1,11 @@
+{'name': "Serial Return Alert (Safe v1.4)",
+'summary': "Avisa cuando un número de serie/lote ha sido devuelto 2+ veces (sin herencias de vistas).",
+'version': "17.0.1.4.1",
+'category': "Inventory/Logistics",
+'author': "CosladaFon (CFON) + ChatGPT",
+'license': "LGPL-3",
+'website': "https://cosladafon.com",
+'depends': ["stock"],
+'data': ["views/actions_menus.xml", "security/ir.model.access.csv"],
+'installable': true,
+'application': false}
