@@ -1,0 +1,50 @@
+<odoo>
+  <record id="view_order_form_with_helpdesk" model="ir.ui.view">
+    <field name="name">sale.order.form.helpdesk.link</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+      <!-- Botón inteligente -->
+      <xpath expr="//sheet//div[@name='button_box']" position="inside">
+        <button type="action"
+                name="action_view_helpdesk_tickets"
+                class="oe_stat_button"
+                icon="fa-life-ring"
+                attrs="{'invisible': [('helpdesk_ticket_count', '=', 0)]}">
+          <field name="helpdesk_ticket_count" widget="statinfo" string="Tickets Helpdesk"/>
+        </button>
+      </xpath>
+
+      <!-- Pestaña con los tickets -->
+      <xpath expr="//notebook" position="inside">
+        <page string="Tickets de Helpdesk">
+          <field name="helpdesk_ticket_ids" context="{'default_sale_link_id': active_id}">
+            <tree editable="bottom">
+              <field name="name"/>
+              <field name="partner_id"/>
+              <field name="stage_id"/>
+              <field name="user_id"/>
+              <field name="sale_link_id" invisible="1"/>
+            </tree>
+            <form>
+              <sheet>
+                <group>
+                  <field name="name"/>
+                  <field name="partner_id"/>
+                  <field name="stage_id"/>
+                  <field name="user_id"/>
+                  <field name="sale_link_id" readonly="1"/>
+                </group>
+                <notebook>
+                  <page string="Descripción">
+                    <field name="description" nolabel="1"/>
+                  </page>
+                </notebook>
+              </sheet>
+            </form>
+          </field>
+        </page>
+      </xpath>
+    </field>
+  </record>
+</odoo>
