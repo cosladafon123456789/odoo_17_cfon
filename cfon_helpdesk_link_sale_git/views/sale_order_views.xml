@@ -20,6 +20,7 @@
         <page string="Tickets de Helpdesk">
           <field name="helpdesk_ticket_ids" context="{'default_sale_link_id': active_id}">
             <tree editable="bottom">
+              <field name="team_id" invisible="1"/>
               <field name="name"/>
               <field name="partner_id"/>
               <field name="stage_id"/>
@@ -29,6 +30,7 @@
             <form>
               <sheet>
                 <group>
+                  <field name="team_id" invisible="1"/>
                   <field name="name"/>
                   <field name="partner_id"/>
                   <field name="stage_id"/>
