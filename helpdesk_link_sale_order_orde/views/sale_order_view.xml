@@ -1,0 +1,21 @@
+<odoo>
+  <record id="view_order_form_inherit_helpdesk_tickets" model="ir.ui.view">
+    <field name="name">sale.order.form.inherit.helpdesk</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//notebook" position="inside">
+        <page string="Tickets de Helpdesk">
+          <field name="helpdesk_ticket_ids">
+            <tree>
+              <field name="name"/>
+              <field name="create_date"/>
+              <field name="stage_id"/>
+              <field name="user_id"/>
+            </tree>
+          </field>
+        </page>
+      </xpath>
+    </field>
+  </record>
+</odoo>
