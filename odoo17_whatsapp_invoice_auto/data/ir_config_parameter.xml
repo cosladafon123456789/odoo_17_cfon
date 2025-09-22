@@ -1,0 +1,8 @@
+<odoo>
+    <data noupdate="1">
+        <record id="param_wa_invoice_message_template" model="ir.config_parameter">
+            <field name="key">whatsapp_invoice_auto.message_template</field>
+            <field name="value">Hola {name}, gracias por tu compra {order_name}. Aquí tienes tu factura {invoice_name}: {invoice_url}</field>
+        </record>
+    </data>
+</odoo>
