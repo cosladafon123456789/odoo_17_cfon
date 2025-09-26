@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_whatsapp_delivery_notify" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.whatsapp.delivery.notify</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.view_res_config_settings"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="WhatsApp" string="WhatsApp" >
+                    <h2>WhatsApp - Envío automático en entregas</h2>
+                    <group>
+                        <field name="whatsapp_autosend_enabled"/>
+                        <field name="whatsapp_template_name"/>
+                        <field name="whatsapp_lang"/>
+                        <field name="whatsapp_phone_priority"/>
+                    </group>
+                    <group string="Conector externo (opcional)">
+                        <field name="whatsapp_connector_model" placeholder="whatsapp.connector"/>
+                        <field name="whatsapp_connector_method" placeholder="whatsapp_send_template"/>
+                    </group>
+                    <label string="El módulo intentará primero usar el conector externo indicado. Si no existe, probará con el módulo nativo 'whatsapp' de Odoo si está instalado."/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
