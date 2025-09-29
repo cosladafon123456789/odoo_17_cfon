@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <record id="action_helpdesk_tickets_from_sale_order" model="ir.actions.act_window">
+    <field name="name">Tickets de Helpdesk</field>
+    <field name="res_model">helpdesk.ticket</field>
+    <field name="view_mode">tree,form</field>
+    <field name="domain">[('linked_sale_order_id', '=', active_id)]</field>
+    <field name="context">{'default_linked_sale_order_id': active_id}</field>
+  </record>
+
+  <record id="view_order_form_inherit_helpdesk_smartbutton" model="ir.ui.view">
+    <field name="name">sale.order.form.inherit.helpdesk.smartbutton</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//header" position="inside">
+        <button name="%(cf_helpdesk_orders.action_helpdesk_tickets_from_sale_order)d"
+                type="action"
+                string="Tickets de Helpdesk"
+                icon="fa-life-ring"
+                class="oe_stat_button"
+                attrs="{'invisible': [('helpdesk_ticket_ids', '=', False)]}">
+          <field name="helpdesk_ticket_ids" widget="statinfo"/>
+        </button>
+      </xpath>
+    </field>
+  </record>
+</odoo>
