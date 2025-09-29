@@ -1,0 +1,20 @@
+<odoo>
+  <record id="view_order_form_inherit_helpdesk_smartbutton" model="ir.ui.view">
+    <field name="name">sale.order.form.inherit.helpdesk.smartbutton</field>
+    <field name="model">sale.order</field>
+    <field name="inherit_id" ref="sale.view_order_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//header" position="inside">
+        <button name="%(helpdesk.helpdesk_ticket_action)d"
+                type="action"
+                string="Tickets de Helpdesk"
+                icon="fa-life-ring"
+                attrs="{'invisible': [('helpdesk_ticket_ids', '=', False)]}"
+                context="{'search_default_linked_sale_order_id': active_id}"
+                class="oe_stat_button">
+          <field name="helpdesk_ticket_ids" widget="statinfo"/>
+        </button>
+      </xpath>
+    </field>
+  </record>
+</odoo>
