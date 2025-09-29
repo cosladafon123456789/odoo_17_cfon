@@ -1,0 +1,31 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_order_form_inherit_refund_reason" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.refund.reason</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Reemplazar botón 'Reembolsar' para abrir nuestro wizard -->
+            <xpath expr="//button[@name='button_refund']" position="replace">
+                <button name="action_open_refund_reason_wizard"
+                        string="Reembolsar"
+                        type="object"
+                        class="btn btn-secondary"
+                        attrs="{'invisible': [('state','!=','sale')]}"/>
+            </xpath>
+
+            <!-- Opcional: mostrar el motivo guardado en una pestaña -->
+            <xpath expr="//sheet/notebook" position="inside">
+                <page string="Devoluciones / Reembolso">
+                    <group>
+                        <field name="refund_reason_code" readonly="1"/>
+                        <field name="refund_reason_text" readonly="1"
+                               attrs="{'invisible': [('refund_reason_code','!=','other')]}"/>
+                        <field name="refund_reason" readonly="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
