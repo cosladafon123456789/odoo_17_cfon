@@ -1,0 +1,15 @@
+
+<odoo>
+    <record id="view_helpdesk_ticket_form_inherit_sale" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit.sale</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/notebook" position="inside">
+                <group string="Pedido Detectado">
+                    <field name="linked_sale_order_id" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
