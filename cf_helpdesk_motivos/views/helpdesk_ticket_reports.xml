@@ -1,0 +1,23 @@
+<odoo>
+    <record id="view_helpdesk_ticket_pivot_motivo" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.pivot.motivo</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.view_helpdesk_ticket_pivot"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='stage_id']" position="after">
+                <field name="motivo_devolucion"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_helpdesk_ticket_graph_motivo" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.graph.motivo</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.view_helpdesk_ticket_graph"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='stage_id']" position="after">
+                <field name="motivo_devolucion"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
