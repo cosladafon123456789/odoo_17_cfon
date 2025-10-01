@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="checkout_wizard_form_view" model="ir.ui.view">
+            <field name="name"></field>
+            <field name="model">checkout.time.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                     <sheet>
+                        <group>
+                            <field name="check_out_delay_message"/>
+                        </group>
+                    </sheet>   
+
+                    <footer>
+                        <button string="ok" type="object" name="action_ok" class="btn-primary"/>
+                    </footer>
+
+               </form>
+            </field>
+        </record>
+
+        <record id="action_checkout_wizard" model="ir.actions.act_window">
+            <field name="name">Check Out Delay Message</field>
+            <field name="res_model">checkout.time.wizard</field>
+            <field name="view_id" ref="checkout_wizard_form_view"/>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>
