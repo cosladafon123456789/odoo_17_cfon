@@ -15,6 +15,14 @@ class AccountMove(models.Model):
 
     is_particular = fields.Boolean(string=_("Is particular"), default=False)
 
+    
+    @api.depends('partner_id.country_id', 'commercial_partner_id.is_company', 'is_rebu')
+    def _compute_l10n_es_reports_mod349_available(self):
+        super(AccountMove, self)._compute_l10n_es_reports_mod349_available()
+        for record in self:
+            if record.is_rebu:
+                record.l10n_es_reports_mod349_available = False
+
     @api.depends('invoice_line_ids')
     def _is_sii_available(self):
         super(AccountMove, self)._is_sii_available()
