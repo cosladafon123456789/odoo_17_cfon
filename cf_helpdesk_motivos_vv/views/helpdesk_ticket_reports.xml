@@ -1,0 +1,42 @@
+<odoo>
+    <!-- Pivot Motivos -->
+    <record id="view_helpdesk_ticket_pivot_motivo" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.pivot.motivo</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <pivot string="Análisis por Motivo de Devolución">
+                <field name="motivo_devolucion" type="row"/>
+                <field name="stage_id" type="col"/>
+                <field name="id" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Gráfico Motivos -->
+    <record id="view_helpdesk_ticket_graph_motivo" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.graph.motivo</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="arch" type="xml">
+            <graph string="Gráfico de Motivos de Devolución" type="bar">
+                <field name="motivo_devolucion" type="row"/>
+                <field name="stage_id" type="col"/>
+                <field name="id" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Acción -->
+    <record id="action_helpdesk_ticket_motivo_report" model="ir.actions.act_window">
+        <field name="name">Motivos de Devolución</field>
+        <field name="res_model">helpdesk.ticket</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="view_id" ref="view_helpdesk_ticket_pivot_motivo"/>
+    </record>
+
+    <!-- Menú independiente en Helpdesk -->
+    <menuitem id="menu_helpdesk_ticket_motivo_report"
+              name="Motivos de Devolución"
+              parent="helpdesk.menu_helpdesk_root"
+              action="action_helpdesk_ticket_motivo_report"
+              sequence="50"/>
+</odoo>
