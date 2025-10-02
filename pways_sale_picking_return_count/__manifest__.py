@@ -2,7 +2,7 @@
 {
     'name': 'Pways Sale Order Return Count',
     'version': '17.0',
-    'summary': """Sale Order Return Count. 01/10/2025-rmu""",
+    'summary': """Sale Order Return Count. 01/10/2025-2rmu""",
     'description': """ Sale Order Shipment""",
     'category': 'Sale Order',
     'author':'Preciseways',

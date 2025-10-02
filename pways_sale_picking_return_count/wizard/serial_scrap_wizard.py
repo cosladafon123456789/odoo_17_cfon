@@ -1,6 +1,18 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
+class RepairActionWizard(models.TransientModel):
+    _inherit = 'repair.action.wizard'
+
+    has_serials_with_multiple_returns = fields.Boolean(string="Has Problematic Serials",compute="_compute_has_serials_with_multiple_returns")
+
+    @api.depends('line_ids.lot_id')
+    def _compute_has_serials_with_multiple_returns(self):
+        for wizard in self:
+            wizard.has_serials_with_multiple_returns = any(
+                line.lot_id and line.lot_id.return_count >= 2
+                for line in wizard.line_ids)
+
 
 class SerialScrapWizard(models.TransientModel):
     _name = "serial.scrap.wizard"
@@ -36,17 +48,17 @@ class SerialScrapWizard(models.TransientModel):
 
 
 
-class StockReturnPickingLine(models.TransientModel):
-    _inherit = 'stock.return.picking.line'
+class StockReturnPicking(models.TransientModel):
+    _inherit = 'stock.return.picking'
 
     has_problematic_batch = fields.Boolean(
         string="Problematic Batch",
-        compute="_compute_has_problematic_batch",
-        store=False
+        compute="_compute_has_problematic_batch"
     )
 
+    @api.depends('product_return_moves')
     def _compute_has_problematic_batch(self):
         for line in self:
             line.has_problematic_batch = any(
                 ml.lot_id and ml.lot_id.return_count >= 2
-                for ml in line.move_id.move_line_ids)
+                for ml in line.product_return_moves.mapped('move_id.move_line_ids'))

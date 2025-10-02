@@ -29,17 +29,32 @@
         <field name="model">stock.return.picking</field>
         <field name="inherit_id" ref="stock.view_stock_return_picking_form"/>
         <field name="arch" type="xml">
-            <!-- <xpath expr="//field[@name='location_id']" position="after">
-                <field name="has_serials_with_multiple_returns" invisible="0"/>
+            <!-- <xpath expr="//field[@name='product_return_moves']/tree/field[@name='move_id']" position="after">
             </xpath> -->
-            <xpath expr="//field[@name='product_return_moves']/tree/field[@name='move_id']" position="after">
+             <xpath expr="//footer" position="before">
                 <field name="has_problematic_batch" invisible="1"/>
-            </xpath>
-            <xpath expr="//form" position="inside">
-                <div class="alert alert-warning" role="alert" invisible="product_return_moves.has_problematic_batch == False">
-                    Warning: The contains problematic batches
+                <div class="alert alert-warning" role="alert" invisible="has_problematic_batch == False">
+                    Advertencia: El contiene lotes problemáticos
                 </div>
             </xpath>
         </field>
     </record>
+
+    <record id="repair_action_wizard_form_inherit_warning" model="ir.ui.view">
+        <field name="name">repair_action_wizard_form_warning</field>
+        <field name="model">repair.action.wizard</field>
+        <field name="inherit_id" ref="pways_sale_repair_management.repair_action_wizard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='default_location_id']" position="after">
+                <field name="has_serials_with_multiple_returns" invisible="1"/>
+            </xpath>
+             <xpath expr="//footer" position="before">
+                <!-- <field name="has_problematic_batch" invisible="1"/> -->
+                <div class="alert alert-warning" role="alert" invisible="has_serials_with_multiple_returns == False">
+                    Advertencia: El contiene lotes problemáticos
+                </div>
+            </xpath>
+        </field>
+    </record>
+
 </odoo>
