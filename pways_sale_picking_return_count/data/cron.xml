@@ -1,0 +1,20 @@
+<odoo>
+    <record id="mail_template_return_count_alert" model="mail.template">
+        <field name="name">Return Count Alert</field>
+        <field name="model_id" ref="stock.model_stock_lot"/>
+        <field name="subject">[ALERTA] El lote/serie {{object.name}} se ha devuelto dos veces</field>
+        <field name="email_from">{{(user.email_formatted or '')}}</field>
+        <field name="partner_to">{{','.join(map(str, ctx.get('recipient_ids', [])))}}</field>
+
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Hola,
+                    El número de serie <strong><t t-out="object.name" /></strong> del producto <b><t t-out="object.product_id.display_name" /></b>
+                    se ha devuelto <b><t t-out="object.return_count" /></b> 
+                    veces Por favor, revise este caso
+                </p>
+            </div>
+        </field>
+    </record>
+</odoo>
