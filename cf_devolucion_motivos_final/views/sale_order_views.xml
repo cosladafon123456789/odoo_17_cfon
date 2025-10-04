@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Añadir campos en el formulario de pedido -->
+    <record id="view_order_form_cf_devolucion_motivos" model="ir.ui.view">
+        <field name="name">sale.order.form.cf.devolucion.motivos</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet//group" position="inside">
+                <group string="Devolución">
+                    <field name="motivo_devolucion"/>
+                    <field name="tipo_error_devolucion"/>
+                    <field name="detalle_devolucion" placeholder="Describe el defecto, accesorio faltante u otro detalle relevante..." nolabel="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
