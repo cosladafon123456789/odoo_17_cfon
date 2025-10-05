@@ -1,2 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_cf_devolucion_dashboard_final,access_cf_devolucion_dashboard_final,model_cf_devolucion_dashboard_final,base.group_user,1,0,1,0
