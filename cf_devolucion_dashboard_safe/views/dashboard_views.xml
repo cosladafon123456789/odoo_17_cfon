@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_cf_devolucion_dashboard_safe_form" model="ir.ui.view">
+        <field name="name">cf.devolucion.dashboard.safe.form</field>
+        <field name="model">cf.devolucion.dashboard.safe</field>
+        <field name="arch" type="xml">
+            <form string="Dashboard de devoluciones (SAFE)">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="fecha_desde"/>
+                        </group>
+                        <group>
+                            <field name="fecha_hasta"/>
+                        </group>
+                    </group>
+                    <separator string="Indicadores"/>
+                    <group>
+                        <group>
+                            <field name="total_devoluciones" widget="statinfo" options="{'display': 'large'}"/>
+                            <field name="pct_sobre_ventas" widget="statinfo" options="{'display': 'large', 'suffix': '%'}"/>
+                        </group>
+                        <group>
+                            <field name="internos" widget="statinfo" options="{'display': 'large'}" attrs="{'invisible': [('has_tipo_error','=',False)]}"/>
+                            <field name="externos" widget="statinfo" options="{'display': 'large'}" attrs="{'invisible': [('has_tipo_error','=',False)]}"/>
+                        </group>
+                        <group>
+                            <field name="media_dias" widget="statinfo" options="{'display': 'large'}"/>
+                        </group>
+                    </group>
+                    <separator string="Gráficos rápidos"/>
+                    <group>
+                        <button name="action_open_graph_motivos" string="Barras: Motivos" type="object" class="btn-primary"/>
+                        <button name="action_open_graph_tipo_error" string="Pastel: Interno/Externo" type="object" class="btn-secondary" attrs="{'invisible': [('has_tipo_error','=',False)]}"/>
+                        <button name="action_open_graph_mes" string="Líneas: Evolución mensual" type="object" class="btn-secondary"/>
+                        <button name="action_open_pivot" string="Pivot completo" type="object" class="btn-secondary"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_cf_devolucion_dashboard_safe" model="ir.actions.act_window">
+        <field name="name">Dashboard de devoluciones</field>
+        <field name="res_model">cf.devolucion.dashboard.safe</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{}</field>
+    </record>
+
+    <menuitem id="menu_cf_devolucion_dashboard_safe"
+              name="Dashboard de devoluciones"
+              parent="sale.menu_sale_report"
+              sequence="68"
+              action="action_cf_devolucion_dashboard_safe"/>
+</odoo>
