@@ -28,8 +28,8 @@ class StockLot(models.Model):
             lot.return_count = len(returned_moves)
 
             # Trigger mail only when exactly 2
-            if lot.return_count == 2:
-                lot._notify_return_count_alert()
+            # if lot.return_count == 2:
+            #     lot._notify_return_count_alert()
 
     def action_open_scrap_wizard(self):
         if self.return_count <= 2:
