@@ -24,17 +24,19 @@ class SaleOrder(models.Model):
     ], string="Tipo de error", tracking=True)
 
     def button_recieved(self):
-    """Abre el wizard siempre, salvo cuando viene del wizard."""
-    self.ensure_one()
+        """Abre el wizard siempre, salvo cuando viene del wizard."""
+        self.ensure_one()
 
-    # Si viene del wizard (ya se rellenó el motivo), ejecutar la acción real
-    if self.env.context.get('from_wizard'):
-        self.state = 'done'   # ← aquí va la acción real del botón "Recibido"
-        return True
+        # Si viene del wizard (ya se rellenó el motivo), ejecutar la acción real
+        if self.env.context.get('from_wizard'):
+            # 🔹 Acción original del botón "Recibido"
+            # Aquí puedes ajustar lo que haga normalmente tu botón (por ejemplo cambiar estado)
+            self.state = 'done'
+            return True
 
-    # En cualquier otro caso, abrir el wizard
-    action = self.env.ref('cf_forzar_wizard_devolucion.action_devolucion_wizard').read()[0]
-    ctx = dict(self.env.context or {})
-    ctx.update({'default_sale_order_id': self.id})
-    action['context'] = ctx
-    return action
+        # En cualquier otro caso, abrir el wizard
+        action = self.env.ref('cf_forzar_wizard_devolucion.action_devolucion_wizard').read()[0]
+        ctx = dict(self.env.context or {})
+        ctx.update({'default_sale_order_id': self.id})
+        action['context'] = ctx
+        return action
