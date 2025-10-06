@@ -28,17 +28,15 @@ class SaleOrder(models.Model):
         """Abre el wizard siempre, salvo cuando viene del wizard."""
         self.ensure_one()
 
-        # Si viene del wizard (ya se rellenó el motivo), ejecutar la acción real
+        # Si viene del wizard (ya se rellenó el motivo), ejecutar la acción real del botón original
         if self.env.context.get('from_wizard'):
-            # Cambiar el estado al correcto definido por el módulo externo
-            self.state = 'received'
-            return True
+            # Llama al método original del módulo pways_sale_repair_management
+            return super(SaleOrder, self).button_recieved()
 
         # En cualquier otro caso, abrir el wizard
         try:
             action = self.env.ref('cf_forzar_wizard_devolucion.action_devolucion_wizard').read()[0]
         except ValueError:
-            # Por compatibilidad si el wizard está en otro módulo
             action = self.env.ref('cf_devolucion_motivos_corrected.action_devolucion_wizard').read()[0]
 
         ctx = dict(self.env.context or {})
