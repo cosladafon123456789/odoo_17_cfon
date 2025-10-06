@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="menu_cf_return_root" name="Informe de Devoluciones" parent="stock.menu_stock_warehouse_mgmt" sequence="98" groups="stock.group_stock_user"/>
+    <menuitem id="menu_cf_return_dashboard" name="Panel de Devoluciones" parent="menu_cf_return_root" action="action_cf_return_dashboard" sequence="1" groups="stock.group_stock_user"/>
+</odoo>

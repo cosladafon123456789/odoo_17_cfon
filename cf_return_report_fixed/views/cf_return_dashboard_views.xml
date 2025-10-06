@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_cf_return_dashboard_form" model="ir.ui.view">
+        <field name="name">cf.return.dashboard.form</field>
+        <field name="model">cf.return.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Panel de devoluciones">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button"  help="Total devoluciones" icon="fa-undo">
+                            <field name="total_returns" widget="statinfo" string="Totales"/>
+                        </button>
+                        <button class="oe_stat_button"  help="Pendientes" icon="fa-clock-o">
+                            <field name="pending_returns" widget="statinfo" string="Pendientes"/>
+                        </button>
+                        <button class="oe_stat_button"  help="Recibidas" icon="fa-check-circle">
+                            <field name="received_returns" widget="statinfo" string="Recibidas"/>
+                        </button>
+                        <button class="oe_stat_button"  help="Rechazadas" icon="fa-times-circle">
+                            <field name="rejected_returns" widget="statinfo" string="Rechazadas"/>
+                        </button>
+                    </div>
+                    <group>
+                        <label string="Consejo"/>
+                        <div class="o_notice info">Este panel calcula los KPIs en tiempo real sobre albaranes marcados como devolución.</div>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_cf_return_dashboard" model="ir.actions.act_window">
+        <field name="name">Panel de Devoluciones</field>
+        <field name="res_model">cf.return.dashboard</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="view_id" ref="view_cf_return_dashboard_form"/>
+        <field name="context">{}</field>
+    </record>
+</odoo>

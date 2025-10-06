@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_picking_form_inherit_cf_return" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.cf.return</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <!-- Campos (ocultos por defecto para no "ensuciar" la vista) -->
+            <xpath expr="//sheet" position="inside">
+                <group groups="stock.group_stock_user" attrs="{'invisible': [('cf_is_return','=',False)]}">
+                    <group string="Devolución (CF)">
+                        <field name="cf_is_return" readonly="1"/>
+                        <field name="cf_return_reason_id"/>
+                        <field name="cf_return_reason_note"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
