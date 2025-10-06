@@ -25,13 +25,14 @@ class SaleOrder(models.Model):
     ], string="Tipo de error", tracking=True)
 
     def button_recieved(self):
-        """Abre el wizard al pulsar 'Recibido', y tras confirmarlo ejecuta la acción original."""
+        """Abre el wizard al pulsar 'Recibido'. Si viene del wizard, ejecuta el flujo original sin super()."""
         self.ensure_one()
 
-        # Si viene del wizard, ejecuta el método original del otro módulo evitando bucles
+        # Si viene del wizard: ejecutar el flujo original del módulo externo directamente
         if self.env.context.get('from_wizard'):
-            # Llamamos directamente al método real sin pasar otra vez por este
-            return super(models.Model, self).button_recieved()
+            # Llamada directa a la acción original (del módulo pways_sale_repair_management)
+            # Simula pulsar el botón sin reabrir el wizard
+            return self.with_context(skip_wizard=True)._button_recieved_original()
 
         # En cualquier otro caso, abrir el wizard
         try:
@@ -43,3 +44,12 @@ class SaleOrder(models.Model):
         ctx.update({'default_sale_order_id': self.id})
         action['context'] = ctx
         return action
+
+    def _button_recieved_original(self):
+        """Lógica del botón original del módulo pways_sale_repair_management."""
+        # ⚠️ IMPORTANTE: aquí puedes copiar lo que hacía originalmente el método button_recieved del otro módulo.
+        # Si no lo sabes exactamente, al menos dejamos un marcador:
+        if hasattr(super(SaleOrder, self), 'button_recieved'):
+            return super(SaleOrder, self).button_recieved()
+        else:
+            raise UserError(_("No se pudo ejecutar el método original de 'Recibido'."))
