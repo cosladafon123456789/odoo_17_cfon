@@ -51,4 +51,4 @@ class DevolucionWizard(models.TransientModel):
 
         # Continuar con la acción original del botón 'button_recieved'
         # Usamos contexto para saltar nuestro propio override y llamar a super()
-        return order.with_context(skip_cf_devolucion_motivos=True).button_recieved()
+        return order.with_context(from_wizard=True).button_recieved()
