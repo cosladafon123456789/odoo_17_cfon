@@ -24,18 +24,17 @@ class SaleOrder(models.Model):
     ], string="Tipo de error", tracking=True)
 
     def button_recieved(self):
-        """Intercepta el botón personalizado 'button_recieved'.
-        Abre el wizard salvo que venga con contexto de salto para ejecutar el flujo original.
-        """
-        self.ensure_one()
-        if self.env.context.get('skip_cf_devolucion_motivos'):
-            # Ejecuta el flujo original del botón en la superclase
-            return super(SaleOrder, self).button_recieved()
-        # Abrir wizard
-        action = self.env.ref('cf_devolucion_motivos_corrected.action_devolucion_wizard').read()[0]
-        ctx = dict(self.env.context or {})
-        ctx.update({
-            'default_sale_order_id': self.id,
-        })
-        action['context'] = ctx
-        return action
+    """Abre el wizard siempre, salvo cuando viene del wizard."""
+    self.ensure_one()
+
+    # Si viene del wizard (ya se rellenó el motivo), ejecutar la acción real
+    if self.env.context.get('from_wizard'):
+        self.state = 'done'   # ← aquí va la acción real del botón "Recibido"
+        return True
+
+    # En cualquier otro caso, abrir el wizard
+    action = self.env.ref('cf_forzar_wizard_devolucion.action_devolucion_wizard').read()[0]
+    ctx = dict(self.env.context or {})
+    ctx.update({'default_sale_order_id': self.id})
+    action['context'] = ctx
+    return action
