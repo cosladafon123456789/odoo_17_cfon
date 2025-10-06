@@ -25,13 +25,13 @@ class SaleOrder(models.Model):
     ], string="Tipo de error", tracking=True)
 
     def button_recieved(self):
-        """Abre el wizard siempre, salvo cuando viene del wizard."""
+        """Abre el wizard al pulsar 'Recibido', y tras confirmarlo ejecuta la acción original."""
         self.ensure_one()
 
-        # Si viene del wizard (ya se rellenó el motivo), ejecutar la acción real del botón original
+        # Si viene del wizard, ejecuta el método original del otro módulo evitando bucles
         if self.env.context.get('from_wizard'):
-            # Llama al método original del módulo pways_sale_repair_management
-            return super(SaleOrder, self).button_recieved()
+            # Llamamos directamente al método real sin pasar otra vez por este
+            return super(models.Model, self).button_recieved()
 
         # En cualquier otro caso, abrir el wizard
         try:
