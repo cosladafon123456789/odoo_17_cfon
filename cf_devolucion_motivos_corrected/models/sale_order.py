@@ -1,4 +1,5 @@
 from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
@@ -29,13 +30,17 @@ class SaleOrder(models.Model):
 
         # Si viene del wizard (ya se rellenó el motivo), ejecutar la acción real
         if self.env.context.get('from_wizard'):
-            # 🔹 Acción original del botón "Recibido"
-            # Aquí puedes ajustar lo que haga normalmente tu botón (por ejemplo cambiar estado)
-            self.state = 'done'
+            # Cambiar el estado al correcto definido por el módulo externo
+            self.state = 'received'
             return True
 
         # En cualquier otro caso, abrir el wizard
-        action = self.env.ref('cf_devolucion_motivos_corrected.action_devolucion_wizard').read()[0]
+        try:
+            action = self.env.ref('cf_forzar_wizard_devolucion.action_devolucion_wizard').read()[0]
+        except ValueError:
+            # Por compatibilidad si el wizard está en otro módulo
+            action = self.env.ref('cf_devolucion_motivos_corrected.action_devolucion_wizard').read()[0]
+
         ctx = dict(self.env.context or {})
         ctx.update({'default_sale_order_id': self.id})
         action['context'] = ctx
