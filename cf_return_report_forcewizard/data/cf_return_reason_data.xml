@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+    <record id="cf_reason_no_enciende" model="cf.return.reason">
+        <field name="name">No enciende</field>
+    </record>
+    <record id="cf_reason_pantalla_danada" model="cf.return.reason">
+        <field name="name">Pantalla dañada</field>
+    </record>
+    <record id="cf_reason_error_cliente" model="cf.return.reason">
+        <field name="name">Error del cliente</field>
+    </record>
+    <record id="cf_reason_accesorios_faltantes" model="cf.return.reason">
+        <field name="name">Accesorios faltantes</field>
+    </record>
+</odoo>
