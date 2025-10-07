@@ -1,0 +1,39 @@
+from odoo import models, _
+from odoo.exceptions import UserError
+import requests
+from bs4 import BeautifulSoup
+
+class StockLot(models.Model):
+    _inherit = "stock.lot"
+
+    def action_check_icloud(self):
+        """Consulta iunlocker.com y muestra el estado iCloud."""
+        self.ensure_one()
+        imei = (self.name or "").strip()
+        if not imei:
+            raise UserError(_("No se encontró número de serie / IMEI en este registro."))
+
+        url = "https://iunlocker.com/es/check_icloud.php"
+        headers = {"User-Agent": "Mozilla/5.0 (compatible; Odoo17; +https://cosladafon.com)"}
+        data = {"imei": imei}
+
+        try:
+            response = requests.post(url, data=data, headers=headers, timeout=20)
+            soup = BeautifulSoup(response.text, "html.parser")
+            text = soup.get_text(separator=" ").upper()
+
+            if "ICLOUD LOCK: ON" in text or "BLOCKED" in text:
+                message = "iCloud: ON"
+            elif "ICLOUD LOCK: OFF" in text or "UNLOCKED" in text:
+                message = "iCloud: OFF"
+            elif "TEMPORARY" in text or "PREMIUM" in text or "NOT AVAILABLE" in text:
+                message = "iCloud: Temporal"
+            else:
+                message = "iCloud: No se pudo determinar"
+
+            return {
+                "effect": {"fadeout": "slow", "message": message, "type": "rainbow_man"},
+            }
+
+        except Exception as e:
+            raise UserError(_("Error al comprobar iCloud: %s") % str(e))
