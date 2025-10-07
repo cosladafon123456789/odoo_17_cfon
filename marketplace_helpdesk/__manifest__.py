@@ -8,11 +8,11 @@
     "license": "LGPL-3",
     "application": True,
     "depends": ["base", "mail"],
-    "data": [
-        "security/security.xml",
-        "security/ir.model.access.csv",
-        "views/menu.xml",
-        "views/marketplace_account_views.xml",
-        "views/marketplace_ticket_views.xml",
-    ],
+   "data": [
+    "security/security.xml",
+    "security/ir.model.access.csv",
+    "views/menu.xml",
+    "views/marketplace_account_views.xml",
+    "views/marketplace_ticket_views.xml",
+],
 }
