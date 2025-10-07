@@ -1,23 +1,37 @@
 <odoo>
+    <!-- Vista propia de configuración -->
     <record id="view_marketplace_settings_form" model="ir.ui.view">
         <field name="name">marketplace.settings.form</field>
         <field name="model">res.config.settings</field>
-        <!-- Odoo 17 usa la vista de base_setup, no base -->
-        <field name="inherit_id" ref="base_setup.view_res_config_settings"/>
         <field name="arch" type="xml">
-            <xpath expr="//div[hasclass('settings')]" position="inside">
-                <div class="app_settings_block" string="Marketplaces">
-                    <h2>Marketplaces</h2>
-                    <div class="row mt16 o_settings_container">
-                        <div class="col-12 col-lg-6">
-                            <label for="marketplace_account_ids"/>
+            <form string="Configuración de Marketplaces">
+                <sheet>
+                    <group string="Marketplaces">
+                        <h2>Conexión con Mirakl</h2>
+                        <group>
                             <field name="marketplace_account_ids"
                                    widget="one2many_list"
                                    options="{'no_create_edit': False}"/>
-                        </div>
-                    </div>
-                </div>
-            </xpath>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
         </field>
     </record>
+
+    <!-- Acción para abrir la configuración -->
+    <record id="action_marketplace_settings" model="ir.actions.act_window">
+        <field name="name">Marketplaces</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_marketplace_settings_form"/>
+        <field name="target">inline</field>
+    </record>
+
+    <!-- Menú dentro de Ajustes -->
+    <menuitem id="menu_marketplace_settings"
+              name="Marketplaces"
+              parent="base.menu_config"
+              action="action_marketplace_settings"
+              sequence="50"/>
 </odoo>
