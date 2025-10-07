@@ -1,5 +1,6 @@
 from odoo import api, fields, models
-import requests 
+import requests
+import json
 
 class SaleOrder(models.Model):
 	_inherit = "sale.order"
@@ -24,8 +25,11 @@ class SaleOrder(models.Model):
 					"status": status
 				}]
 			}
+
 			try:
+				payload = json.dumps(payload)
 				answer = requests.post(url, data=payload, headers=headers)
+				print("answer.........",answer)
 				if answer.status_code == 200:
 					self.sync_status = "done"
 				else:
