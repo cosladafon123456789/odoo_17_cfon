@@ -1,5 +1,28 @@
 <odoo>
-    <menuitem id="menu_marketplace_root" name="Marketplaces" sequence="10"/>
-    <menuitem id="menu_marketplace_tickets" name="Tickets" parent="menu_marketplace_root" action="action_marketplace_tickets"/>
-    <menuitem id="menu_marketplace_accounts" name="Cuentas" parent="menu_marketplace_root" action="action_marketplace_accounts" sequence="20"/>
+    <!-- Menú raíz de la aplicación -->
+    <menuitem id="menu_marketplace_root"
+              name="Marketplaces"
+              sequence="5"
+              web_icon="marketplace_helpdesk,static/description/icon.png"/>
+
+    <!-- Submenú: Tickets -->
+    <menuitem id="menu_marketplace_tickets"
+              name="Tickets"
+              parent="menu_marketplace_root"
+              action="action_marketplace_tickets"
+              sequence="10"/>
+
+    <!-- Submenú: Cuentas conectadas -->
+    <menuitem id="menu_marketplace_accounts"
+              name="Cuentas conectadas"
+              parent="menu_marketplace_root"
+              action="action_marketplace_accounts"
+              sequence="20"/>
+
+    <!-- Submenú: Configuración -->
+    <menuitem id="menu_marketplace_settings"
+              name="Configuración"
+              parent="menu_marketplace_root"
+              action="action_marketplace_settings"
+              sequence="30"/>
 </odoo>
