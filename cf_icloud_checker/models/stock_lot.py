@@ -13,25 +13,43 @@ class StockLot(models.Model):
             raise UserError(_("No se encontró número de serie / IMEI en este registro."))
 
         url = "https://iunlocker.com/es/check_icloud.php"
-        headers = {"User-Agent": "Mozilla/5.0 (compatible; Odoo17; +https://cosladafon.com)"}
+        headers = {
+            "User-Agent": "Mozilla/5.0 (compatible; Odoo17; +https://cosladafon.com)",
+            "Accept-Language": "es-ES,es;q=0.9,en;q=0.8",
+        }
         data = {"imei": imei}
 
         try:
             response = requests.post(url, data=data, headers=headers, timeout=20)
             soup = BeautifulSoup(response.text, "html.parser")
-            text = soup.get_text(separator=" ").upper()
 
-            if "ICLOUD LOCK: ON" in text or "BLOCKED" in text:
-                message = "iCloud: ON"
-            elif "ICLOUD LOCK: OFF" in text or "UNLOCKED" in text:
+            # Buscar el texto del estado iCloud dentro de la página
+            icloud_label = soup.find(text=lambda t: "iCloud Lock" in t)
+            if not icloud_label:
+                raise UserError(_("No se pudo leer el estado de iCloud en la respuesta."))
+
+            # Buscar el valor (OFF/ON) cercano a esa etiqueta
+            value_tag = None
+            if icloud_label.parent:
+                value_tag = icloud_label.parent.find_next("td")
+            if not value_tag:
+                value_tag = soup.find(string=lambda t: t and "OFF" in t or "ON" in t)
+
+            text = (value_tag.get_text() if hasattr(value_tag, "get_text") else str(value_tag)).upper()
+
+            if "OFF" in text:
                 message = "iCloud: OFF"
-            elif "TEMPORARY" in text or "PREMIUM" in text or "NOT AVAILABLE" in text:
-                message = "iCloud: Temporal"
+            elif "ON" in text:
+                message = "iCloud: ON"
             else:
                 message = "iCloud: No se pudo determinar"
 
             return {
-                "effect": {"fadeout": "slow", "message": message, "type": "rainbow_man"},
+                "effect": {
+                    "fadeout": "slow",
+                    "message": message,
+                    "type": "rainbow_man"
+                },
             }
 
         except Exception as e:
