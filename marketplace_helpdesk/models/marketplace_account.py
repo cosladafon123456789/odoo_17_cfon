@@ -9,5 +9,5 @@ class MarketplaceAccount(models.Model):
     api_key = fields.Char(string='API Key', required=True)
     active = fields.Boolean(string='Activo', default=True)
 
-    # Relación inversa con los ajustes
-    config_id = fields.Many2one('res.config.settings', string='Configuración')
+    # ⚠️ Eliminada la relación prohibida con res.config.settings
+    # config_id = fields.Many2one('res.config.settings', string='Configuración')
