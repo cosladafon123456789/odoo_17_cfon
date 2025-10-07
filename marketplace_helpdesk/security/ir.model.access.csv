@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+marketplace_ticket_user,marketplace_ticket_user,model_marketplace_ticket,base.group_user,1,1,1,1
+marketplace_account_user,marketplace_account_user,model_marketplace_account,base.group_user,1,1,1,1

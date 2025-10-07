@@ -1,0 +1,40 @@
+<odoo>
+    <record id="view_marketplace_account_tree" model="ir.ui.view">
+        <field name="name">marketplace.account.tree</field>
+        <field name="model">marketplace.account</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="api_url"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_marketplace_account_form" model="ir.ui.view">
+        <field name="name">marketplace.account.form</field>
+        <field name="model">marketplace.account</field>
+        <field name="arch" type="xml">
+            <form string="Cuenta de Marketplace">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="api_url"/>
+                            <field name="api_key" password="True"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_marketplace_accounts" model="ir.actions.act_window">
+        <field name="name">Cuentas conectadas</field>
+        <field name="res_model">marketplace.account</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
