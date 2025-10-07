@@ -1,4 +1,5 @@
 <odoo>
+    <!-- LISTA -->
     <record id="view_marketplace_ticket_tree" model="ir.ui.view">
         <field name="name">marketplace.ticket.tree</field>
         <field name="model">marketplace.ticket</field>
@@ -15,6 +16,7 @@
         </field>
     </record>
 
+    <!-- FORMULARIO -->
     <record id="view_marketplace_ticket_form" model="ir.ui.view">
         <field name="name">marketplace.ticket.form</field>
         <field name="model">marketplace.ticket</field>
@@ -61,6 +63,7 @@
         </field>
     </record>
 
+    <!-- KANBAN -->
     <record id="view_marketplace_ticket_kanban" model="ir.ui.view">
         <field name="name">marketplace.ticket.kanban</field>
         <field name="model">marketplace.ticket</field>
@@ -78,7 +81,7 @@
                             <div class="o_kanban_primary_left">
                                 <strong t-esc="record.name.value"/>
                                 <t t-if="record.is_critical.value">
-                                    <span class="badge ms-2">Crítico</span>
+                                    <span class="badge ms-2 text-danger">⚠️ Crítico</span>
                                 </t>
                             </div>
                             <div><span t-esc="record.participants.value"/></div>
@@ -92,21 +95,30 @@
         </field>
     </record>
 
+    <!-- BÚSQUEDA -->
     <record id="view_marketplace_ticket_search" model="ir.ui.view">
         <field name="name">marketplace.ticket.search</field>
         <field name="model">marketplace.ticket</field>
         <field name="arch" type="xml">
-            <search string="Tickets">
+            <search string="Tickets de Marketplaces">
                 <field name="name"/>
                 <field name="participants"/>
                 <filter name="unread" string="No leídos" domain="[('message_count','>',0)]"/>
-                <separator/>
                 <filter name="all" string="Todos" domain="[]"/>
+                <separator/>
                 <group expand="0" string="Agrupar por">
-                    <filter string="Crítico" domain="[]" context="{'group_by':'is_critical'}"/>
-                    <filter string="Tipo" domain="[]" context="{'group_by':'thread_type'}"/>
+                    <filter string="Crítico" context="{'group_by':'is_critical'}"/>
+                    <filter string="Tipo" context="{'group_by':'thread_type'}"/>
                 </group>
             </search>
         </field>
+    </record>
+
+    <!-- ACCIÓN PRINCIPAL (ahora aquí dentro) -->
+    <record id="action_marketplace_tickets" model="ir.actions.act_window">
+        <field name="name">Tickets</field>
+        <field name="res_model">marketplace.ticket</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_marketplace_ticket_search"/>
     </record>
 </odoo>
