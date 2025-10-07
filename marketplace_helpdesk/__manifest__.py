@@ -9,13 +9,8 @@
     'license': 'LGPL-3',
     'depends': ['base', 'mail'],
     'data': [
-        'views/marketplace_account_views.xml',
-        'views/marketplace_ticket_views.xml',
-        'views/res_config_settings_views.xml',
-        'views/menuitems.xml',   # ✅ nombre correcto del archivo del menú raíz
-    ],
-    'installable': True,
-    'application': True,   # ✅ esto hace que aparezca como aplicación en el panel principal
-    'sequence': 5,
-    'assets': {},
-}
+    'views/marketplace_account_views.xml',
+    'views/marketplace_ticket_views.xml',
+    'views/res_config_settings_views.xml',
+    'views/menu.xml',  # 👈 el tuyo se llama así, no hace falta renombrarlo
+],
