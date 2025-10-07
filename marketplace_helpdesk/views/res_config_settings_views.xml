@@ -2,8 +2,8 @@
     <record id="view_marketplace_settings_form" model="ir.ui.view">
         <field name="name">marketplace.settings.form</field>
         <field name="model">res.config.settings</field>
-        <!-- Odoo 17 usa esta vista base -->
-        <field name="inherit_id" ref="base.view_res_config_settings"/>
+        <!-- Odoo 17 usa la vista de base_setup, no base -->
+        <field name="inherit_id" ref="base_setup.view_res_config_settings"/>
         <field name="arch" type="xml">
             <xpath expr="//div[hasclass('settings')]" position="inside">
                 <div class="app_settings_block" string="Marketplaces">
