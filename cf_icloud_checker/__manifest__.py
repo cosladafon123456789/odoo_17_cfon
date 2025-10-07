@@ -1,7 +1,7 @@
 {
     "name": "Comprobador de iCloud (CosladaFon)",
-    "version": "1.2.0",
-    "summary": "Botón para comprobar el estado de iCloud (ON/OFF) en los números de serie / IMEI – Odoo 17",
+    "version": "1.3.0",
+    "summary": "Botón para comprobar iCloud (ON/OFF) desde imeicheck.net – Odoo 17",
     "category": "Inventory",
     "author": "CosladaFon",
     "depends": ["stock"],

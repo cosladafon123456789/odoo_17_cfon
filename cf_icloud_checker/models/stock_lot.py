@@ -13,11 +13,11 @@ class StockLot(models.Model):
         if not imei:
             raise UserError(_("No se encontró número de serie / IMEI en este registro."))
 
-        url = "https://iunlocker.com/check_icloud.php"
+        url = "https://imeicheck.net/check_icloud.php"
         headers = {
             "User-Agent": "Mozilla/5.0 (compatible; Odoo17; +https://cosladafon.com)",
-            "Accept-Language": "es-ES,es;q=0.9,en;q=0.8",
-            "Referer": "https://iunlocker.com/"
+            "Accept-Language": "en-US,en;q=0.9",
+            "Referer": "https://imeicheck.net/"
         }
         data = {"imei": imei}
 
@@ -30,20 +30,19 @@ class StockLot(models.Model):
             soup = BeautifulSoup(html, "html.parser")
             text = soup.get_text(" ", strip=True).upper()
 
-            # Buscar OFF o ON en el texto de la página
+            # Buscar la línea "FIND MY DEVICE: ON/OFF"
             status = None
-            if re.search(r"ICLOUD\s*LOCK\s*[:\-]?\s*OFF", text):
-                status = "OFF"
-            elif re.search(r"ICLOUD\s*LOCK\s*[:\-]?\s*ON", text):
-                status = "ON"
+            m = re.search(r"FIND\s+MY\s+DEVICE\s*[:\-]?\s*(ON|OFF)", text, flags=re.I)
+            if m:
+                status = m.group(1).upper()
 
             if not status:
-                # Intentar localizar manualmente
-                label = soup.find(string=lambda t: t and "iCloud Lock" in t)
+                # Buscar visualmente el texto dentro del HTML
+                label = soup.find(string=lambda t: t and "Find My Device" in t)
                 if label:
                     el = getattr(label, "parent", None)
                     if el:
-                        nxt = el.find_next(["strong", "b", "span", "td", "div"])
+                        nxt = el.find_next(["strong", "span", "b", "td", "div"])
                         if nxt:
                             val = nxt.get_text(strip=True).upper()
                             if "OFF" in val:
