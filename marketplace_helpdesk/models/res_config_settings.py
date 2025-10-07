@@ -1,6 +1,10 @@
-from odoo import models, fields
+from odoo import fields, models
 
 class ResConfigSettings(models.TransientModel):
-    _inherit = "res.config.settings"
+    _inherit = 'res.config.settings'
 
-    marketplace_account_ids = fields.One2many(related="company_id.marketplace_account_ids", readonly=False)
+    marketplace_account_ids = fields.One2many(
+        'marketplace.account',
+        'config_id',
+        string='Cuentas de Marketplaces'
+    )
