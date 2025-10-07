@@ -1,7 +1,7 @@
 {
     "name": "Comprobador de iCloud (CosladaFon)",
-    "version": "1.0",
-    "summary": "Botón para comprobar el estado de iCloud en los números de serie (Odoo 17 Enterprise)",
+    "version": "1.1.0",
+    "summary": "Botón para comprobar iCloud (ON/OFF) en números de serie / IMEI – Odoo 17",
     "category": "Inventory",
     "author": "CosladaFon",
     "depends": ["stock"],
@@ -9,5 +9,5 @@
     "installable": True,
     "application": False,
     "license": "LGPL-3",
-    "external_dependencies": {"python": ["requests", "bs4"]},
+    "external_dependencies": {"python": ["requests", "bs4"]}
 }

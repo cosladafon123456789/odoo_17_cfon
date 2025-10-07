@@ -2,6 +2,7 @@ from odoo import models, _
 from odoo.exceptions import UserError
 import requests
 from bs4 import BeautifulSoup
+import re
 
 class StockLot(models.Model):
     _inherit = "stock.lot"
@@ -12,50 +13,54 @@ class StockLot(models.Model):
         if not imei:
             raise UserError(_("No se encontró número de serie / IMEI en este registro."))
 
-        url = "https://iunlocker.com/es/check_icloud.php"
+        url = "https://iunlocker.net/check_icloud.php"
         headers = {
             "User-Agent": "Mozilla/5.0 (compatible; Odoo17; +https://cosladafon.com)",
             "Accept-Language": "es-ES,es;q=0.9,en;q=0.8",
+            "Referer": "https://iunlocker.net/"
         }
         data = {"imei": imei}
 
         try:
+            # Petición directa, sin JS
             response = requests.post(url, data=data, headers=headers, timeout=25)
-            soup = BeautifulSoup(response.text, "html.parser")
+            if response.status_code >= 400:
+                raise UserError(_("No se pudo contactar con el servicio de verificación (HTTP %s).") % response.status_code)
 
-            # Buscar el bloque donde se muestra el estado "iCloud Lock"
-            result_label = soup.find(string=lambda t: t and "iCloud Lock" in t)
-            if not result_label:
-                raise UserError(_("No se pudo leer el estado de iCloud en la respuesta."))
+            html = response.text or ""
+            soup = BeautifulSoup(html, "html.parser")
 
-            # Buscar la palabra ON u OFF cerca de ese texto
-            parent = result_label.find_parent()
-            value_text = None
+            # 1) Búsqueda por regex robusta en todo el texto
+            text = soup.get_text(" ", strip=True)
+            m = re.search(r"iCloud\\s*Lock\\s*[:\\-]?\\s*(ON|OFF)", text, flags=re.I)
+            status = None
+            if m:
+                status = m.group(1).upper()
 
-            if parent:
-                # Buscar dentro de los elementos cercanos
-                value_el = parent.find_next(["strong", "span", "td"])
-                if value_el:
-                    value_text = value_el.get_text(strip=True).upper()
+            # 2) Si no, intentar localizar por etiquetas cercanas
+            if not status:
+                label = soup.find(string=lambda t: t and "iCloud" in t and "Lock" in t)
+                if label:
+                    el = getattr(label, "parent", None)
+                    if el:
+                        nxt = el.find_next(["strong", "b", "span", "td", "div"])
+                        if nxt:
+                            val = nxt.get_text(strip=True).upper()
+                            if "OFF" in val:
+                                status = "OFF"
+                            elif "ON" in val:
+                                status = "ON"
 
-            # Fallback si no lo encuentra directamente
-            if not value_text:
-                text = soup.get_text(" ", strip=True).upper()
-                if "ICLOUD LOCK OFF" in text:
-                    value_text = "OFF"
-                elif "ICLOUD LOCK ON" in text:
-                    value_text = "ON"
+            if not status:
+                # Mensaje neutro si no se pudo extraer
+                raise UserError(_("No se pudo determinar el estado de iCloud para el IMEI indicado."))
 
-            if not value_text:
-                raise UserError(_("No se pudo leer el estado de iCloud en la respuesta."))
-
-            # Determinar el resultado final
-            if "OFF" in value_text:
-                message = "✅ iCloud: OFF (libre)"
-            elif "ON" in value_text:
-                message = "🔒 iCloud: ON (bloqueado)"
+            if status == "OFF":
+                message = "iCloud: OFF"
+            elif status == "ON":
+                message = "iCloud: ON"
             else:
-                message = f"iCloud: {value_text}"
+                message = "iCloud: %s" % status
 
             return {
                 "effect": {
