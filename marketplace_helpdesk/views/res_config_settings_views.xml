@@ -1,19 +1,13 @@
 <odoo>
-    <record id="res_config_settings_view_form_marketplace" model="ir.ui.view">
-        <field name="name">res.config.settings.view.form.marketplace</field>
+    <record id="view_marketplace_settings_form" model="ir.ui.view">
+        <field name="name">marketplace.settings.form</field>
         <field name="model">res.config.settings</field>
-        <field name="inherit_id" ref="base.view_res_config_settings"/>
         <field name="arch" type="xml">
-            <xpath expr="//div[hasclass('settings')]" position="inside">
-                <div class="app_settings_block" data-string="Marketplaces" string="Marketplaces">
-                    <h2>Marketplaces</h2>
-                    <div class="row mt16 o_settings_container">
-                        <div class="col-12 col-lg-6">
-                            <field name="marketplace_account_ids" context="{'default_company_id': company_id}" widget="one2many_list"/>
-                        </div>
-                    </div>
-                </div>
-            </xpath>
+            <form string="Configuración de Marketplaces">
+                <group>
+                    <field name="marketplace_account_ids" context="{'default_company_id': company_id}" widget="one2many_list"/>
+                </group>
+            </form>
         </field>
     </record>
 </odoo>
