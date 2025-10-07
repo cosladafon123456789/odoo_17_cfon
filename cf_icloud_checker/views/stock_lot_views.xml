@@ -4,12 +4,13 @@
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
-            <header position="inside">
+            <xpath expr="//div[@name='button_box']" position="inside">
                 <button name="action_check_icloud"
                         type="object"
                         string="Comprobar iCloud"
-                        class="btn-primary"/>
-            </header>
+                        class="oe_stat_button btn-primary"
+                        icon="fa-cloud"/>
+            </xpath>
         </field>
     </record>
 </odoo>
