@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 {
     "name": "Marketplaces",
     "summary": "Tickets de mensajes de marketplaces (Mirakl) tipo Helpdesk",
@@ -9,11 +10,11 @@
     "depends": ["mail", "base"],
     "data": [
         "security/ir.model.access.csv",
-        "views/menu.xml",
         "views/marketplace_ticket_views.xml",
         "views/marketplace_account_views.xml",
         "views/res_config_settings_views.xml",
-        "data/ir_cron.xml"
+        "data/ir_cron.xml",
+        "views/menu.xml"
     ],
     "assets": {},
     "application": True,
