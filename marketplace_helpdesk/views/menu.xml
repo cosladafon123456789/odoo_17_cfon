@@ -5,31 +5,44 @@
               sequence="10"
               web_icon="marketplace_helpdesk,static/description/icon.png"/>
 
-    <!-- Menú de Tickets sin acción directa -->
+    <!-- Menú Tickets -->
     <menuitem id="marketplace_helpdesk_menu_tickets"
               name="Tickets"
               parent="marketplace_helpdesk_menu_root"
               sequence="10"/>
-
-    <!-- Menú de Cuentas conectadas -->
-    <menuitem id="marketplace_helpdesk_menu_accounts"
-              name="Cuentas conectadas"
-              parent="marketplace_helpdesk_menu_root"
-              sequence="20"
-              action="marketplace_helpdesk.action_marketplace_accounts"/>
 
     <!-- Acción para Tickets -->
     <record id="action_marketplace_tickets" model="ir.actions.act_window">
         <field name="name">Tickets</field>
         <field name="res_model">marketplace.ticket</field>
         <field name="view_mode">kanban,tree,form</field>
-        <field name="search_view_id" ref="marketplace_helpdesk.view_marketplace_ticket_search"/>
+        <field name="search_view_id" ref="view_marketplace_ticket_search"/>
     </record>
 
-    <!-- Submenú que usa la acción -->
+    <!-- Submenú de Tickets -->
     <menuitem id="menu_marketplace_tickets_action"
               name="Ver Tickets"
               parent="marketplace_helpdesk_menu_tickets"
-              action="marketplace_helpdesk.action_marketplace_tickets"
+              action="action_marketplace_tickets"
+              sequence="1"/>
+
+    <!-- Menú Cuentas -->
+    <menuitem id="marketplace_helpdesk_menu_accounts"
+              name="Cuentas conectadas"
+              parent="marketplace_helpdesk_menu_root"
+              sequence="20"/>
+
+    <!-- Acción para Cuentas -->
+    <record id="action_marketplace_accounts" model="ir.actions.act_window">
+        <field name="name">Cuentas conectadas</field>
+        <field name="res_model">marketplace.account</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Submenú que llama a la acción de cuentas -->
+    <menuitem id="menu_marketplace_accounts_action"
+              name="Ver Cuentas"
+              parent="marketplace_helpdesk_menu_accounts"
+              action="action_marketplace_accounts"
               sequence="1"/>
 </odoo>
