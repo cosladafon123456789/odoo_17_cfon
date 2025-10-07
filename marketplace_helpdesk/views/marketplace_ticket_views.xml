@@ -114,11 +114,10 @@
         </field>
     </record>
 
-    <!-- ACCIÓN PRINCIPAL (ahora aquí dentro) -->
+    <!-- ACCIÓN PRINCIPAL (sin search_view_id para evitar ParseError) -->
     <record id="action_marketplace_tickets" model="ir.actions.act_window">
         <field name="name">Tickets</field>
         <field name="res_model">marketplace.ticket</field>
         <field name="view_mode">kanban,tree,form</field>
-        <field name="search_view_id" ref="view_marketplace_ticket_search"/>
     </record>
 </odoo>
