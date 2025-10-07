@@ -6,7 +6,7 @@
     "website": "https://cosladafon.com",
     "license": "LGPL-3",
     "category": "Helpdesk",
-    "depends": ["mail","base"],
+    "depends": ["mail", "base"],
     "data": [
         "security/ir.model.access.csv",
         "views/menu.xml",
@@ -16,6 +16,6 @@
         "data/ir_cron.xml"
     ],
     "assets": {},
-    "application": true,
-    "installable": true
+    "application": True,
+    "installable": True,
 }
