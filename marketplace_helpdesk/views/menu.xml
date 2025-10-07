@@ -1,0 +1,5 @@
+<odoo>
+    <menuitem id="menu_marketplace_root" name="Marketplaces" sequence="5" web_icon="marketplace_helpdesk,static/description/icon.png"/>
+    <menuitem id="menu_marketplace_tickets" name="Tickets" parent="menu_marketplace_root" action="action_marketplace_tickets"/>
+    <menuitem id="menu_marketplace_accounts" name="Cuentas" parent="menu_marketplace_root" action="action_marketplace_accounts"/>
+</odoo>
