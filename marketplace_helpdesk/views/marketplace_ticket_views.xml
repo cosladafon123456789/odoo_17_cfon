@@ -63,4 +63,23 @@
         <field name="view_mode">kanban,tree,form</field>
         <field name="search_view_id" ref="view_marketplace_ticket_search"/>
     </record>
+        <!-- Vista de búsqueda -->
+    <record id="view_marketplace_ticket_search" model="ir.ui.view">
+        <field name="name">marketplace.ticket.search</field>
+        <field name="model">marketplace.ticket</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Tickets">
+                <field name="name" string="Asunto"/>
+                <field name="customer_name" string="Cliente"/>
+                <field name="marketplace" string="Marketplace"/>
+                <filter string="Nuevos" name="filter_new" domain="[('state','=','new')]"/>
+                <filter string="En progreso" name="filter_in_progress" domain="[('state','=','in_progress')]"/>
+                <filter string="Cerrados" name="filter_closed" domain="[('state','=','closed')]"/>
+                <group expand="0" string="Agrupar por...">
+                    <filter string="Marketplace" context="{'group_by': 'marketplace'}"/>
+                    <filter string="Estado" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
 </odoo>
