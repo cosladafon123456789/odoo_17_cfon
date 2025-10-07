@@ -1,13 +1,35 @@
 <odoo>
-    <menuitem id="marketplace_helpdesk_menu_root" name="Marketplaces"
+    <!-- Menú principal -->
+    <menuitem id="marketplace_helpdesk_menu_root"
+              name="Marketplaces"
               sequence="10"
               web_icon="marketplace_helpdesk,static/description/icon.png"/>
-    <menuitem id="marketplace_helpdesk_menu_tickets" name="Tickets"
+
+    <!-- Menú de Tickets sin acción directa -->
+    <menuitem id="marketplace_helpdesk_menu_tickets"
+              name="Tickets"
               parent="marketplace_helpdesk_menu_root"
-              sequence="10"
-              action="action_marketplace_tickets"/>
-    <menuitem id="marketplace_helpdesk_menu_accounts" name="Cuentas conectadas"
+              sequence="10"/>
+
+    <!-- Menú de Cuentas conectadas -->
+    <menuitem id="marketplace_helpdesk_menu_accounts"
+              name="Cuentas conectadas"
               parent="marketplace_helpdesk_menu_root"
               sequence="20"
-              action="action_marketplace_accounts"/>
+              action="marketplace_helpdesk.action_marketplace_accounts"/>
+
+    <!-- Acción para Tickets -->
+    <record id="action_marketplace_tickets" model="ir.actions.act_window">
+        <field name="name">Tickets</field>
+        <field name="res_model">marketplace.ticket</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="marketplace_helpdesk.view_marketplace_ticket_search"/>
+    </record>
+
+    <!-- Submenú que usa la acción -->
+    <menuitem id="menu_marketplace_tickets_action"
+              name="Ver Tickets"
+              parent="marketplace_helpdesk_menu_tickets"
+              action="marketplace_helpdesk.action_marketplace_tickets"
+              sequence="1"/>
 </odoo>
