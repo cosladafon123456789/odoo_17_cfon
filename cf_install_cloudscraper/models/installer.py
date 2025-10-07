@@ -2,11 +2,9 @@ import subprocess
 import sys
 import logging
 
-from odoo import api
-
 _logger = logging.getLogger(__name__)
 
-def _install_cloudscraper(cr, registry):
+def _install_cloudscraper():
     try:
         import cloudscraper
         _logger.info("✅ El paquete 'cloudscraper' ya está instalado.")
@@ -18,5 +16,6 @@ def _install_cloudscraper(cr, registry):
         except Exception as e:
             _logger.error(f"❌ Error al instalar cloudscraper: {e}")
 
-def post_init_hook(cr, registry):
-    _install_cloudscraper(cr, registry)
+def post_init_hook(env):
+    """Se ejecuta automáticamente tras instalar el módulo."""
+    _install_cloudscraper()
