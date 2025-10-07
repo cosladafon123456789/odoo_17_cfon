@@ -5,7 +5,11 @@
         <field name="arch" type="xml">
             <form string="Configuración de Marketplaces">
                 <group>
-                    <field name="marketplace_account_ids" context="{'default_company_id': company_id}" widget="one2many_list"/>
+                    <!-- 🔧 Añadimos el campo company_id para el contexto -->
+                    <field name="company_id" invisible="1"/>
+                    <field name="marketplace_account_ids"
+                           context="{'default_company_id': company_id}"
+                           widget="one2many_list"/>
                 </group>
             </form>
         </field>
