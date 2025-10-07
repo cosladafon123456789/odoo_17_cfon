@@ -20,36 +20,49 @@ class StockLot(models.Model):
         data = {"imei": imei}
 
         try:
-            response = requests.post(url, data=data, headers=headers, timeout=20)
+            response = requests.post(url, data=data, headers=headers, timeout=25)
             soup = BeautifulSoup(response.text, "html.parser")
 
-            # Buscar el texto del estado iCloud dentro de la página
-            icloud_label = soup.find(text=lambda t: "iCloud Lock" in t)
-            if not icloud_label:
+            # Buscar el bloque donde se muestra el estado "iCloud Lock"
+            result_label = soup.find(string=lambda t: t and "iCloud Lock" in t)
+            if not result_label:
                 raise UserError(_("No se pudo leer el estado de iCloud en la respuesta."))
 
-            # Buscar el valor (OFF/ON) cercano a esa etiqueta
-            value_tag = None
-            if icloud_label.parent:
-                value_tag = icloud_label.parent.find_next("td")
-            if not value_tag:
-                value_tag = soup.find(string=lambda t: t and "OFF" in t or "ON" in t)
+            # Buscar la palabra ON u OFF cerca de ese texto
+            parent = result_label.find_parent()
+            value_text = None
 
-            text = (value_tag.get_text() if hasattr(value_tag, "get_text") else str(value_tag)).upper()
+            if parent:
+                # Buscar dentro de los elementos cercanos
+                value_el = parent.find_next(["strong", "span", "td"])
+                if value_el:
+                    value_text = value_el.get_text(strip=True).upper()
 
-            if "OFF" in text:
-                message = "iCloud: OFF"
-            elif "ON" in text:
-                message = "iCloud: ON"
+            # Fallback si no lo encuentra directamente
+            if not value_text:
+                text = soup.get_text(" ", strip=True).upper()
+                if "ICLOUD LOCK OFF" in text:
+                    value_text = "OFF"
+                elif "ICLOUD LOCK ON" in text:
+                    value_text = "ON"
+
+            if not value_text:
+                raise UserError(_("No se pudo leer el estado de iCloud en la respuesta."))
+
+            # Determinar el resultado final
+            if "OFF" in value_text:
+                message = "✅ iCloud: OFF (libre)"
+            elif "ON" in value_text:
+                message = "🔒 iCloud: ON (bloqueado)"
             else:
-                message = "iCloud: No se pudo determinar"
+                message = f"iCloud: {value_text}"
 
             return {
                 "effect": {
                     "fadeout": "slow",
                     "message": message,
-                    "type": "rainbow_man"
-                },
+                    "type": "rainbow_man",
+                }
             }
 
         except Exception as e:
