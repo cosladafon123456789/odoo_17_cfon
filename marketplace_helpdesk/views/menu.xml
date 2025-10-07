@@ -1,5 +1,12 @@
 <odoo>
-    <menuitem id="menu_marketplace_root" name="Marketplaces" sequence="5" web_icon="marketplace_helpdesk,static/description/icon.png"/>
+    <menuitem id="menu_marketplace_root" name="Marketplaces" sequence="10"/>
     <menuitem id="menu_marketplace_tickets" name="Tickets" parent="menu_marketplace_root" action="action_marketplace_tickets"/>
-    <menuitem id="menu_marketplace_accounts" name="Cuentas" parent="menu_marketplace_root" action="action_marketplace_accounts"/>
+    <menuitem id="menu_marketplace_accounts" name="Cuentas" parent="menu_marketplace_root" action="action_marketplace_accounts" sequence="20"/>
+
+    <record id="action_marketplace_tickets" model="ir.actions.act_window">
+        <field name="name">Tickets</field>
+        <field name="res_model">marketplace.ticket</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_marketplace_ticket_search"/>
+    </record>
 </odoo>

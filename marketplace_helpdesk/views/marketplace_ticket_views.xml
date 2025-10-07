@@ -1,60 +1,56 @@
 <odoo>
-
-    <!-- Lista -->
     <record id="view_marketplace_ticket_tree" model="ir.ui.view">
         <field name="name">marketplace.ticket.tree</field>
         <field name="model">marketplace.ticket</field>
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
-                <field name="account_id"/>
-                <field name="customer_name"/>
-                <field name="state"/>
-                <field name="create_date"/>
+                <field name="participants"/>
+                <field name="message_count"/>
+                <field name="thread_type"/>
+                <field name="is_critical"/>
+                <field name="marketplace"/>
+                <field name="last_message_date"/>
             </tree>
         </field>
     </record>
 
-    <!-- Formulario -->
     <record id="view_marketplace_ticket_form" model="ir.ui.view">
         <field name="name">marketplace.ticket.form</field>
         <field name="model">marketplace.ticket</field>
         <field name="arch" type="xml">
             <form string="Ticket de Marketplace">
                 <header>
-                    <button name="action_mark_in_progress"
-                            type="object"
-                            string="En proceso"
-                            class="btn-primary"
-                            invisible="state not in ('new','answered')"/>
-                    <button name="action_mark_closed"
-                            type="object"
-                            string="Cerrar"
-                            class="btn-secondary"
-                            invisible="state == 'closed'"/>
-                    <button name="action_sync_messages"
-                            type="object"
-                            string="Sincronizar hilo"
-                            class="btn-secondary"/>
-                    <field name="state"
-                           widget="statusbar"
-                           statusbar_visible="new,in_progress,answered,closed"/>
+                    <button name="action_mark_in_progress" type="object" string="En proceso" class="btn-primary" invisible="state not in ('new','answered')"/>
+                    <button name="action_mark_closed" type="object" string="Cerrar" class="btn-secondary" invisible="state == 'closed'"/>
+                    <button name="action_sync_messages" type="object" string="Sincronizar hilo" class="btn-secondary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,in_progress,answered,closed"/>
                 </header>
-
                 <sheet>
                     <group>
                         <group>
                             <field name="name"/>
                             <field name="account_id" options="{'no_create': False}"/>
                             <field name="external_id" readonly="1"/>
+                            <field name="marketplace" readonly="1"/>
                         </group>
+                        <group>
+                            <field name="participants" readonly="1"/>
+                            <field name="message_count" readonly="1"/>
+                            <field name="thread_type" readonly="1"/>
+                            <field name="is_critical" readonly="1"/>
+                            <field name="last_message_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
                         <group>
                             <field name="customer_name"/>
                             <field name="customer_email"/>
+                        </group>
+                        <group>
                             <field name="last_external_update" readonly="1"/>
                         </group>
                     </group>
-
                     <notebook>
                         <page string="Conversación">
                             <field name="message_ids" widget="mail_thread"/>
@@ -65,27 +61,30 @@
         </field>
     </record>
 
-    <!-- Kanban -->
     <record id="view_marketplace_ticket_kanban" model="ir.ui.view">
         <field name="name">marketplace.ticket.kanban</field>
         <field name="model">marketplace.ticket</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="state">
+            <kanban default_group_by="is_critical">
                 <field name="name"/>
-                <field name="customer_name"/>
-                <field name="account_id"/>
+                <field name="participants"/>
+                <field name="message_count"/>
+                <field name="thread_type"/>
+                <field name="is_critical"/>
+                <field name="last_message_date"/>
                 <templates>
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click">
-                            <t t-if="record.name">
+                            <div class="o_kanban_primary_left">
                                 <strong t-esc="record.name.value"/>
-                            </t>
-                            <t t-if="record.customer_name">
-                                <div><span t-esc="record.customer_name.value"/></div>
-                            </t>
-                            <t t-if="record.account_id">
-                                <div><span t-esc="record.account_id.value"/></div>
-                            </t>
+                                <t t-if="record.is_critical.value">
+                                    <span class="badge ms-2">Crítico</span>
+                                </t>
+                            </div>
+                            <div><span t-esc="record.participants.value"/></div>
+                            <div><b>Mensajes:</b> <t t-esc="record.message_count.value"/></div>
+                            <div><b>Tipo:</b> <t t-esc="record.thread_type.value"/></div>
+                            <div><b>Último:</b> <t t-esc="record.last_message_date.value"/></div>
                         </div>
                     </t>
                 </templates>
@@ -93,11 +92,21 @@
         </field>
     </record>
 
-    <!-- Acción -->
-    <record id="action_marketplace_tickets" model="ir.actions.act_window">
-        <field name="name">Tickets</field>
-        <field name="res_model">marketplace.ticket</field>
-        <field name="view_mode">kanban,tree,form</field>
+    <record id="view_marketplace_ticket_search" model="ir.ui.view">
+        <field name="name">marketplace.ticket.search</field>
+        <field name="model">marketplace.ticket</field>
+        <field name="arch" type="xml">
+            <search string="Tickets">
+                <field name="name"/>
+                <field name="participants"/>
+                <filter name="unread" string="No leídos" domain="[('message_count','>',0)]"/>
+                <separator/>
+                <filter name="all" string="Todos" domain="[]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Crítico" domain="[]" context="{'group_by':'is_critical'}"/>
+                    <filter string="Tipo" domain="[]" context="{'group_by':'thread_type'}"/>
+                </group>
+            </search>
+        </field>
     </record>
-
 </odoo>

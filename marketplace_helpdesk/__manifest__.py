@@ -1,22 +1,19 @@
-# -*- coding: utf-8 -*-
 {
     "name": "Marketplaces",
-    "summary": "Tickets de mensajes de marketplaces (Mirakl) tipo Helpdesk",
+    "summary": "Sincroniza hilos de Mirakl como tickets (solo no leídos)",
     "version": "17.0.1.0.0",
-    "author": "CosladaFon + ChatGPT",
-    "website": "https://cosladafon.com",
     "license": "LGPL-3",
-    "category": "Helpdesk",
-    "depends": ["mail", "base"],
+    "author": "ChatGPT Assist",
+    "website": "https://example.com",
+    "depends": ["base", "mail"],
     "data": [
         "security/ir.model.access.csv",
         "views/marketplace_ticket_views.xml",
         "views/marketplace_account_views.xml",
         "views/res_config_settings_views.xml",
-        "data/ir_cron.xml",
-        "views/menu.xml"
+        "views/menu.xml",
+        "data/ir_cron.xml"
     ],
-    "assets": {},
-    "application": True,
     "installable": True,
+    "application": True
 }

@@ -1,87 +1,67 @@
-# -*- coding: utf-8 -*-
-from odoo import api, models
-import logging, json
+import logging
+import json
+from datetime import timezone
 import requests
-from datetime import datetime, timezone
+
+from odoo import fields, models
 
 _logger = logging.getLogger(__name__)
 
 class MiraklClient(models.AbstractModel):
     _name = "mirakl.client"
-    _description = "Cliente HTTP para Mirakl (genérico)"
+    _description = "Cliente Mirakl"
 
     def _headers(self, account):
-        headers = {
-            account.header_name or "Authorization": account.api_key or "",
-            "Accept": "application/json"
+        return {
+            "Authorization": account.api_key or "",
+            "Accept": "application/json",
+            "Content-Type": "application/json",
         }
-        return headers
 
-    def _base(self, account):
-        return (account.api_base or "").rstrip("/")
+    def _get(self, account, path, params=None):
+        base = account._normalized_base()
+        url = f"{base}/api{path}"
+        resp = requests.get(url, headers=self._headers(account), params=params or {}, timeout=30)
+        try:
+            body = resp.json()
+        except Exception:
+            _logger.warning("Mirakl fetch %s -> %s %s", url, resp.status_code, resp.text[:400])
+            raise
+        if resp.status_code >= 300:
+            _logger.warning("Mirakl fetch %s -> %s %s", url, resp.status_code, json.dumps(body)[:400])
+        return resp.status_code, body
 
-    def fetch_new_conversations(self, account, updated_since=None, limit=50):
-        """
-        Intenta primero con API de Conversaciones; si falla, prueba API antigua de Mensajes.
-        """
-        base = self._base(account)
+    def test_connection(self, account):
+        try:
+            code, _ = self._get(account, "/inbox/threads", params={"updated_since": fields.Datetime.now().isoformat()})
+            return (code < 400), f"HTTP {code}"
+        except Exception as e:
+            return False, str(e)
+
+    def fetch_threads(self, account, updated_since=None, unread_only=True, with_messages=False):
         params = {}
         if updated_since:
-            # formato ISO8601
             if isinstance(updated_since, str):
                 params["updated_since"] = updated_since
             else:
                 params["updated_since"] = updated_since.astimezone(timezone.utc).isoformat()
-        params["max"] = limit
-        try_endpoints = [
-            account.conv_list_endpoint or "/api/conversations",
-            account.legacy_messages_list_endpoint or "/api/messages"
-        ]
-        for ep in try_endpoints:
-            url = f"{base}{ep}"
-            try:
-                resp = requests.get(url, headers=self._headers(account), params=params, timeout=30)
-                if resp.status_code == 200:
-                    return ep, resp.json()
-                else:
-                    _logger.warning("Mirakl fetch %s -> %s %s", url, resp.status_code, resp.text[:200])
-            except Exception as e:
-                _logger.exception("Mirakl fetch error %s: %s", url, e)
-        return None, {}
+        if with_messages:
+            params["with_messages"] = "true"
+        code, data = self._get(account, "/inbox/threads", params=params)
+        if code >= 400:
+            return []
+        threads = data if isinstance(data, list) else data.get("threads") or data.get("data") or []
+        results = []
+        for th in threads:
+            unread_count = th.get("unread_count") or th.get("unreadCount") or 0
+            if unread_only and unread_count <= 0:
+                continue
+            results.append(th)
+        return results
 
-    def fetch_conversation_messages(self, account, conv_id):
-        base = self._base(account)
-        try_endpoints = [
-            (account.conv_messages_endpoint or "/api/conversations/{id}/messages").replace("{id}", str(conv_id)),
-            (account.legacy_messages_thread_endpoint or "/api/messages/{id}").replace("{id}", str(conv_id)),
-        ]
-        for ep in try_endpoints:
-            url = f"{base}{ep}"
-            try:
-                resp = requests.get(url, headers=self._headers(account), timeout=30)
-                if resp.status_code == 200:
-                    return ep, resp.json()
-                else:
-                    _logger.warning("Mirakl fetch conv %s -> %s %s", url, resp.status_code, resp.text[:200])
-            except Exception as e:
-                _logger.exception("Mirakl fetch conv error %s: %s", url, e)
-        return None, {}
-
-    def send_message(self, account, conv_id, body):
-        base = self._base(account)
-        payload = {"body": body}
-        try_endpoints = [
-            (account.conv_send_message_endpoint or "/api/conversations/{id}/messages").replace("{id}", str(conv_id)),
-            (account.legacy_send_message_endpoint or "/api/messages/{id}/answer").replace("{id}", str(conv_id)),
-        ]
-        for ep in try_endpoints:
-            url = f"{base}{ep}"
-            try:
-                resp = requests.post(url, headers=self._headers(account), json=payload, timeout=30)
-                if resp.status_code in (200,201,202):
-                    return True, resp.json() if resp.text else {}
-                else:
-                    _logger.warning("Mirakl send %s -> %s %s", url, resp.status_code, resp.text[:200])
-            except Exception as e:
-                _logger.exception("Mirakl send error %s: %s", url, e)
-        return False, {}
+    def fetch_thread_messages(self, account, thread_id):
+        code, data = self._get(account, f"/messages", params={"thread_id": thread_id})
+        if code >= 400:
+            return []
+        msgs = data if isinstance(data, list) else data.get("messages") or data.get("data") or []
+        return msgs

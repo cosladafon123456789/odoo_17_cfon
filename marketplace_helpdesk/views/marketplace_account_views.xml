@@ -1,18 +1,4 @@
 <odoo>
-    <record id="view_marketplace_account_tree" model="ir.ui.view">
-        <field name="name">marketplace.account.tree</field>
-        <field name="model">marketplace.account</field>
-        <field name="arch" type="xml">
-            <tree>
-                <field name="name"/>
-                <field name="marketplace"/>
-                <field name="api_base"/>
-                <field name="active"/>
-                <field name="last_sync"/>
-            </tree>
-        </field>
-    </record>
-
     <record id="view_marketplace_account_form" model="ir.ui.view">
         <field name="name">marketplace.account.form</field>
         <field name="model">marketplace.account</field>
@@ -20,28 +6,37 @@
             <form string="Cuenta de Marketplace">
                 <sheet>
                     <group>
-                        <group string="Credenciales">
+                        <group>
                             <field name="name"/>
-                            <field name="marketplace"/>
-                            <field name="api_base"/>
+                            <field name="company_id"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="base_url"/>
                             <field name="api_key" password="True"/>
-                            <field name="header_name"/>
-                        </group>
-                        <group string="Endpoints">
-                            <field name="conv_list_endpoint"/>
-                            <field name="conv_messages_endpoint"/>
-                            <field name="conv_send_message_endpoint"/>
-                            <field name="legacy_messages_list_endpoint"/>
-                            <field name="legacy_messages_thread_endpoint"/>
-                            <field name="legacy_send_message_endpoint"/>
+                            <field name="sync_unread_only"/>
+                            <field name="last_sync" readonly="1"/>
                         </group>
                     </group>
-                    <group>
-                        <field name="last_sync" readonly="1"/>
-                        <field name="active"/>
-                    </group>
+                    <footer>
+                        <button name="action_test_connection" type="object" string="Probar conexión" class="btn-primary"/>
+                    </footer>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <record id="view_marketplace_account_tree" model="ir.ui.view">
+        <field name="name">marketplace.account.tree</field>
+        <field name="model">marketplace.account</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="active"/>
+                <field name="base_url"/>
+                <field name="last_sync"/>
+            </tree>
         </field>
     </record>
 

@@ -2,16 +2,30 @@
     <record id="view_marketplace_settings_form" model="ir.ui.view">
         <field name="name">marketplace.settings.form</field>
         <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.view_general_configuration"/>
         <field name="arch" type="xml">
-            <form string="Configuración de Marketplaces">
-                <group>
-                    <!-- 🔧 Añadimos el campo company_id para el contexto -->
-                    <field name="company_id" invisible="1"/>
-                    <field name="marketplace_account_ids"
-                           context="{'default_company_id': company_id}"
-                           widget="one2many_list"/>
-                </group>
-            </form>
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="Marketplaces" string="Marketplaces">
+                    <h2>Marketplaces</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6">
+                            <label for="marketplace_account_ids"/>
+                            <field name="marketplace_account_ids" widget="one2many_list" options="{'no_create_edit': False}"/>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="res_config_settings_view_form_marketplace_fields" model="ir.ui.view">
+        <field name="name">res.config.settings.marketplace.fields</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.view_general_configuration"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet" position="inside">
+                <field name="marketplace_account_ids" invisible="1"/>
+            </xpath>
         </field>
     </record>
 </odoo>
