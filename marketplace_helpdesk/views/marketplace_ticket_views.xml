@@ -1,4 +1,5 @@
 <odoo>
+
     <!-- LISTA -->
     <record id="view_marketplace_ticket_tree" model="ir.ui.view">
         <field name="name">marketplace.ticket.tree</field>
@@ -23,11 +24,16 @@
         <field name="arch" type="xml">
             <form string="Ticket de Marketplace">
                 <header>
-                    <button name="action_mark_in_progress" type="object" string="En proceso" class="btn-primary" invisible="state not in ('new','answered')"/>
-                    <button name="action_mark_closed" type="object" string="Cerrar" class="btn-secondary" invisible="state == 'closed'"/>
-                    <button name="action_sync_messages" type="object" string="Sincronizar hilo" class="btn-secondary"/>
-                    <field name="state" widget="statusbar" statusbar_visible="new,in_progress,answered,closed"/>
+                    <button name="action_mark_in_progress" type="object" string="En proceso"
+                            class="btn-primary" invisible="state not in ('new','answered')"/>
+                    <button name="action_mark_closed" type="object" string="Cerrar"
+                            class="btn-secondary" invisible="state == 'closed'"/>
+                    <button name="action_sync_messages" type="object" string="Sincronizar hilo"
+                            class="btn-secondary"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="new,in_progress,answered,closed"/>
                 </header>
+
                 <sheet>
                     <group>
                         <group>
@@ -44,6 +50,7 @@
                             <field name="last_message_date" readonly="1"/>
                         </group>
                     </group>
+
                     <group>
                         <group>
                             <field name="customer_name"/>
@@ -53,6 +60,7 @@
                             <field name="last_external_update" readonly="1"/>
                         </group>
                     </group>
+
                     <notebook>
                         <page string="Conversación">
                             <field name="message_ids" widget="mail_thread"/>
@@ -114,10 +122,11 @@
         </field>
     </record>
 
-    <!-- ACCIÓN PRINCIPAL (sin search_view_id para evitar ParseError) -->
+    <!-- ACCIÓN PRINCIPAL -->
     <record id="action_marketplace_tickets" model="ir.actions.act_window">
         <field name="name">Tickets</field>
         <field name="res_model">marketplace.ticket</field>
         <field name="view_mode">kanban,tree,form</field>
     </record>
+
 </odoo>
