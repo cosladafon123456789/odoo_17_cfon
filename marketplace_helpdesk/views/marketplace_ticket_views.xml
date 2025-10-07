@@ -37,7 +37,7 @@
         </field>
     </record>
 
-    <!-- ✅ Vista de búsqueda -->
+    <!-- ✅ Vista de búsqueda (dentro del mismo <odoo>) -->
     <record id="view_marketplace_ticket_search" model="ir.ui.view">
         <field name="name">marketplace.ticket.search</field>
         <field name="model">marketplace.ticket</field>
