@@ -8,12 +8,13 @@ class MarketplaceAccount(models.Model):
 
     name = fields.Char(required=True)
     marketplace = fields.Selection([
-        ("mediamarkt","MediaMarkt"),
-        ("pccomponentes","PCComponentes"),
-        ("carrefour","Carrefour"),
-        ("phonehouse","Phone House"),
-        ("otros","Otros"),
+        ("mediamarkt", "MediaMarkt"),
+        ("pccomponentes", "PCComponentes"),
+        ("carrefour", "Carrefour"),
+        ("phonehouse", "Phone House"),
+        ("otros", "Otros"),
     ], string="Marketplace")
+
     api_base = fields.Char(string="URL base API", required=True, help="Ej: https://marketplace.mediamarkt.es/api")
     api_key = fields.Char(string="API Key", required=True)
     header_name = fields.Char(string="Nombre de cabecera", default="Authorization",
@@ -29,5 +30,12 @@ class MarketplaceAccount(models.Model):
     legacy_send_message_endpoint = fields.Char(string="Endpoint legacy responder", default="/api/messages/{id}/answer")
 
     last_sync = fields.Datetime(string="Última sincronización")
-
     active = fields.Boolean(default=True)
+
+    # 🔧 Corrección: añadimos relación con la compañía para evitar KeyError
+    company_id = fields.Many2one(
+        'res.company',
+        string='Compañía',
+        default=lambda self: self.env.company,
+        required=True
+    )
