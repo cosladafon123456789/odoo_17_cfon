@@ -37,7 +37,7 @@
         </field>
     </record>
 
-    <!-- ✅ Vista de búsqueda (dentro del mismo <odoo>) -->
+    <!-- ✅ Vista de búsqueda -->
     <record id="view_marketplace_ticket_search" model="ir.ui.view">
         <field name="name">marketplace.ticket.search</field>
         <field name="model">marketplace.ticket</field>
@@ -46,14 +46,23 @@
                 <field name="name" string="Asunto"/>
                 <field name="customer_name" string="Cliente"/>
                 <field name="marketplace" string="Marketplace"/>
-                <filter string="Nuevos" name="filter_new" domain="[('state','=','new')]"/>
-                <filter string="En progreso" name="filter_in_progress" domain="[('state','=','in_progress')]"/>
-                <filter string="Cerrados" name="filter_closed" domain="[('state','=','closed')]"/>
+                <filter name="filter_new" string="Nuevos" domain="[('state','=','new')]"/>
+                <filter name="filter_in_progress" string="En progreso" domain="[('state','=','in_progress')]"/>
+                <filter name="filter_closed" string="Cerrados" domain="[('state','=','closed')]"/>
                 <group expand="0" string="Agrupar por...">
-                    <filter string="Marketplace" context="{'group_by': 'marketplace'}"/>
-                    <filter string="Estado" context="{'group_by': 'state'}"/>
+                    <filter name="group_marketplace" string="Marketplace" context="{'group_by': 'marketplace'}"/>
+                    <filter name="group_state" string="Estado" context="{'group_by': 'state'}"/>
                 </group>
             </search>
         </field>
     </record>
+
+    <!-- ✅ Acción de ventana (añadida aquí para evitar referencias rotas) -->
+    <record id="action_marketplace_tickets" model="ir.actions.act_window">
+        <field name="name">Tickets</field>
+        <field name="res_model">marketplace.ticket</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_marketplace_ticket_search"/>
+    </record>
+
 </odoo>
