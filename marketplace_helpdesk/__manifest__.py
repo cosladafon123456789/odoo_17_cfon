@@ -9,8 +9,8 @@
         "security/security.xml",
         "security/ir.model.access.csv",
         "views/marketplace_account_views.xml",
-        "views/marketplace_ticket_views.xml",   # 👈 esta va antes
-        "views/menu.xml",                       # 👈 esta va después
+        "views/marketplace_ticket_views.xml",
+        "views/menu.xml"
     ],
     "application": True,
     "installable": True,
