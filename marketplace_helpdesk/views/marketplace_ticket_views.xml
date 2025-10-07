@@ -1,4 +1,5 @@
 <odoo>
+
     <!-- Lista -->
     <record id="view_marketplace_ticket_tree" model="ir.ui.view">
         <field name="name">marketplace.ticket.tree</field>
@@ -6,7 +7,7 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
-                <field name="marketplace"/>
+                <field name="account_id"/>
                 <field name="customer_name"/>
                 <field name="state"/>
                 <field name="create_date"/>
@@ -26,19 +27,18 @@
                             string="En proceso"
                             class="btn-primary"
                             invisible="state not in ('new','answered')"/>
-
                     <button name="action_mark_closed"
                             type="object"
                             string="Cerrar"
                             class="btn-secondary"
                             invisible="state == 'closed'"/>
-
                     <button name="action_sync_messages"
                             type="object"
                             string="Sincronizar hilo"
                             class="btn-secondary"/>
-
-                    <field name="state" widget="statusbar" statusbar_visible="new,in_progress,answered,closed"/>
+                    <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="new,in_progress,answered,closed"/>
                 </header>
 
                 <sheet>
@@ -47,7 +47,6 @@
                             <field name="name"/>
                             <field name="account_id" options="{'no_create': False}"/>
                             <field name="external_id" readonly="1"/>
-                            <field name="marketplace" readonly="1"/>
                         </group>
                         <group>
                             <field name="customer_name"/>
@@ -74,12 +73,19 @@
             <kanban default_group_by="state">
                 <field name="name"/>
                 <field name="customer_name"/>
+                <field name="account_id"/>
                 <templates>
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click">
-                            <strong t-esc="record.name.value"/>
-                            <div><span t-esc="record.customer_name.value"/></div>
-                            <div><span t-esc="record.marketplace.value"/></div>
+                            <t t-if="record.name">
+                                <strong t-esc="record.name.value"/>
+                            </t>
+                            <t t-if="record.customer_name">
+                                <div><span t-esc="record.customer_name.value"/></div>
+                            </t>
+                            <t t-if="record.account_id">
+                                <div><span t-esc="record.account_id.value"/></div>
+                            </t>
                         </div>
                     </t>
                 </templates>
@@ -93,4 +99,5 @@
         <field name="res_model">marketplace.ticket</field>
         <field name="view_mode">kanban,tree,form</field>
     </record>
+
 </odoo>
