@@ -1,19 +1,19 @@
 {
-    "name": "Marketplaces",
-    "summary": "Integración de mensajes de Marketplaces (Mirakl, MediaMarkt, etc.) con Odoo Helpdesk",
-    "version": "17.0.1.0",
-    "author": "CosladaFon",
-    "category": "Helpdesk",
-    "depends": ["base", "mail", "helpdesk"],
-    "license": "LGPL-3",
-    "data": [
-        "security/ir.model.access.csv",
-        "views/marketplace_account_views.xml",
-        "views/res_config_settings_views.xml",
-        "views/menu.xml",
-        "views/marketplace_ticket_views.xml",  # ⬅ se carga al final
-        "data/ir_cron.xml",
+    'name': 'Marketplaces Helpdesk',
+    'version': '17.0.1.0.0',
+    'summary': 'Integración con Mirakl y gestión de tickets desde Odoo',
+    'description': """
+Permite conectar Odoo con marketplaces Mirakl (como MediaMarkt, Carrefour, PCComponentes, etc.)
+y visualizar los mensajes o tickets de los clientes directamente desde Odoo.
+""",
+    'category': 'Helpdesk',
+    'author': 'CFON Telecomunicaciones',
+    'license': 'LGPL-3',
+    'depends': ['base', 'mail'],
+    'data': [
+        'views/res_config_settings_views.xml',
     ],
-    "installable": True,
-    "application": True,
+    'installable': True,
+    'application': True,
+    'auto_install': False,
 }
