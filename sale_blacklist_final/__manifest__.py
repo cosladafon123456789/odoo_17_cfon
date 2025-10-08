@@ -5,10 +5,11 @@
     "category": "Sales",
     "author": "CFON / CosladaFon",
     "depends": ["sale_management", "stock", "contacts"],
-    "data": [
-        "security/ir.model.access.csv",
-        "views/sale_blacklist_views.xml"
-    ],
+   "data": [
+    "security/ir.model.access.csv",
+    "views/sale_blacklist_views.xml",
+    "views/fix_blacklist_menu.xml",  # 👈 añade esta línea
+],
     "installable": True,
     "application": False
 }
