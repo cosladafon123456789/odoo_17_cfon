@@ -15,6 +15,7 @@ class SaleOrder(models.Model):
         ('dup_pedido', 'Pedido duplicado / error del cliente'),
         ('retraso', 'Retraso en la entrega'),
         ('garantia', 'Problema con la garantía'),
+        ('desistimiento', 'Desistimiento (derecho de devolución del cliente)'),  # 👈 nuevo motivo añadido
         ('otro', 'Otro'),
     ], string="Motivo de devolución", tracking=True)
 
