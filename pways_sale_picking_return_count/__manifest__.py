@@ -2,7 +2,7 @@
 {
     'name': 'Pways Sale Order Return Count',
     'version': '17.0',
-    'summary': """Sale Order Return Count. 03/10/2025-rmu""",
+    'summary': """Sale Order Return Count. 8-oct-25 Bhagat""",
     'description': """ Sale Order Shipment""",
     'category': 'Sale Order',
     'author':'Preciseways',
@@ -11,6 +11,7 @@
         "security/ir.model.access.csv",
         "data/cron.xml",
         "views/inherit_stock_lot_view.xml",
+        "views/inherit_repair_order_view.xml",
         "wizard/serial_scrap_wizard_views.xml",
     ],
     'installable': True,

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+    	<record id="view_repair_order_form_inherit" model="ir.ui.view">
+	        <field name="name">repair.order.inherit</field>
+	        <field name="model">repair.order</field>
+	        <field name="inherit_id" ref="repair.view_repair_order_form"/>
+	        <field name="arch" type="xml">
+	            <xpath expr="//header" position="after">
+	                <div class="alert alert-warning" role="alert"
+	                    invisible="not has_more_return_count">
+	                    <field name="has_more_return_count" invisible="1"/>Advertencia: El contiene lotes problemáticos
+	                </div>
+	            </xpath>
+	        </field>
+    	</record>
+
+    </data>
+</odoo>

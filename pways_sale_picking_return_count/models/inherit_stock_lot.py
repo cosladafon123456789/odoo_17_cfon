@@ -143,3 +143,5 @@ class StockMove(models.Model):
                 ml.lot_id and ml.lot_id.return_count >= 2
                 for ml in move.move_line_ids
             )
+
+
