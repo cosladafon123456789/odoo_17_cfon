@@ -5,7 +5,12 @@ class DevolucionWizard(models.TransientModel):
     _name = "cf.devolucion.wizard"
     _description = "Wizard de motivo de devolución"
 
-    sale_order_id = fields.Many2one("sale.order", string="Pedido", required=True, ondelete="cascade")
+    sale_order_id = fields.Many2one(
+        "sale.order",
+        string="Pedido",
+        required=True,
+        ondelete="cascade"
+    )
 
     motivo = fields.Selection([
         ('bat_85', 'Batería < 85%'),
@@ -18,10 +23,12 @@ class DevolucionWizard(models.TransientModel):
         ('dup_pedido', 'Pedido duplicado / error del cliente'),
         ('retraso', 'Retraso en la entrega'),
         ('garantia', 'Problema con la garantía'),
+        ('desistimiento', 'Desistimiento (derecho de devolución del cliente)'),
         ('otro', 'Otro'),
     ], string="Motivo de devolución", required=True)
 
     detalle = fields.Text(string="Detalle del motivo")
+
     tipo_error = fields.Selection([
         ('interno', 'Interno (almacén, control de calidad, anuncio incorrecto)'),
         ('externo', 'Externo (cliente, transporte, garantía fabricante)'),
@@ -29,26 +36,31 @@ class DevolucionWizard(models.TransientModel):
 
     @api.onchange('motivo')
     def _onchange_motivo(self):
-        # Limpiar detalle cuando cambie motivo
+        """Lógica al cambiar el motivo."""
         if self.motivo not in ('defectuoso', 'acc_faltantes', 'otro'):
-            # Mantener detalle opcional para otros motivos, pero no obligatorio
+            # No obligar detalle para otros motivos
             pass
 
     def action_confirm(self):
+        """Confirma el motivo y continúa con la acción original de 'Recibido'."""
         self.ensure_one()
         order = self.sale_order_id
-        # Validaciones de detalle obligatorio para ciertos motivos
+
+        # Validaciones de detalle obligatorio
         if self.motivo in ('defectuoso', 'acc_faltantes', 'otro'):
             if not (self.detalle or '').strip():
                 raise UserError(_("Debes especificar el detalle para el motivo seleccionado."))
 
-        # Guardar en la orden
+        # Guardar la información en la orden de venta
         order.write({
             'motivo_devolucion': self.motivo,
-            'detalle_devolucion': self.detalle if self.motivo in ('defectuoso','acc_faltantes','otro') else (self.detalle or ''),
+            'detalle_devolucion': (
+                self.detalle if self.motivo in ('defectuoso', 'acc_faltantes', 'otro')
+                else (self.detalle or '')
+            ),
             'tipo_error_devolucion': self.tipo_error,
         })
 
-        # Continuar con la acción original del botón 'button_recieved'
-        # Usamos contexto para saltar nuestro propio override y llamar a super()
+        # Continuar con la acción original del botón "Recibido"
+        # Usamos el contexto 'from_wizard' para no reabrir el wizard
         return order.with_context(from_wizard=True).button_recieved()
