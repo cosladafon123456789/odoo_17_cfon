@@ -1,48 +1,5 @@
 <odoo>
-    <!-- Menú principal -->
-    <menuitem id="marketplace_helpdesk_menu_root"
-              name="Marketplaces"
-              sequence="10"
-              web_icon="marketplace_helpdesk,static/description/icon.png"/>
-
-    <!-- Menú Tickets -->
-    <menuitem id="marketplace_helpdesk_menu_tickets"
-              name="Tickets"
-              parent="marketplace_helpdesk_menu_root"
-              sequence="10"/>
-
-    <!-- Acción para Tickets -->
-    <record id="action_marketplace_tickets" model="ir.actions.act_window">
-        <field name="name">Tickets</field>
-        <field name="res_model">marketplace.ticket</field>
-        <field name="view_mode">kanban,tree,form</field>
-        <field name="search_view_id" ref="view_marketplace_ticket_search"/>
-    </record>
-
-    <!-- Submenú de Tickets -->
-    <menuitem id="menu_marketplace_tickets_action"
-              name="Ver Tickets"
-              parent="marketplace_helpdesk_menu_tickets"
-              action="action_marketplace_tickets"
-              sequence="1"/>
-
-    <!-- Menú Cuentas -->
-    <menuitem id="marketplace_helpdesk_menu_accounts"
-              name="Cuentas conectadas"
-              parent="marketplace_helpdesk_menu_root"
-              sequence="20"/>
-
-    <!-- Acción para Cuentas -->
-    <record id="action_marketplace_accounts" model="ir.actions.act_window">
-        <field name="name">Cuentas conectadas</field>
-        <field name="res_model">marketplace.account</field>
-        <field name="view_mode">tree,form</field>
-    </record>
-
-    <!-- Submenú que llama a la acción de cuentas -->
-    <menuitem id="menu_marketplace_accounts_action"
-              name="Ver Cuentas"
-              parent="marketplace_helpdesk_menu_accounts"
-              action="action_marketplace_accounts"
-              sequence="1"/>
+    <menuitem id="menu_marketplace_root" name="Marketplaces" sequence="5" web_icon="marketplace_helpdesk,static/description/icon.png"/>
+    <menuitem id="menu_marketplace_tickets" name="Tickets" parent="menu_marketplace_root" action="action_marketplace_tickets"/>
+    <menuitem id="menu_marketplace_accounts" name="Cuentas" parent="menu_marketplace_root" action="action_marketplace_accounts"/>
 </odoo>

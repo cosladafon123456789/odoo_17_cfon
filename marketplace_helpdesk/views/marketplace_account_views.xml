@@ -5,8 +5,10 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="name"/>
-                <field name="api_url"/>
+                <field name="marketplace"/>
+                <field name="api_base"/>
                 <field name="active"/>
+                <field name="last_sync"/>
             </tree>
         </field>
     </record>
@@ -18,14 +20,25 @@
             <form string="Cuenta de Marketplace">
                 <sheet>
                     <group>
-                        <group>
+                        <group string="Credenciales">
                             <field name="name"/>
-                            <field name="active"/>
-                        </group>
-                        <group>
-                            <field name="api_url"/>
+                            <field name="marketplace"/>
+                            <field name="api_base"/>
                             <field name="api_key" password="True"/>
+                            <field name="header_name"/>
                         </group>
+                        <group string="Endpoints">
+                            <field name="conv_list_endpoint"/>
+                            <field name="conv_messages_endpoint"/>
+                            <field name="conv_send_message_endpoint"/>
+                            <field name="legacy_messages_list_endpoint"/>
+                            <field name="legacy_messages_thread_endpoint"/>
+                            <field name="legacy_send_message_endpoint"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="last_sync" readonly="1"/>
+                        <field name="active"/>
                     </group>
                 </sheet>
             </form>
@@ -33,7 +46,7 @@
     </record>
 
     <record id="action_marketplace_accounts" model="ir.actions.act_window">
-        <field name="name">Cuentas conectadas</field>
+        <field name="name">Cuentas</field>
         <field name="res_model">marketplace.account</field>
         <field name="view_mode">tree,form</field>
     </record>

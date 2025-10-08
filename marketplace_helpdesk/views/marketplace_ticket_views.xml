@@ -1,68 +1,77 @@
 <odoo>
-    <!-- Vista tipo lista -->
     <record id="view_marketplace_ticket_tree" model="ir.ui.view">
         <field name="name">marketplace.ticket.tree</field>
         <field name="model">marketplace.ticket</field>
         <field name="arch" type="xml">
-            <tree string="Tickets de Marketplaces">
+            <tree>
                 <field name="name"/>
                 <field name="marketplace"/>
                 <field name="customer_name"/>
                 <field name="state"/>
-                <field name="message_count"/>
-                <field name="last_message_date"/>
+                <field name="create_date"/>
             </tree>
         </field>
     </record>
 
-    <!-- Vista tipo formulario -->
     <record id="view_marketplace_ticket_form" model="ir.ui.view">
         <field name="name">marketplace.ticket.form</field>
         <field name="model">marketplace.ticket</field>
         <field name="arch" type="xml">
             <form string="Ticket de Marketplace">
+                <header>
+                    <button name="action_mark_in_progress" type="object" string="En proceso" class="btn-primary" states="new,answered"/>
+                    <button name="action_mark_closed" type="object" string="Cerrar" class="btn-secondary" states="new,in_progress,answered"/>
+                    <button name="action_sync_messages" type="object" string="Sincronizar hilo" class="btn-secondary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,in_progress,answered,closed"/>
+                </header>
                 <sheet>
                     <group>
-                        <field name="name"/>
-                        <field name="marketplace"/>
-                        <field name="customer_name"/>
-                        <field name="state"/>
+                        <group>
+                            <field name="name"/>
+                            <field name="account_id" options="{'no_create': False}"/>
+                            <field name="external_id" readonly="1"/>
+                            <field name="marketplace" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="customer_name"/>
+                            <field name="customer_email"/>
+                            <field name="last_external_update" readonly="1"/>
+                        </group>
                     </group>
-                    <group>
-                        <field name="message_count"/>
-                        <field name="last_message_date"/>
-                    </group>
+                    <notebook>
+                        <page string="Conversación">
+                            <field name="message_ids" widget="mail_thread"/>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <!-- ✅ Vista de búsqueda -->
-    <record id="view_marketplace_ticket_search" model="ir.ui.view">
-        <field name="name">marketplace.ticket.search</field>
+    <record id="view_marketplace_ticket_kanban" model="ir.ui.view">
+        <field name="name">marketplace.ticket.kanban</field>
         <field name="model">marketplace.ticket</field>
         <field name="arch" type="xml">
-            <search string="Buscar Tickets">
-                <field name="name" string="Asunto"/>
-                <field name="customer_name" string="Cliente"/>
-                <field name="marketplace" string="Marketplace"/>
-                <filter name="filter_new" string="Nuevos" domain="[('state','=','new')]"/>
-                <filter name="filter_in_progress" string="En progreso" domain="[('state','=','in_progress')]"/>
-                <filter name="filter_closed" string="Cerrados" domain="[('state','=','closed')]"/>
-                <group expand="0" string="Agrupar por...">
-                    <filter name="group_marketplace" string="Marketplace" context="{'group_by': 'marketplace'}"/>
-                    <filter name="group_state" string="Estado" context="{'group_by': 'state'}"/>
-                </group>
-            </search>
+            <kanban default_group_by="state">
+                <field name="name"/>
+                <field name="customer_name"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <strong t-esc="record.name.value"/>
+                            <div><span t-esc="record.customer_name.value"/></div>
+                            <div><span t-esc="record.marketplace.value"/></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
         </field>
     </record>
 
-    <!-- ✅ Acción de ventana (añadida aquí para evitar referencias rotas) -->
     <record id="action_marketplace_tickets" model="ir.actions.act_window">
         <field name="name">Tickets</field>
         <field name="res_model">marketplace.ticket</field>
-        <field name="view_mode">tree,form</field>
-        <field name="search_view_id" ref="view_marketplace_ticket_search"/>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{}</field>
     </record>
-
 </odoo>
