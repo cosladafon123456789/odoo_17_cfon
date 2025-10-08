@@ -1,4 +1,3 @@
-
 {
     "name": "Marketplace Helpdesk",
     "version": "17.0.1.0.0",
@@ -12,9 +11,9 @@
         "views/marketplace_account_views.xml",
         "views/marketplace_ticket_views.xml",
         "views/menu.xml",
-        "data/ir_cron.xml"
+        "data/ir_cron.xml",
     ],
-    "application": true,
-    "installable": true,
-    "license": "LGPL-3"
+    "application": True,
+    "installable": True,
+    "license": "LGPL-3",
 }
