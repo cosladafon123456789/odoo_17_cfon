@@ -1,6 +1,5 @@
 
-from odoo import api, fields, models, _
-from odoo.exceptions import UserError
+from odoo import fields, models, _
 
 class MarketplaceTicket(models.Model):
     _name = "marketplace.ticket"
@@ -34,9 +33,7 @@ class MarketplaceTicket(models.Model):
             "res_model": "marketplace.compose.wizard",
             "view_mode": "form",
             "target": "new",
-            "context": {
-                "default_ticket_id": self.id,
-            }
+            "context": {"default_ticket_id": self.id},
         }
 
     def action_mark_closed(self):

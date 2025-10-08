@@ -1,6 +1,6 @@
 
 <odoo>
-    <menuitem id="menu_marketplace_helpdesk_root" name="Marketplace Helpdesk" sequence="10"/>
-    <menuitem id="menu_marketplace_tickets" name="Tickets" parent="menu_marketplace_helpdesk_root" action="action_marketplace_tickets"/>
-    <menuitem id="menu_marketplace_accounts" name="Cuentas" parent="menu_marketplace_helpdesk_root" action="action_marketplace_accounts"/>
+    <menuitem id="menu_marketplace_helpdesk_root" name="Marketplace Helpdesk" groups="base.group_system" sequence="10"/>
+    <menuitem id="menu_marketplace_tickets" name="Tickets" parent="menu_marketplace_helpdesk_root" action="action_marketplace_tickets" groups="base.group_system"/>
+    <menuitem id="menu_marketplace_accounts" name="Cuentas" parent="menu_marketplace_helpdesk_root" action="action_marketplace_accounts" groups="base.group_system"/>
 </odoo>

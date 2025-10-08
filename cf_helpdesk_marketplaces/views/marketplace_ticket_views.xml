@@ -25,15 +25,9 @@
                     <t t-name="kanban-box">
                         <div class="oe_kanban_global_click">
                             <field name="name"/>
-                            <div>
-                                <span><strong>Pedido:</strong> <field name="order_reference"/></span>
-                            </div>
-                            <div>
-                                <span><field name="partner_id"/></span>
-                            </div>
-                            <div>
-                                <span><field name="message_count"/> mensajes</span>
-                            </div>
+                            <div><strong>Pedido:</strong> <field name="order_reference"/></div>
+                            <div><field name="partner_id"/></div>
+                            <div><field name="message_count"/> mensajes</div>
                         </div>
                     </t>
                 </templates>

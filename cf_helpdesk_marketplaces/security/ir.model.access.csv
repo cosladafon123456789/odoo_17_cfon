@@ -1,5 +1,5 @@
 
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_marketplace_account_user,access_marketplace_account_user,model_marketplace_account,cf_helpdesk_marketplaces.group_marketplace_helpdesk_user,1,1,1,0
-access_marketplace_ticket_user,access_marketplace_ticket_user,model_marketplace_ticket,cf_helpdesk_marketplaces.group_marketplace_helpdesk_user,1,1,1,1
-access_marketplace_message_user,access_marketplace_message_user,model_marketplace_message,cf_helpdesk_marketplaces.group_marketplace_helpdesk_user,1,0,0,0
+access_marketplace_account_admin,Marketplace Account (Admin),model_marketplace_account,base.group_system,1,1,1,1
+access_marketplace_ticket_admin,Marketplace Ticket (Admin),model_marketplace_ticket,base.group_system,1,1,1,1
+access_marketplace_message_admin,Marketplace Message (Admin),model_marketplace_message,base.group_system,1,1,1,1

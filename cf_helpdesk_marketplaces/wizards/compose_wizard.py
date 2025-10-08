@@ -1,6 +1,5 @@
 
-from odoo import api, fields, models, _
-from odoo.exceptions import UserError
+from odoo import fields, models, _
 
 class MarketplaceComposeWizard(models.TransientModel):
     _name = "marketplace.compose.wizard"
@@ -14,17 +13,21 @@ class MarketplaceComposeWizard(models.TransientModel):
         self.ensure_one()
         ticket = self.ticket_id
         acc = ticket.account_id
-        # Example Mirakl reply endpoint; adjust to the real one.
-        # Payload will vary by marketplace; adapt here.
         payload = {
             "thread_id": ticket.external_id,
             "message": self.message,
         }
-        files = []
-        for att in self.attachment_ids:
-            files.append(("files", (att.name, att._file_read(att.store_fname, bin_size=False), att.mimetype)))
-        res = acc._api_post("/api/messages/reply", payload=payload, files=files if files else None)
-        # Log locally
+
+        files = None
+        if self.attachment_ids:
+            files = []
+            for att in self.attachment_ids:
+                data = att._file_read(att.store_fname, bin_size=False) if att.store_fname else None
+                if isinstance(data, str):
+                    data = data.encode("utf-8")
+                files.append(("files", (att.name or "adjunto.bin", data or b"", att.mimetype or "application/octet-stream")))
+
+        acc._api_post("/api/messages/reply", payload=payload, files=files)
         self.env["marketplace.message"].create({
             "ticket_id": ticket.id,
             "direction": "out",
