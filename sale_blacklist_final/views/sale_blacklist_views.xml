@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+  <!-- VISTA TREE -->
   <record id="view_sale_blacklist_tree" model="ir.ui.view">
     <field name="name">sale.blacklist.tree</field>
     <field name="model">sale.blacklist</field>
@@ -15,19 +16,24 @@
     </field>
   </record>
 
+  <!-- VISTA FORM -->
   <record id="view_sale_blacklist_form" model="ir.ui.view">
     <field name="name">sale.blacklist.form</field>
     <field name="model">sale.blacklist</field>
     <field name="arch" type="xml">
-      <form>
+      <form string="Cliente bloqueado / Blacklist">
         <sheet>
           <group>
             <field name="name"/>
             <field name="active"/>
+          </group>
+          <group>
             <field name="zip"/>
             <field name="city"/>
             <field name="phone"/>
             <field name="email"/>
+          </group>
+          <group>
             <field name="address_substring"/>
             <field name="name_regex"/>
           </group>
@@ -39,13 +45,26 @@
     </field>
   </record>
 
-  <menuitem id="menu_sale_blacklist_root" name="Blacklist" parent="base.menu_sales"/>
-
+  <!-- ACCIÓN -->
   <record id="action_sale_blacklist" model="ir.actions.act_window">
-    <field name="name">Blacklist</field>
+    <field name="name">Clientes bloqueados</field>
     <field name="res_model">sale.blacklist</field>
     <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p>Gestione aquí los clientes o patrones bloqueados por fraude o comportamiento sospechoso.</p>
+    </field>
   </record>
 
-  <menuitem id="menu_sale_blacklist" name="Clientes bloqueados" parent="menu_sale_blacklist_root" action="action_sale_blacklist"/>
+  <!-- MENÚS -->
+  <!-- 🔹 Menú raíz independiente (no depende de Ventas) -->
+  <menuitem id="menu_sale_blacklist_root"
+            name="Blacklist / Bloqueos"
+            sequence="10"/>
+
+  <!-- 🔹 Submenú principal -->
+  <menuitem id="menu_sale_blacklist"
+            name="Clientes bloqueados"
+            parent="menu_sale_blacklist_root"
+            action="action_sale_blacklist"
+            sequence="1"/>
 </odoo>
