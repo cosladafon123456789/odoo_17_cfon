@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="action_sale_blacklist_manual" model="ir.actions.act_window">
+    <field name="name">Clientes bloqueados</field>
+    <field name="res_model">sale.blacklist</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p>Gestione los clientes y patrones bloqueados por fraude o reincidencia.</p>
+    </field>
+  </record>
+
+  <menuitem id="menu_sale_blacklist_root"
+            name="Blacklist / Bloqueos"
+            sequence="5"/>
+
+  <menuitem id="menu_sale_blacklist"
+            name="Clientes bloqueados"
+            parent="menu_sale_blacklist_root"
+            action="action_sale_blacklist_manual"
+            sequence="1"/>
+</odoo>
