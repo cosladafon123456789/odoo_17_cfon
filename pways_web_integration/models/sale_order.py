@@ -19,10 +19,8 @@ class SaleOrder(models.Model):
 		return res
 
 	def button_refund(self):
-		res = super(SaleOrder, self).button_refund()
-		for sale in self:
-			sale._notify_delivery_status(status=11)
-		return res
+		"""Ejecuta la lógica normal de reembolso sin enviar status=11 a Laravel."""
+		return super(SaleOrder, self).button_refund()
 
 	def _notify_delivery_status(self, status=9):
 		# lógica para enviar request
