@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sale_blacklist_form" model="ir.ui.view">
+        <field name="name">sale.blacklist.form</field>
+        <field name="model">sale.blacklist</field>
+        <field name="arch" type="xml">
+            <form string="Clientes bloqueados">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="active"/>
+                    </group>
+                    <group>
+                        <field name="zip"/>
+                        <field name="city"/>
+                        <field name="phone"/>
+                        <field name="email"/>
+                    </group>
+                    <group>
+                        <field name="address_substring"/>
+                        <field name="name_regex"/>
+                    </group>
+                    <group>
+                        <field name="note" colspan="2"/>
+                    </group>
+
+                    <separator string="📘 Ejemplos y Reglas de Coincidencia" colspan="2"/>
+                    <div class="o_alert_info" style="background-color:#e8f4fd;border-left:4px solid #007bff;padding:10px;margin-top:10px;">
+                        <p><strong>📘 Ejemplos de coincidencia (recordatorio):</strong></p>
+                        <ul>
+                            <li>✅ Coincide <b>solo el código postal (CP)</b> → se bloqueará.</li>
+                            <li>✅ Coincide <b>CP y ciudad</b> → se bloqueará.</li>
+                            <li>❌ Coincide <b>ciudad distinta</b> → no se bloqueará.</li>
+                            <li>✅ Coincide <b>teléfono exacto</b> → se bloqueará.</li>
+                            <li>❌ Teléfono con prefijo <b>+34</b>, espacios o guiones → no se bloqueará (exacto).</li>
+                            <li>✅ La <b>dirección contiene el texto indicado</b> → se bloqueará.</li>
+                            <li>✅ El <b>nombre coincide con la expresión regular</b> (<code>(?i)(kamal|mimoun)</code>) → se bloqueará.</li>
+                        </ul>
+                        <p><strong>📙 Reglas del sistema:</strong></p>
+                        <ul>
+                            <li>Bloquea <b>solo al validar entregas (albaranes)</b>.</li>
+                            <li>Los pedidos pueden confirmarse normalmente.</li>
+                            <li>Si el registro está <b>inactivo</b>, se ignora.</li>
+                            <li>Si solo hay CP, <b>bloquea por CP aunque la ciudad sea distinta</b>.</li>
+                            <li>Las comparaciones son exactas (no ignoran mayúsculas, acentos ni prefijos telefónicos).</li>
+                        </ul>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sale_blacklist_tree" model="ir.ui.view">
+        <field name="name">sale.blacklist.tree</field>
+        <field name="model">sale.blacklist</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="zip"/>
+                <field name="city"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_sale_blacklist" model="ir.actions.act_window">
+        <field name="name">Clientes bloqueados</field>
+        <field name="res_model">sale.blacklist</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_sale_blacklist_root" name="Blacklist / Bloqueos" sequence="10"/>
+    <menuitem id="menu_sale_blacklist" name="Clientes bloqueados" parent="menu_sale_blacklist_root" action="action_sale_blacklist"/>
+</odoo>
