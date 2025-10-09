@@ -1,4 +1,3 @@
-
 <odoo>
   <data noupdate="1">
     <record id="ir_cron_marketplace_sync" model="ir.cron">

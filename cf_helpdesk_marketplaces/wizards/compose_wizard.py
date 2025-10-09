@@ -1,4 +1,3 @@
-
 from odoo import fields, models, _
 
 class MarketplaceComposeWizard(models.TransientModel):
@@ -13,11 +12,7 @@ class MarketplaceComposeWizard(models.TransientModel):
         self.ensure_one()
         ticket = self.ticket_id
         acc = ticket.account_id
-        payload = {
-            "thread_id": ticket.external_id,
-            "message": self.message,
-        }
-
+        payload = {"thread_id": ticket.external_id, "message": self.message}
         files = None
         if self.attachment_ids:
             files = []
@@ -26,7 +21,6 @@ class MarketplaceComposeWizard(models.TransientModel):
                 if isinstance(data, str):
                     data = data.encode("utf-8")
                 files.append(("files", (att.name or "adjunto.bin", data or b"", att.mimetype or "application/octet-stream")))
-
         acc._api_post("/api/messages/reply", payload=payload, files=files)
         self.env["marketplace.message"].create({
             "ticket_id": ticket.id,

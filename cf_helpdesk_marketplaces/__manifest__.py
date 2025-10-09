@@ -1,9 +1,8 @@
-
 {
     "name": "Marketplace Helpdesk",
-    "version": "17.0.1.0.0",
+    "version": "17.0.2.0.0",
     "category": "Helpdesk",
-    "summary": "Gestión de tickets de marketplaces (MediaMarkt - Mirakl) con sincronización y respuestas.",
+    "summary": "Helpdesk unificado para marketplaces Mirakl (PCComponentes, MediaMarkt, etc.) con replies.",
     "author": "CFON Telecomunicaciones",
     "website": "https://cosladafon.com",
     "depends": ["base", "mail", "contacts"],
@@ -16,5 +15,5 @@
     ],
     "application": True,
     "installable": True,
-    "license": "LGPL-3",
+    "license": "LGPL-3"
 }
