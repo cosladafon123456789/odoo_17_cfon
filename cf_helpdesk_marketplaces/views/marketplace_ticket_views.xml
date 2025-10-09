@@ -41,7 +41,8 @@
             <form>
                 <header>
                     <button name="action_open_compose" type="object" string="Responder" class="btn-primary"/>
-                    <button name="action_mark_closed" type="object" string="Cerrar" class="btn-secondary" states="open,answered,pending"/>
+                    <button name="action_mark_closed" type="object" string="Cerrar" class="btn-secondary"
+                            invisible="status == 'closed'"/>
                     <field name="status" widget="statusbar" statusbar_visible="open,answered,pending,closed"/>
                 </header>
                 <sheet>
