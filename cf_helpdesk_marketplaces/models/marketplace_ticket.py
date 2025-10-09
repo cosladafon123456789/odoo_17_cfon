@@ -11,10 +11,31 @@ class MarketplaceTicket(models.Model):
     account_id = fields.Many2one("marketplace.account", required=True, tracking=True, ondelete="cascade")
     partner_id = fields.Many2one("res.partner", string="Cliente", tracking=True)
     order_reference = fields.Char(string="Referencia de pedido", tracking=True)
-    status = fields.Selection([("open","Abierto"),("answered","Respondido"),("pending","Pendiente"),("closed","Cerrado")], default="open", tracking=True)
-    message_ids = fields.One2many("marketplace.message","ticket_id", string="Mensajes")
+    status = fields.Selection([
+        ("open", "Abierto"),
+        ("answered", "Respondido"),
+        ("pending", "Pendiente"),
+        ("closed", "Cerrado"),
+    ], default="open", tracking=True)
+    message_ids = fields.One2many("marketplace.message", "ticket_id", string="Mensajes")
     message_count = fields.Integer(compute="_compute_message_count")
 
     def _compute_message_count(self):
         for rec in self:
             rec.message_count = len(rec.message_ids)
+
+    def action_open_compose(self):
+        """Abre el wizard para responder al ticket"""
+        self.ensure_one()
+        return {
+            "name": _("Responder ticket"),
+            "type": "ir.actions.act_window",
+            "res_model": "marketplace.compose.wizard",
+            "view_mode": "form",
+            "target": "new",
+            "context": {"default_ticket_id": self.id},
+        }
+
+    def action_mark_closed(self):
+        """Cierra el ticket manualmente"""
+        self.write({"status": "closed"})
