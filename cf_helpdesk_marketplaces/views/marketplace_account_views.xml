@@ -1,7 +1,7 @@
 <odoo>
     <data>
 
-        <!-- Vista TREE (lista de cuentas de marketplace) -->
+        <!-- VISTA TREE -->
         <record id="view_marketplace_account_tree" model="ir.ui.view">
             <field name="name">marketplace.account.tree</field>
             <field name="model">marketplace.account</field>
@@ -17,25 +17,22 @@
             </field>
         </record>
 
-        <!-- Vista FORM (detalle de cuenta) -->
+        <!-- VISTA FORM -->
         <record id="view_marketplace_account_form" model="ir.ui.view">
             <field name="name">marketplace.account.form</field>
             <field name="model">marketplace.account</field>
             <field name="arch" type="xml">
-                <form string="Cuenta de Marketplace">
+                <form>
                     <header>
                         <button name="action_test_connection"
-                                string="Probar conexión"
                                 type="object"
+                                string="Probar conexión"
                                 class="btn-primary"/>
                         <button name="action_sync_now"
+                                type="object"
                                 string="Sincronizar ahora"
-                                type="object"
-                                class="btn-success"/>
-                        <button name="action_api_diagnostic"
-                                string="Diagnóstico de API"
-                                type="object"
                                 class="btn-secondary"/>
+                        <field name="active"/>
                     </header>
 
                     <sheet>
@@ -45,7 +42,6 @@
                                 <field name="api_url"/>
                                 <field name="api_key" password="True"/>
                                 <field name="shop_id"/>
-                                <field name="active"/>
                             </group>
                             <group>
                                 <field name="last_sync" readonly="1"/>
@@ -54,14 +50,14 @@
                         </group>
 
                         <notebook>
-                            <page string="Tickets relacionados">
+                            <page string="Tickets">
+                                <field name="ticket_count" readonly="1"/>
                                 <button name="action_view_tickets"
-                                        string="Ver Tickets"
                                         type="object"
-                                        class="btn-secondary"/>
+                                        string="Ver Tickets"
+                                        class="btn-primary mt16"/>
                             </page>
-
-                            <page string="Mensajes (log)">
+                            <page string="Historial">
                                 <chatter/>
                             </page>
                         </notebook>
@@ -70,36 +66,12 @@
             </field>
         </record>
 
-        <!-- Acción: abrir lista de cuentas -->
+        <!-- ACCIÓN DE CUENTAS -->
         <record id="action_marketplace_accounts" model="ir.actions.act_window">
             <field name="name">Cuentas de Marketplace</field>
             <field name="res_model">marketplace.account</field>
             <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-                <p>
-                    Configura aquí tus cuentas de marketplaces Mirakl (PcComponentes, MediaMarkt, etc.)
-                    para sincronizar mensajes automáticamente con el Helpdesk.
-                </p>
-            </field>
         </record>
-
-        <!-- Menú principal -->
-        <menuitem id="menu_marketplace_root"
-                  name="Marketplaces"
-                  sequence="10"
-                  icon="fa-globe"/>
-
-        <menuitem id="menu_marketplace_accounts"
-                  name="Cuentas"
-                  parent="menu_marketplace_root"
-                  action="action_marketplace_accounts"
-                  sequence="20"/>
-
-        <menuitem id="menu_marketplace_tickets"
-                  name="Tickets"
-                  parent="menu_marketplace_root"
-                  action="action_marketplace_tickets"
-                  sequence="30"/>
 
     </data>
 </odoo>
