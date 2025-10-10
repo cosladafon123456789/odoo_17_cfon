@@ -1,9 +1,11 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
-import logging, requests
+import requests
+import logging
 from datetime import timedelta
 
 _logger = logging.getLogger(__name__)
+
 
 class MarketplaceAccount(models.Model):
     _name = "marketplace.account"
@@ -11,27 +13,50 @@ class MarketplaceAccount(models.Model):
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
     name = fields.Char(required=True, tracking=True)
-    api_url = fields.Char(string="API Base URL", required=True, help="Ej: https://pccomponentes-prod.mirakl.net/api")
-    api_key = fields.Char(string="API Key", required=True, help="Debe ser la clave del usuario ADMIN en Mirakl")
-    shop_id = fields.Char(string="Shop/Seller ID", help="Seller ID numérico requerido por algunos Mirakl (PCComponentes, etc.)")
+    api_url = fields.Char(
+        string="API Base URL",
+        required=True,
+        help="Ejemplo: https://mediamarktsaturn.mirakl.net/api o https://pccomponentes-prod.mirakl.net/api"
+    )
+    api_key = fields.Char(string="API Key", required=True, help="Clave API del usuario administrador en Mirakl")
+    shop_id = fields.Char(string="Shop/Seller ID", help="ID numérico de la tienda (Seller ID)")
     active = fields.Boolean(default=True)
     last_sync = fields.Datetime(readonly=True)
     ticket_count = fields.Integer(compute="_compute_ticket_count")
+
+    # ----------------------------------------------------
+    # MÉTODOS AUXILIARES
+    # ----------------------------------------------------
 
     def _compute_ticket_count(self):
         for rec in self:
             rec.ticket_count = self.env["marketplace.ticket"].sudo().search_count([("account_id", "=", rec.id)])
 
     def _build_headers(self):
+        """Construye las cabeceras de autenticación para Mirakl"""
         self.ensure_one()
-        headers = {"X-API-KEY": self.api_key or ""}
+        headers = {
+            "Accept": "application/json",
+            "User-Agent": "Odoo-Marketplace-Integration",
+        }
+        # En la mayoría de Mirakl se usa X-API-KEY
+        if self.api_key:
+            headers["X-API-KEY"] = self.api_key
+        # Algunos marketplaces (raro, pero posible) usan Authorization
+        # headers["Authorization"] = f"Bearer {self.api_key}"
         if self.shop_id:
             headers["X-MIRAKL-SELLER-ID"] = str(self.shop_id)
         return headers
 
     def _api_get(self, path, params=None, timeout=60):
+        """Petición GET genérica a la API Mirakl"""
         self.ensure_one()
-        url = (self.api_url or "").rstrip("/") + "/" + path.lstrip("/")
+        base = (self.api_url or "").rstrip("/")
+        # Evita doble /api/api/
+        if base.endswith("/api"):
+            url = base + "/" + path.lstrip("/")
+        else:
+            url = base + "/api/" + path.lstrip("/")
         try:
             res = requests.get(url, headers=self._build_headers(), params=params or {}, timeout=timeout)
             if not res.ok:
@@ -44,8 +69,13 @@ class MarketplaceAccount(models.Model):
             raise UserError(_("No se pudo conectar a la API: %s") % e)
 
     def _api_post(self, path, payload=None, files=None, timeout=60):
+        """Petición POST genérica a la API Mirakl"""
         self.ensure_one()
-        url = (self.api_url or "").rstrip("/") + "/" + path.lstrip("/")
+        base = (self.api_url or "").rstrip("/")
+        if base.endswith("/api"):
+            url = base + "/" + path.lstrip("/")
+        else:
+            url = base + "/api/" + path.lstrip("/")
         try:
             if files:
                 res = requests.post(url, headers=self._build_headers(), data=payload or {}, files=files, timeout=timeout)
@@ -60,73 +90,60 @@ class MarketplaceAccount(models.Model):
         except Exception as e:
             raise UserError(_("No se pudo conectar a la API: %s") % e)
 
+    # ----------------------------------------------------
+    # ACCIONES DEL USUARIO
+    # ----------------------------------------------------
+
     def action_test_connection(self):
+        """Comprueba la conexión con Mirakl probando endpoints accesibles para sellers"""
         self.ensure_one()
         try:
-            data = self._api_get("/api/shops")
-            shop_info = data.get("shops") or data.get("shop") or data
-            name = shop_info[0]["name"] if isinstance(shop_info, list) and shop_info else "Cuenta"
-            self.message_post(body=_("✅ Conexión correcta con la API (%s)") % name)
-        except Exception as e:
-            raise UserError(_("❌ No se pudo conectar con la API: %s") % e)
-
-    def action_api_diagnostic(self):
-        """Diagnóstico de conexión API Mirakl (versión, autenticación, mensajes)"""
-        self.ensure_one()
-        logs = []
-
-        # 1️⃣ Comprobación de conectividad básica
-        try:
-            version_data = self._api_get("/api/version")
-            version = version_data.get("version") or "Desconocida"
-            logs.append(f"✅ /api/version → OK (versión {version})")
-        except Exception as e:
-            logs.append(f"❌ /api/version → Error: {e}")
-            self.message_post(body="<br/>".join(logs))
-            return
-
-        # 2️⃣ Comprobación de autenticación básica
-        try:
-            shops_data = self._api_get("/api/shops")
-            shop_count = len(shops_data.get("shops", [])) if isinstance(shops_data, dict) else 0
-            logs.append(f"✅ /api/shops → OK (autenticación válida, {shop_count} tiendas detectadas)")
-        except Exception as e:
-            logs.append(f"❌ /api/shops → Error de autenticación o permisos: {e}")
-            self.message_post(body="<br/>".join(logs))
-            return
-
-        # 3️⃣ Comprobación de API de mensajes
-        try:
-            msg_data = self._api_get("/api/messages", params={"max": 1})
-            msg_count = len(msg_data.get("messages", [])) if isinstance(msg_data, dict) else 0
-            logs.append(f"✅ /api/messages → OK (mensajes recuperados: {msg_count})")
-        except Exception as e:
-            logs.append(f"⚠️ /api/messages → No autorizado o no habilitado: {e}")
-
-        self.message_post(body="<br/>".join(logs))
+            # 🔹 1) Probar con /api/messages (siempre accesible a sellers)
+            data = self._api_get("messages", params={"max": 1})
+            arr = data.get("messages") or data.get("data") or []
+            count = len(arr) if isinstance(arr, list) else 0
+            self.message_post(body=_("✅ Conexión OK (messages). Elementos: %s") % count)
+        except Exception as e1:
+            try:
+                # 🔹 2) Si falla, probar con /api/orders
+                data = self._api_get("orders", params={"max": 1})
+                arr = data.get("orders") or data.get("data") or []
+                count = len(arr) if isinstance(arr, list) else 0
+                self.message_post(body=_("✅ Conexión OK (orders). Elementos: %s") % count)
+            except Exception as e2:
+                msg = str(e1 or e2)
+                self.message_post(body=_("❌ Error de conexión: %s") % msg)
+                raise UserError(_("No se pudo conectar con la API: %s") % msg)
 
     def action_view_tickets(self):
+        """Abre los tickets asociados a la cuenta"""
         self.ensure_one()
         return {
             "type": "ir.actions.act_window",
             "name": _("Tickets de Marketplace"),
             "res_model": "marketplace.ticket",
-            "view_mode": "tree,form,kanban,calendar,pivot,graph",
+            "view_mode": "kanban,tree,form,pivot,graph",
             "domain": [("account_id", "=", self.id)],
             "context": {"default_account_id": self.id},
         }
 
     def action_sync_now(self):
+        """Sincroniza manualmente los mensajes"""
         for acc in self:
             acc._sync_messages()
 
+    # ----------------------------------------------------
+    # SINCRONIZACIÓN AUTOMÁTICA
+    # ----------------------------------------------------
+
     def _sync_messages(self):
+        """Sincroniza mensajes de Mirakl"""
         self.ensure_one()
         Ticket = self.env["marketplace.ticket"].sudo()
         Message = self.env["marketplace.message"].sudo()
         since_dt = self.last_sync or (fields.Datetime.now() - timedelta(days=7))
         params = {"max": 100, "since": fields.Datetime.to_string(since_dt)}
-        data = self._api_get("/api/messages", params=params)
+        data = self._api_get("messages", params=params)
         msgs = data.get("messages") or data.get("data") or []
         if not isinstance(msgs, list):
             msgs = []
@@ -149,6 +166,7 @@ class MarketplaceAccount(models.Model):
                     partner = self.env["res.partner"].search([("email", "=", email)], limit=1)
                 if not partner and (email or name):
                     partner = self.env["res.partner"].create({"name": name or email, "email": email})
+
             ticket = Ticket.search([("external_id", "=", ext_thread), ("account_id", "=", self.id)], limit=1)
             if not ticket:
                 ticket = Ticket.create({
@@ -162,7 +180,7 @@ class MarketplaceAccount(models.Model):
 
             msg_id = str(m.get("message_id") or m.get("id") or "").strip()
             if msg_id:
-                ex = Message.search([("external_id", "=", msg_id), ("ticket_id", "=", ticket.id)], limit=1)
+                ex = self.env["marketplace.message"].search([("external_id", "=", msg_id), ("ticket_id", "=", ticket.id)], limit=1)
                 if ex:
                     continue
 
@@ -183,10 +201,12 @@ class MarketplaceAccount(models.Model):
             created_msgs += 1
 
         self.last_sync = fields.Datetime.now()
-        self.message_post(body=_("Sincronización completada. Tickets nuevos: %s, Mensajes nuevos: %s") % (created_tickets, created_msgs))
+        self.message_post(body=_("Sincronización completada. Tickets nuevos: %s, Mensajes nuevos: %s") %
+                          (created_tickets, created_msgs))
 
     @api.model
     def _cron_sync(self):
+        """Ejecutado automáticamente por cron"""
         for acc in self.search([("active", "=", True)]):
             try:
                 acc._sync_messages()
