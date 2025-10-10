@@ -20,7 +20,7 @@ class MarketplaceAccount(models.Model):
 
     def _compute_ticket_count(self):
         for rec in self:
-            rec.ticket_count = self.env["marketplace.ticket"].sudo().search_count([("account_id","=",rec.id)])
+            rec.ticket_count = self.env["marketplace.ticket"].sudo().search_count([("account_id", "=", rec.id)])
 
     def _build_headers(self):
         self.ensure_one()
@@ -60,20 +60,16 @@ class MarketplaceAccount(models.Model):
         except Exception as e:
             raise UserError(_("No se pudo conectar a la API: %s") % e)
 
+    # ✅ Corrección: test de conexión usando /api/shops (más universal y sin permisos de pedidos)
     def action_test_connection(self):
         self.ensure_one()
         try:
-            data = self._api_get("/api/messages", params={"max": 1})
-            arr = data.get("messages") or data.get("data") or []
-            self.message_post(body=_("✅ Conexión OK (messages). Elementos: %s") % (len(arr) if isinstance(arr, list) else 0))
-        except Exception as e1:
-            try:
-                data = self._api_get("/api/orders", params={"max": 1})
-                arr = data.get("orders") or data.get("data") or []
-                self.message_post(body=_("⚠️ Messages no disponible. ✅ Conexión OK (orders). Elementos: %s") % (len(arr) if isinstance(arr, list) else 0))
-            except Exception as e2:
-                self.message_post(body=_("❌ Error de conexión: %s") % (e1 or e2))
-                raise
+            data = self._api_get("/api/shops")
+            shop_info = data.get("shops") or data.get("shop") or data
+            name = shop_info[0]["name"] if isinstance(shop_info, list) and shop_info else "Cuenta"
+            self.message_post(body=_("✅ Conexión correcta con la API (%s)") % name)
+        except Exception as e:
+            raise UserError(_("❌ No se pudo conectar con la API: %s") % e)
 
     def action_view_tickets(self):
         self.ensure_one()
@@ -82,7 +78,7 @@ class MarketplaceAccount(models.Model):
             "name": _("Tickets de Marketplace"),
             "res_model": "marketplace.ticket",
             "view_mode": "tree,form,kanban,calendar,pivot,graph",
-            "domain": [("account_id","=",self.id)],
+            "domain": [("account_id", "=", self.id)],
             "context": {"default_account_id": self.id},
         }
 
@@ -96,12 +92,16 @@ class MarketplaceAccount(models.Model):
         Message = self.env["marketplace.message"].sudo()
         since_dt = self.last_sync or (fields.Datetime.now() - timedelta(days=7))
         params = {"max": 100, "since": fields.Datetime.to_string(since_dt)}
+
+        # 🔄 Recupera mensajes de Mirakl
         data = self._api_get("/api/messages", params=params)
         msgs = data.get("messages") or data.get("data") or []
         if not isinstance(msgs, list):
             msgs = []
+
         created_tickets = 0
         created_msgs = 0
+
         for m in msgs:
             ext_thread = str(m.get("thread_id") or m.get("id") or m.get("conversation_id") or "").strip()
             if not ext_thread:
@@ -114,10 +114,10 @@ class MarketplaceAccount(models.Model):
                 email = (customer.get("email") or "").strip() or None
                 name = (customer.get("name") or "").strip() or None
                 if email:
-                    partner = self.env["res.partner"].search([("email","=",email)], limit=1)
+                    partner = self.env["res.partner"].search([("email", "=", email)], limit=1)
                 if not partner and (email or name):
                     partner = self.env["res.partner"].create({"name": name or email, "email": email})
-            ticket = Ticket.search([("external_id","=",ext_thread),("account_id","=",self.id)], limit=1)
+            ticket = Ticket.search([("external_id", "=", ext_thread), ("account_id", "=", self.id)], limit=1)
             if not ticket:
                 ticket = Ticket.create({
                     "name": subject or _("Sin asunto"),
@@ -127,31 +127,35 @@ class MarketplaceAccount(models.Model):
                     "partner_id": partner.id if partner else False,
                 })
                 created_tickets += 1
+
             msg_id = str(m.get("message_id") or m.get("id") or "").strip()
             if msg_id:
-                ex = self.env["marketplace.message"].search([("external_id","=",msg_id),("ticket_id","=",ticket.id)], limit=1)
+                ex = Message.search([("external_id", "=", msg_id), ("ticket_id", "=", ticket.id)], limit=1)
                 if ex:
                     continue
+
             body = (m.get("body") or m.get("message") or "").strip()
             author = m.get("author") or m.get("sender") or {}
             author_name = (author.get("name") if isinstance(author, dict) else str(author)) or _("Desconocido")
             direction = (m.get("direction") or "in").lower()
             date_val = m.get("date") or m.get("created_at") or fields.Datetime.now()
-            self.env["marketplace.message"].create({
+
+            Message.create({
                 "ticket_id": ticket.id,
                 "external_id": msg_id or False,
                 "author": author_name,
                 "date": date_val,
-                "direction": "in" if direction in ("in","incoming","customer") else "out",
+                "direction": "in" if direction in ("in", "incoming", "customer") else "out",
                 "body": body,
             })
             created_msgs += 1
+
         self.last_sync = fields.Datetime.now()
         self.message_post(body=_("Sincronización completada. Tickets nuevos: %s, Mensajes nuevos: %s") % (created_tickets, created_msgs))
 
     @api.model
     def _cron_sync(self):
-        for acc in self.search([("active","=",True)]):
+        for acc in self.search([("active", "=", True)]):
             try:
                 acc._sync_messages()
             except Exception as e:
