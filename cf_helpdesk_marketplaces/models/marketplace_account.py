@@ -11,7 +11,7 @@ class MarketplaceAccount(models.Model):
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
     name = fields.Char(required=True, tracking=True)
-    api_url = fields.Char(string="API Base URL", required=True, help="Ej: https://pccomponentes.mirakl.net/api")
+    api_url = fields.Char(string="API Base URL", required=True, help="Ej: https://pccomponentes-prod.mirakl.net/api")
     api_key = fields.Char(string="API Key", required=True, help="Debe ser la clave del usuario ADMIN en Mirakl")
     shop_id = fields.Char(string="Shop/Seller ID", help="Seller ID numérico requerido por algunos Mirakl (PCComponentes, etc.)")
     active = fields.Boolean(default=True)
@@ -60,7 +60,6 @@ class MarketplaceAccount(models.Model):
         except Exception as e:
             raise UserError(_("No se pudo conectar a la API: %s") % e)
 
-    # ✅ Corrección: test de conexión usando /api/shops (más universal y sin permisos de pedidos)
     def action_test_connection(self):
         self.ensure_one()
         try:
@@ -70,6 +69,41 @@ class MarketplaceAccount(models.Model):
             self.message_post(body=_("✅ Conexión correcta con la API (%s)") % name)
         except Exception as e:
             raise UserError(_("❌ No se pudo conectar con la API: %s") % e)
+
+    def action_api_diagnostic(self):
+        """Diagnóstico de conexión API Mirakl (versión, autenticación, mensajes)"""
+        self.ensure_one()
+        logs = []
+
+        # 1️⃣ Comprobación de conectividad básica
+        try:
+            version_data = self._api_get("/api/version")
+            version = version_data.get("version") or "Desconocida"
+            logs.append(f"✅ /api/version → OK (versión {version})")
+        except Exception as e:
+            logs.append(f"❌ /api/version → Error: {e}")
+            self.message_post(body="<br/>".join(logs))
+            return
+
+        # 2️⃣ Comprobación de autenticación básica
+        try:
+            shops_data = self._api_get("/api/shops")
+            shop_count = len(shops_data.get("shops", [])) if isinstance(shops_data, dict) else 0
+            logs.append(f"✅ /api/shops → OK (autenticación válida, {shop_count} tiendas detectadas)")
+        except Exception as e:
+            logs.append(f"❌ /api/shops → Error de autenticación o permisos: {e}")
+            self.message_post(body="<br/>".join(logs))
+            return
+
+        # 3️⃣ Comprobación de API de mensajes
+        try:
+            msg_data = self._api_get("/api/messages", params={"max": 1})
+            msg_count = len(msg_data.get("messages", [])) if isinstance(msg_data, dict) else 0
+            logs.append(f"✅ /api/messages → OK (mensajes recuperados: {msg_count})")
+        except Exception as e:
+            logs.append(f"⚠️ /api/messages → No autorizado o no habilitado: {e}")
+
+        self.message_post(body="<br/>".join(logs))
 
     def action_view_tickets(self):
         self.ensure_one()
@@ -92,8 +126,6 @@ class MarketplaceAccount(models.Model):
         Message = self.env["marketplace.message"].sudo()
         since_dt = self.last_sync or (fields.Datetime.now() - timedelta(days=7))
         params = {"max": 100, "since": fields.Datetime.to_string(since_dt)}
-
-        # 🔄 Recupera mensajes de Mirakl
         data = self._api_get("/api/messages", params=params)
         msgs = data.get("messages") or data.get("data") or []
         if not isinstance(msgs, list):
