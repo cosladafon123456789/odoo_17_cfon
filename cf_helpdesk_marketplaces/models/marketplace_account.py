@@ -11,9 +11,9 @@ class MarketplaceAccount(models.Model):
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
     name = fields.Char(required=True, tracking=True)
-    api_url = fields.Char(string="API Base URL", required=True, help="Ej: https://mediamarktsaturn.mirakl.net/api")
-    api_key = fields.Char(string="API Key", required=True, help="Debe ser la clave del usuario ADMIN en Mirakl")
-    shop_id = fields.Char(string="Shop/Seller ID", help="Seller ID numérico requerido por algunos Mirakl (PCComponentes, MediaMarkt, etc.)")
+    api_url = fields.Char(string="API Base URL", required=True, help="Ej: https://mediamarktsaturn.mirakl.net")
+    api_key = fields.Char(string="API Key", required=True, help="Clave de acceso proporcionada por Mirakl")
+    shop_id = fields.Char(string="Shop/Seller ID", help="ID numérico del vendedor (por ejemplo, 4350)")
     active = fields.Boolean(default=True)
     last_sync = fields.Datetime(readonly=True)
     ticket_count = fields.Integer(compute="_compute_ticket_count")
@@ -29,20 +29,17 @@ class MarketplaceAccount(models.Model):
     # CABECERAS DE AUTENTICACIÓN
     # -------------------------------
     def _build_headers(self):
-        """Cabeceras para Mirakl (MediaMarkt, PCComponentes, etc.)"""
+        """Cabeceras estándar Mirakl"""
         self.ensure_one()
+        if not self.api_key:
+            raise UserError(_("Debe configurar la API Key para conectarse."))
+
         headers = {
             "Accept": "application/json",
             "User-Agent": "Odoo-Marketplace-Integration",
+            "X-API-KEY": self.api_key.strip()
         }
 
-        # MediaMarkt y la mayoría de Mirakl usan autenticación básica (Basic)
-        if self.api_key:
-            headers["Authorization"] = f"Basic {self.api_key.strip()}"
-        else:
-            raise UserError(_("Debe configurar la API Key para conectarse."))
-
-        # Algunos Mirakl requieren además el Seller ID
         if self.shop_id:
             headers["X-MIRAKL-SELLER-ID"] = str(self.shop_id)
 
@@ -53,21 +50,25 @@ class MarketplaceAccount(models.Model):
     # -------------------------------
     def _api_get(self, path, params=None, timeout=60):
         self.ensure_one()
-        url = (self.api_url or "").rstrip("/") + "/" + path.lstrip("/")
+        # Aseguramos que no haya /api repetido
+        base = (self.api_url or "").rstrip("/")
+        if "/api" in base:
+            base = base.replace("/api", "")
+        url = f"{base}/api/{path.lstrip('/')}"
         try:
             res = requests.get(url, headers=self._build_headers(), params=params or {}, timeout=timeout)
             if not res.ok:
                 raise UserError(_("Error API GET %s: [%s] %s") % (url, res.status_code, res.text[:500]))
-            try:
-                return res.json()
-            except Exception:
-                raise UserError(_("La respuesta no es JSON válido: %s") % res.text[:500])
+            return res.json()
         except Exception as e:
             raise UserError(_("No se pudo conectar a la API: %s") % e)
 
     def _api_post(self, path, payload=None, files=None, timeout=60):
         self.ensure_one()
-        url = (self.api_url or "").rstrip("/") + "/" + path.lstrip("/")
+        base = (self.api_url or "").rstrip("/")
+        if "/api" in base:
+            base = base.replace("/api", "")
+        url = f"{base}/api/{path.lstrip('/')}"
         try:
             if files:
                 res = requests.post(url, headers=self._build_headers(), data=payload or {}, files=files, timeout=timeout)
@@ -75,10 +76,7 @@ class MarketplaceAccount(models.Model):
                 res = requests.post(url, headers=self._build_headers(), json=payload or {}, timeout=timeout)
             if not res.ok:
                 raise UserError(_("Error API POST %s: [%s] %s") % (url, res.status_code, res.text[:500]))
-            try:
-                return res.json() if res.text else {}
-            except Exception:
-                return {"_text": res.text}
+            return res.json() if res.text else {}
         except Exception as e:
             raise UserError(_("No se pudo conectar a la API: %s") % e)
 
@@ -89,14 +87,12 @@ class MarketplaceAccount(models.Model):
         """Botón 'Probar conexión'"""
         self.ensure_one()
         try:
-            # Intentar obtener mensajes primero
-            data = self._api_get("/api/messages", params={"max": 1})
+            data = self._api_get("messages", params={"max": 1})
             arr = data.get("messages") or data.get("data") or []
             self.message_post(body=_("✅ Conexión OK (messages). Elementos: %s") % (len(arr) if isinstance(arr, list) else 0))
         except Exception as e1:
             try:
-                # Si falla, probar con /orders
-                data = self._api_get("/api/orders", params={"max": 1})
+                data = self._api_get("orders", params={"max": 1})
                 arr = data.get("orders") or data.get("data") or []
                 self.message_post(body=_("⚠️ Messages no disponible. ✅ Conexión OK (orders). Elementos: %s") % (len(arr) if isinstance(arr, list) else 0))
             except Exception as e2:
@@ -131,7 +127,7 @@ class MarketplaceAccount(models.Model):
         since_dt = self.last_sync or (fields.Datetime.now() - timedelta(days=7))
         params = {"max": 100, "since": fields.Datetime.to_string(since_dt)}
 
-        data = self._api_get("/api/messages", params=params)
+        data = self._api_get("messages", params=params)
         msgs = data.get("messages") or data.get("data") or []
         if not isinstance(msgs, list):
             msgs = []
@@ -143,7 +139,6 @@ class MarketplaceAccount(models.Model):
             ext_thread = str(m.get("thread_id") or m.get("id") or m.get("conversation_id") or "").strip()
             if not ext_thread:
                 continue
-
             subject = (m.get("subject") or m.get("title") or _("Sin asunto")).strip()
             order_ref = (m.get("order_id") or m.get("order_reference") or "")
             partner = False
