@@ -55,7 +55,6 @@
 
                         <notebook>
                             <page string="Tickets relacionados">
-                                <field name="ticket_count" readonly="1"/>
                                 <button name="action_view_tickets"
                                         string="Ver Tickets"
                                         type="object"
@@ -71,7 +70,7 @@
             </field>
         </record>
 
-        <!-- Acción para abrir las cuentas de marketplace -->
+        <!-- Acción: abrir lista de cuentas -->
         <record id="action_marketplace_accounts" model="ir.actions.act_window">
             <field name="name">Cuentas de Marketplace</field>
             <field name="res_model">marketplace.account</field>
@@ -84,7 +83,7 @@
             </field>
         </record>
 
-        <!-- Menú principal del módulo -->
+        <!-- Menú principal -->
         <menuitem id="menu_marketplace_root"
                   name="Marketplaces"
                   sequence="10"
