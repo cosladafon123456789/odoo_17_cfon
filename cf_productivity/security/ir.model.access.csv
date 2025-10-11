@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_productivity_log,access_productivity_log,model_productivity_log,,1,1,1,1

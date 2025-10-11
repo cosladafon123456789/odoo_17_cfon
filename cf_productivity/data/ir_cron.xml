@@ -1,0 +1,12 @@
+<odoo>
+    <record id="ir_cron_cf_productivity_daily_summary" model="ir.cron">
+        <field name="name">CF Productivity - Enviar resumen diario</field>
+        <field name="model_id" ref="base.model_productivity_log"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_send_daily_summary()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">False</field>
+    </record>
+</odoo>

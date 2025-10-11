@@ -1,0 +1,71 @@
+<odoo>
+    <!-- Acciones -->
+    <record id="action_productivity_dashboard" model="ir.actions.act_window">
+        <field name="name">Dashboard Productividad</field>
+        <field name="res_model">productivity.log</field>
+        <field name="view_mode">pivot,graph,tree</field>
+    </record>
+
+    <record id="action_productivity_logs" model="ir.actions.act_window">
+        <field name="name">Registros de actividad</field>
+        <field name="res_model">productivity.log</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_cf_productivity_settings" model="ir.actions.act_window">
+        <field name="name">Configuración de Productividad</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_cf_productivity_settings"/>
+        <field name="target">inline</field>
+    </record>
+
+    <!-- Vista de configuración -->
+    <record id="view_cf_productivity_settings" model="ir.ui.view">
+        <field name="name">cf.productivity.settings</field>
+        <field name="model">res.config.settings</field>
+        <field name="arch" type="xml">
+            <form string="Configuración de Productividad">
+                <sheet>
+                    <group>
+                        <separator string="📦 Usuarios de pedidos a contabilizar" colspan="2"/>
+                        <field name="picking_user_ids" widget="many2many_tags"/>
+
+                        <separator string="🔧 Usuarios técnicos a contabilizar" colspan="2"/>
+                        <field name="repair_user_ids" widget="many2many_tags"/>
+
+                        <separator string="🧾 Usuarios de postventa a contabilizar" colspan="2"/>
+                        <field name="helpdesk_user_ids" widget="many2many_tags"/>
+
+                        <separator string="📧 Notificaciones diarias" colspan="2"/>
+                        <field name="send_daily_summary"/>
+                        <field name="summary_recipient_ids" widget="many2many_tags"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Guardar" type="object" name="execute" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menús -->
+    <menuitem id="menu_cf_productivity_dashboard"
+              name="Dashboard Productividad"
+              parent="menu_productivity_root"
+              sequence="10"
+              action="action_productivity_dashboard"/>
+
+    <menuitem id="menu_cf_productivity_logs"
+              name="Registros de actividad"
+              parent="menu_productivity_root"
+              sequence="15"
+              action="action_productivity_logs"/>
+
+    <menuitem id="menu_cf_productivity_settings"
+              name="Configuración"
+              parent="menu_productivity_root"
+              sequence="20"
+              action="action_cf_productivity_settings"/>
+</odoo>

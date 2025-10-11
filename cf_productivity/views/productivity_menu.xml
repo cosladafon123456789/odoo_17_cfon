@@ -1,0 +1,6 @@
+<odoo>
+    <menuitem id="menu_productivity_root"
+              name="Productividad"
+              sequence="10"
+              web_icon="cf_productivity,static/description/icon.png"/>
+</odoo>
