@@ -1,90 +1,33 @@
 <odoo>
-    <!-- ===================== -->
-    <!-- Vistas Productividad -->
-    <!-- ===================== -->
-
-    <!-- Vista árbol (listado de logs) -->
     <record id="view_employee_productivity_log_tree" model="ir.ui.view">
         <field name="name">employee.productivity.log.tree</field>
         <field name="model">employee.productivity.log</field>
         <field name="arch" type="xml">
-            <tree string="Registros de Productividad" default_order="date desc">
+            <tree>
                 <field name="date"/>
                 <field name="user_id"/>
-                <field name="action_type"/>
-                <field name="picking_id"/>
-                <field name="repair_id"/>
-                <field name="ticket_id"/>
-                <field name="repair_reason_id"/>
+                <field name="task_type"/>
+                <field name="points"/>
             </tree>
         </field>
     </record>
 
-    <!-- Vista formulario -->
-    <record id="view_employee_productivity_log_form" model="ir.ui.view">
-        <field name="name">employee.productivity.log.form</field>
-        <field name="model">employee.productivity.log</field>
-        <field name="arch" type="xml">
-            <form string="Detalle de Productividad">
-                <sheet>
-                    <group>
-                        <field name="date" readonly="1"/>
-                        <field name="user_id" readonly="1"/>
-                        <field name="action_type" readonly="1"/>
-                        <!-- El campo motivo solo visible si es reparación -->
-                        <field name="repair_reason_id" invisible="action_type != 'repair'"/>
-                    </group>
-
-                    <group string="Registros relacionados">
-                        <field name="picking_id" invisible="action_type != 'picking'"/>
-                        <field name="repair_id" invisible="action_type != 'repair'"/>
-                        <field name="ticket_id" invisible="action_type != 'ticket'"/>
-                    </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-    <!-- Vista búsqueda -->
-    <record id="view_employee_productivity_log_search" model="ir.ui.view">
-        <field name="name">employee.productivity.log.search</field>
-        <field name="model">employee.productivity.log</field>
-        <field name="arch" type="xml">
-            <search string="Buscar registros de productividad">
-                <field name="user_id"/>
-                <field name="action_type"/>
-                <filter name="today" string="Hoy" domain="[('date','&gt;=', context_today())]"/>
-                <filter name="repair" string="Reparaciones" domain="[('action_type','=','repair')]"/>
-                <filter name="tickets" string="Tickets" domain="[('action_type','=','ticket')]"/>
-                <filter name="picking" string="Pedidos" domain="[('action_type','=','picking')]"/>
-            </search>
-        </field>
-    </record>
-
-    <!-- Vista gráfica -->
     <record id="view_employee_productivity_log_graph" model="ir.ui.view">
         <field name="name">employee.productivity.log.graph</field>
         <field name="model">employee.productivity.log</field>
         <field name="arch" type="xml">
-            <graph string="Productividad por usuario" type="bar">
+            <graph string="Productividad" type="bar">
                 <field name="user_id" type="row"/>
-                <field name="action_type" type="col"/>
-                <field name="id" type="measure" string="Acciones"/>
+                <field name="points" type="measure"/>
             </graph>
         </field>
     </record>
 
-    <!-- Vista pivot -->
-    <record id="view_employee_productivity_log_pivot" model="ir.ui.view">
-        <field name="name">employee.productivity.log.pivot</field>
-        <field name="model">employee.productivity.log</field>
-        <field name="arch" type="xml">
-            <pivot string="Análisis de Productividad">
-                <field name="user_id" type="row"/>
-                <field name="action_type" type="col"/>
-                <field name="id" type="measure" string="Acciones"/>
-            </pivot>
-        </field>
+    <menuitem id="menu_cf_productivity_root" name="Productividad" sequence="50"/>
+    <record id="action_employee_productivity_log" model="ir.actions.act_window">
+        <field name="name">Registros de Productividad</field>
+        <field name="res_model">employee.productivity.log</field>
+        <field name="view_mode">tree,graph</field>
     </record>
-
+    <menuitem id="menu_cf_productivity_logs" name="Registros" parent="menu_cf_productivity_root" action="action_employee_productivity_log"/>
 </odoo>

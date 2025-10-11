@@ -5,12 +5,7 @@
     "summary": "Control de productividad de empleados (pedidos, reparaciones y postventa)",
     "author": "CFON Telecomunicaciones",
     "website": "https://cosladafon.com",
-    "depends": [
-        "base",
-        "stock",
-        "repair",
-        "helpdesk"
-    ],
+    "depends": ["base", "stock", "repair", "helpdesk"],
     "data": [
         "security/ir.model.access.csv",
         "views/productivity_views.xml",
@@ -20,7 +15,5 @@
     "application": True,
     "installable": True,
     "license": "LGPL-3",
-
-    # 👇 Esta línea hace que Odoo muestre tu icono personalizado
-    "images": ["static/description/icon.png"],
+    "images": ["static/description/icon.png"]
 }
