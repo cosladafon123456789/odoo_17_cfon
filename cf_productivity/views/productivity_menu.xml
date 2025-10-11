@@ -1,6 +1,12 @@
 <odoo>
-    <menuitem id="menu_cf_productivity_root" name="Productividad" sequence="10" web_icon="cf_productivity,static/description/icon.png"/>
-    <menuitem id="menu_cf_productivity_dashboard" name="Dashboard Productividad" parent="menu_cf_productivity_root" sequence="10" action="action_productivity_dashboard"/>
-    <menuitem id="menu_cf_productivity_logs" name="Registros de actividad" parent="menu_cf_productivity_root" sequence="15" action="action_productivity_logs"/>
-    <menuitem id="menu_cf_productivity_settings" name="Configuración" parent="menu_cf_productivity_root" sequence="20" action="action_cf_productivity_settings"/>
+    <menuitem id="menu_cf_productivity_root"
+              name="Productividad"
+              sequence="10"
+              web_icon="cf_productivity,static/description/icon.png"/>
+
+    <menuitem id="menu_cf_productivity_settings"
+              name="Configuración"
+              parent="menu_cf_productivity_root"
+              sequence="20"
+              action="action_cf_productivity_settings"/>
 </odoo>
