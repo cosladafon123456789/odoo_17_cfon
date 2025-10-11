@@ -17,10 +17,6 @@
                         <field name="summary_recipient_ids" widget="many2many_tags"/>
                     </group>
                 </sheet>
-                <footer>
-                    <button string="Guardar" type="object" name="execute" class="btn-primary"/>
-                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
-                </footer>
             </form>
         </field>
     </record>
@@ -33,9 +29,15 @@
         <field name="target">inline</field>
     </record>
 
+    <!-- ⚠️ Ajusta este "parent" según tu menú raíz real -->
+    <menuitem id="menu_cf_employee_productivity_root"
+              name="Productividad"
+              parent="base.menu_custom"
+              sequence="10"/>
+
     <menuitem id="menu_cf_employee_productivity_settings"
               name="Configuración"
-              parent="menu_productivity_root"
-              sequence="50"
+              parent="menu_cf_employee_productivity_root"
+              sequence="20"
               action="action_cf_employee_productivity_settings"/>
 </odoo>
