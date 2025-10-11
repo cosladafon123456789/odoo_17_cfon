@@ -5,7 +5,14 @@
     "category": "Productivity",
     "author": "CFON Telecomunicaciones",
     "license": "LGPL-3",
-    "depends": ["base", "stock", "repair", "helpdesk", "mail"],
+    "depends": [
+        "base",
+        "base_setup",       # ✅ Añadido para heredar correctamente la vista de configuración base
+        "stock",
+        "repair",
+        "helpdesk",
+        "mail"
+    ],
     "data": [
         "security/ir.model.access.csv",
         "views/productivity_menu.xml",
