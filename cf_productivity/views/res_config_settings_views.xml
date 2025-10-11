@@ -8,10 +8,13 @@
                     <group>
                         <separator string="📦 Usuarios de pedidos a contabilizar" colspan="2"/>
                         <field name="picking_user_ids" widget="many2many_tags"/>
+
                         <separator string="🔧 Usuarios técnicos a contabilizar" colspan="2"/>
                         <field name="repair_user_ids" widget="many2many_tags"/>
+
                         <separator string="🧾 Usuarios de postventa a contabilizar" colspan="2"/>
                         <field name="helpdesk_user_ids" widget="many2many_tags"/>
+
                         <separator string="📧 Notificaciones diarias" colspan="2"/>
                         <field name="send_daily_summary"/>
                         <field name="summary_recipient_ids" widget="many2many_tags"/>
@@ -20,6 +23,7 @@
             </form>
         </field>
     </record>
+
     <record id="action_cf_productivity_settings" model="ir.actions.act_window">
         <field name="name">Configuración de Productividad</field>
         <field name="res_model">res.config.settings</field>
