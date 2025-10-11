@@ -7,7 +7,6 @@
     "license": "LGPL-3",
     "depends": [
         "base",
-        "base_setup",       # ✅ Añadido para heredar correctamente la vista de configuración base
         "stock",
         "repair",
         "helpdesk",
