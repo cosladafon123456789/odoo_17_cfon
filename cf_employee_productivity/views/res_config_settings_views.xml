@@ -1,20 +1,22 @@
 <odoo>
-    <!-- Vista de configuración de Productividad -->
+    <!-- VISTA DE CONFIGURACIÓN -->
     <record id="view_cf_employee_productivity_settings" model="ir.ui.view">
         <field name="name">cf.employee.productivity.settings</field>
         <field name="model">res.config.settings</field>
         <field name="arch" type="xml">
             <form string="Configuración de Productividad">
                 <sheet>
-                    <group name="group_cf_employee_productivity_users">
-                        <separator string="Usuarios contabilizados" colspan="2"/>
+                    <group>
+                        <separator string="📦 Usuarios de pedidos a contabilizar" colspan="2"/>
                         <field name="picking_user_ids" widget="many2many_tags"/>
-                        <field name="repair_user_ids" widget="many2many_tags"/>
-                        <field name="helpdesk_user_ids" widget="many2many_tags"/>
-                    </group>
 
-                    <group name="group_cf_employee_productivity_notifications">
-                        <separator string="Notificaciones diarias" colspan="2"/>
+                        <separator string="🔧 Usuarios técnicos a contabilizar" colspan="2"/>
+                        <field name="repair_user_ids" widget="many2many_tags"/>
+
+                        <separator string="🧾 Usuarios de postventa a contabilizar" colspan="2"/>
+                        <field name="helpdesk_user_ids" widget="many2many_tags"/>
+
+                        <separator string="📧 Notificaciones diarias" colspan="2"/>
                         <field name="send_daily_summary"/>
                         <field name="summary_recipient_ids" widget="many2many_tags"/>
                     </group>
@@ -27,7 +29,7 @@
         </field>
     </record>
 
-    <!-- Acción para abrir la vista -->
+    <!-- ACCIÓN -->
     <record id="action_cf_employee_productivity_settings" model="ir.actions.act_window">
         <field name="name">Configuración de Productividad</field>
         <field name="res_model">res.config.settings</field>
@@ -36,13 +38,13 @@
         <field name="target">inline</field>
     </record>
 
-    <!-- Menú raíz (nivel principal) -->
+    <!-- MENÚ PRINCIPAL (siempre visible, bajo "Ajustes") -->
     <menuitem id="menu_cf_employee_productivity_root"
               name="Productividad"
-              parent="base.menu_administration"
+              parent="base.menu_config"
               sequence="10"/>
 
-    <!-- Submenú de Configuración -->
+    <!-- SUBMENÚ CONFIGURACIÓN -->
     <menuitem id="menu_cf_employee_productivity_settings"
               name="Configuración"
               parent="menu_cf_employee_productivity_root"
