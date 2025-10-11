@@ -1,20 +1,34 @@
 <odoo>
-    <!-- Menú en Tableros -> Productividad -->
-    <menuitem id="menu_cf_productivity_root"
+    <!-- Root application menu -->
+    <menuitem id="menu_cf_app_root"
               name="Productividad"
-              parent="board.menu_board_root"
-              sequence="50"/>
-
+              sequence="15"
+              groups="base.group_user"/>
+              
     <record id="action_employee_productivity_log" model="ir.actions.act_window">
         <field name="name">Dashboard Productividad</field>
         <field name="res_model">employee.productivity.log</field>
-        <field name="view_mode">graph,kanban,tree,pivot,form</field>
+        <field name="view_mode">graph,tree,pivot,kanban,form</field>
         <field name="context">{'search_default_today': 1}</field>
     </record>
 
-    <menuitem id="menu_cf_productivity_dashboard"
+    <!-- Dashboard entry -->
+    <menuitem id="menu_cf_dashboard"
               name="Dashboard Productividad"
-              parent="menu_cf_productivity_root"
+              parent="menu_cf_app_root"
               action="action_employee_productivity_log"
-              sequence="10"/>
+              sequence="1"/>
+
+    <!-- Logs submenu (list view) -->
+    <record id="action_employee_productivity_log_list" model="ir.actions.act_window">
+        <field name="name">Registros de actividad</field>
+        <field name="res_model">employee.productivity.log</field>
+        <field name="view_mode">tree,form,graph,pivot</field>
+    </record>
+
+    <menuitem id="menu_cf_logs"
+              name="Registros de actividad"
+              parent="menu_cf_app_root"
+              action="action_employee_productivity_log_list"
+              sequence="2"/>
 </odoo>
