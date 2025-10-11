@@ -1,13 +1,17 @@
 <odoo>
-    <!-- ============================
-         ACCIONES DEL MÓDULO
-    ============================= -->
 
-    <!-- Acción del Dashboard -->
+    <!-- =========================================================
+         ACCIONES PRINCIPALES DEL MÓDULO
+    ========================================================== -->
+
+    <!-- Acción del Dashboard de Productividad -->
     <record id="action_productivity_dashboard" model="ir.actions.act_window">
         <field name="name">Dashboard Productividad</field>
         <field name="res_model">productivity.log</field>
         <field name="view_mode">pivot,graph,tree</field>
+        <field name="help" type="html">
+            <p>Visualiza un resumen de la productividad de los empleados.</p>
+        </field>
     </record>
 
     <!-- Acción de Registros de actividad -->
@@ -15,6 +19,9 @@
         <field name="name">Registros de actividad</field>
         <field name="res_model">productivity.log</field>
         <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p>Consulta los registros individuales de productividad de cada empleado.</p>
+        </field>
     </record>
 
     <!-- Acción de Configuración -->
@@ -26,9 +33,11 @@
         <field name="target">inline</field>
     </record>
 
-    <!-- ============================
+
+    <!-- =========================================================
          VISTA DE CONFIGURACIÓN
-    ============================= -->
+    ========================================================== -->
+
     <record id="view_cf_employee_productivity_settings" model="ir.ui.view">
         <field name="name">cf.employee.productivity.settings</field>
         <field name="model">res.config.settings</field>
@@ -59,9 +68,16 @@
         </field>
     </record>
 
-    <!-- ============================
-         MENÚS PRINCIPALES
-    ============================= -->
+
+    <!-- =========================================================
+         MENÚS DEL MÓDULO
+    ========================================================== -->
+
+    <!-- Menú principal -->
+    <menuitem id="menu_productivity_root"
+              name="Productividad"
+              sequence="10"
+              web_icon="cf_employee_productivity,static/description/icon.png"/>
 
     <!-- Submenú Dashboard -->
     <menuitem id="menu_cf_employee_productivity_dashboard"
@@ -83,4 +99,5 @@
               parent="menu_productivity_root"
               sequence="20"
               action="action_cf_employee_productivity_settings"/>
+
 </odoo>
