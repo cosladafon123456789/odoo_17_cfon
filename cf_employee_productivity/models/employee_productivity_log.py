@@ -10,7 +10,7 @@ class EmployeeProductivityLog(models.Model):
     task_type = fields.Selection([
         ("picking", "Pedido"),
         ("repair", "Reparación"),
-        ("helpdesk", "Postventa")
+        ("helpdesk", "Postventa"),
     ], string="Tipo de tarea", required=True)
     points = fields.Integer(string="Puntos", default=1)
     date = fields.Datetime(string="Fecha", default=fields.Datetime.now)
