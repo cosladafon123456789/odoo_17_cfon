@@ -1,5 +1,34 @@
 <odoo>
-    <!-- Vista de configuración de Productividad -->
+    <!-- ============================
+         ACCIONES DEL MÓDULO
+    ============================= -->
+
+    <!-- Acción del Dashboard -->
+    <record id="action_productivity_dashboard" model="ir.actions.act_window">
+        <field name="name">Dashboard Productividad</field>
+        <field name="res_model">productivity.log</field>
+        <field name="view_mode">pivot,graph,tree</field>
+    </record>
+
+    <!-- Acción de Registros de actividad -->
+    <record id="action_productivity_logs" model="ir.actions.act_window">
+        <field name="name">Registros de actividad</field>
+        <field name="res_model">productivity.log</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Acción de Configuración -->
+    <record id="action_cf_employee_productivity_settings" model="ir.actions.act_window">
+        <field name="name">Configuración de Productividad</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_cf_employee_productivity_settings"/>
+        <field name="target">inline</field>
+    </record>
+
+    <!-- ============================
+         VISTA DE CONFIGURACIÓN
+    ============================= -->
     <record id="view_cf_employee_productivity_settings" model="ir.ui.view">
         <field name="name">cf.employee.productivity.settings</field>
         <field name="model">res.config.settings</field>
@@ -21,6 +50,7 @@
                         <field name="summary_recipient_ids" widget="many2many_tags"/>
                     </group>
                 </sheet>
+
                 <footer>
                     <button string="Guardar" type="object" name="execute" class="btn-primary"/>
                     <button string="Cancelar" class="btn-secondary" special="cancel"/>
@@ -29,24 +59,28 @@
         </field>
     </record>
 
-    <!-- Acción para abrir la vista -->
-    <record id="action_cf_employee_productivity_settings" model="ir.actions.act_window">
-        <field name="name">Configuración de Productividad</field>
-        <field name="res_model">res.config.settings</field>
-        <field name="view_mode">form</field>
-        <field name="view_id" ref="view_cf_employee_productivity_settings"/>
-        <field name="target">inline</field>
-    </record>
+    <!-- ============================
+         MENÚS PRINCIPALES
+    ============================= -->
 
-    <!-- Menú raíz -->
-    <menuitem id="menu_cf_employee_productivity_root"
-              name="Productividad"
-              sequence="10"/>
+    <!-- Submenú Dashboard -->
+    <menuitem id="menu_cf_employee_productivity_dashboard"
+              name="Dashboard Productividad"
+              parent="menu_productivity_root"
+              sequence="10"
+              action="action_productivity_dashboard"/>
 
-    <!-- Submenú de Configuración -->
+    <!-- Submenú Registros -->
+    <menuitem id="menu_cf_employee_productivity_logs"
+              name="Registros de actividad"
+              parent="menu_productivity_root"
+              sequence="15"
+              action="action_productivity_logs"/>
+
+    <!-- Submenú Configuración -->
     <menuitem id="menu_cf_employee_productivity_settings"
               name="Configuración"
-              parent="menu_cf_employee_productivity_root"
+              parent="menu_productivity_root"
               sequence="20"
               action="action_cf_employee_productivity_settings"/>
 </odoo>
