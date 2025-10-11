@@ -12,8 +12,8 @@
         <field name="numbercall">-1</field>
         <field name="active">True</field>
 
-        <!-- ✅ Compatible con Odoo 17 -->
-        <!-- Programa el cron para hoy a las 20:00 -->
-        <field name="nextcall" eval="datetime.combine(datetime.today(), datetime.time(20, 0, 0))"/>
+        <!-- ✅ 100 % compatible con Odoo 17 -->
+        <!-- Fija el primer disparo hoy a las 20:00 locales -->
+        <field name="nextcall" eval="(fields.Datetime.now() + relativedelta(hours=20 - fields.Datetime.now().hour, minutes=-fields.Datetime.now().minute, seconds=-fields.Datetime.now().second))"/>
     </record>
 </odoo>
