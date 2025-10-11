@@ -1,0 +1,94 @@
+<odoo>
+    <record id="view_employee_productivity_log_tree" model="ir.ui.view">
+        <field name="name">employee.productivity.log.tree</field>
+        <field name="model">employee.productivity.log</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="date"/>
+                <field name="user_id"/>
+                <field name="action_type"/>
+                <field name="picking_id"/>
+                <field name="repair_id"/>
+                <field name="ticket_id"/>
+                <field name="repair_reason_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_employee_productivity_log_form" model="ir.ui.view">
+        <field name="name">employee.productivity.log.form</field>
+        <field name="model">employee.productivity.log</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="date"/>
+                        <field name="user_id"/>
+                        <field name="action_type"/>
+                        <field name="picking_id" readonly="1"/>
+                        <field name="repair_id" readonly="1"/>
+                        <field name="ticket_id" readonly="1"/>
+                        <field name="repair_reason_id" attrs="{'invisible': [('action_type','!=','repair')]}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_employee_productivity_log_kanban" model="ir.ui.view">
+        <field name="name">employee.productivity.log.kanban</field>
+        <field name="model">employee.productivity.log</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="user_id">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <strong t-esc="record.user_id.value"/><br/>
+                            <span t-esc="record.action_type.value"/> —
+                            <span t-esc="record.date.value"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_employee_productivity_log_graph" model="ir.ui.view">
+        <field name="name">employee.productivity.log.graph</field>
+        <field name="model">employee.productivity.log</field>
+        <field name="arch" type="xml">
+            <graph string="Productividad" type="bar">
+                <field name="user_id" type="row"/>
+                <field name="action_type" type="col"/>
+                <field name="id" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_employee_productivity_log_pivot" model="ir.ui.view">
+        <field name="name">employee.productivity.log.pivot</field>
+        <field name="model">employee.productivity.log</field>
+        <field name="arch" type="xml">
+            <pivot string="Productividad">
+                <field name="user_id" type="row"/>
+                <field name="action_type" type="col"/>
+                <field name="id" type="measure"/>
+                <field name="date" interval="week" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_employee_productivity_log_search" model="ir.ui.view">
+        <field name="name">employee.productivity.log.search</field>
+        <field name="model">employee.productivity.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="user_id"/>
+                <field name="action_type"/>
+                <filter name="today" string="Hoy" domain="[('date','&gt;=', context_today().strftime('%%Y-%%m-%%d 00:00:00'))]" help="Solo registros de hoy"/>
+                <filter name="this_week" string="Esta semana" domain="[('date','&gt;=', (context_today() - relativedelta(days=context_today().weekday())).strftime('%%Y-%%m-%%d 00:00:00'))]"/>
+                <filter name="this_month" string="Este mes" domain="[('date','&gt;=', (context_today().replace(day=1)).strftime('%%Y-%%m-%%d 00:00:00'))]"/>
+            </search>
+        </field>
+    </record>
+</odoo>
