@@ -1,55 +1,39 @@
 <odoo>
-    <!-- ====================================================== -->
-    <!-- CONFIGURACIÓN DE LA APLICACIÓN PRODUCTIVIDAD - ODOO 17 -->
-    <!-- ====================================================== -->
-
-    <!-- Vista propia (no hereda base.view_res_config_settings) -->
-    <record id="view_res_config_settings_productivity" model="ir.ui.view">
-        <field name="name">res.config.settings.cf.productivity</field>
+    <record id="view_cf_employee_productivity_settings" model="ir.ui.view">
+        <field name="name">cf.employee.productivity.settings</field>
         <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.view_res_config_settings"/>
         <field name="arch" type="xml">
-            <form string="Configuración de Productividad">
-                <sheet>
-                    <group string="Usuarios contabilizados">
+            <xpath expr="//div[@id='settings']" position="inside">
+                <div class="app_settings_block" string="Configuración de productividad">
+                    <h2>Usuarios contabilizados</h2>
+                    <group name="group_cf_employee_productivity_users">
                         <field name="picking_user_ids" widget="many2many_tags"/>
                         <field name="repair_user_ids" widget="many2many_tags"/>
                         <field name="helpdesk_user_ids" widget="many2many_tags"/>
                     </group>
 
-                    <group string="Resumen diario por email">
+                    <h2>Notificaciones</h2>
+                    <group name="group_cf_employee_productivity_notifications">
                         <field name="send_daily_summary"/>
-                        <field name="summary_recipient_ids"
-                               widget="many2many_tags"
-                               invisible="not send_daily_summary"/>
+                        <field name="summary_recipient_ids" widget="many2many_tags"/>
                     </group>
-
-                    <footer>
-                        <button string="Guardar" type="object" name="execute" class="btn-primary"/>
-                        <button string="Cancelar" special="cancel" class="btn-secondary"/>
-                    </footer>
-                </sheet>
-            </form>
+                </div>
+            </xpath>
         </field>
     </record>
 
-    <!-- ====================================================== -->
-    <!-- ACCIÓN: abrir esta vista desde el menú lateral -->
-    <!-- ====================================================== -->
-    <record id="action_res_config_settings_productivity" model="ir.actions.act_window">
-        <field name="name">Configuración Productividad</field>
+    <record id="action_cf_employee_productivity_settings" model="ir.actions.act_window">
+        <field name="name">Productividad</field>
         <field name="res_model">res.config.settings</field>
         <field name="view_mode">form</field>
-        <field name="view_id" ref="view_res_config_settings_productivity"/>
+        <field name="view_id" ref="view_cf_employee_productivity_settings"/>
         <field name="target">inline</field>
-        <field name="context">{'default_group_productivity': True}</field>
     </record>
 
-    <!-- ====================================================== -->
-    <!-- MENÚ: Configuración dentro de la app Productividad -->
-    <!-- ====================================================== -->
-    <menuitem id="menu_cf_productivity_settings"
-              name="Configuración"
-              parent="menu_cf_app_root"
-              action="action_res_config_settings_productivity"
-              sequence="99"/>
+    <menuitem id="menu_cf_employee_productivity_root"
+              name="Productividad"
+              sequence="10"
+              parent="base.menu_custom"
+              action="action_cf_employee_productivity_settings"/>
 </odoo>
