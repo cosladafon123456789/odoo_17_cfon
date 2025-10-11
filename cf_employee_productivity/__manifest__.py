@@ -1,20 +1,26 @@
 {
-    "name": "CF Employee Productivity",
-    "summary": "Aplicación Productividad: dashboard, métricas y correo diario",
-    "version": "17.0.3.0.0",
+    "name": "CF Productividad",
+    "version": "1.0",
     "category": "Productivity",
+    "summary": "Control de productividad de empleados (pedidos, reparaciones y postventa)",
     "author": "CFON Telecomunicaciones",
-    "license": "LGPL-3",
-    "depends": ["base", "stock", "repair", "helpdesk", "mail"],
+    "website": "https://cosladafon.com",
+    "depends": [
+        "base",
+        "stock",
+        "repair",
+        "helpdesk"
+    ],
     "data": [
         "security/ir.model.access.csv",
-        "views/productivity_menu.xml",
         "views/productivity_views.xml",
         "views/res_config_settings_views.xml",
-        "wizard/repair_reason_wizard_views.xml",
         "data/ir_cron.xml"
     ],
-    "images": ["static/description/icon.png"],
     "application": True,
-    "installable": True
+    "installable": True,
+    "license": "LGPL-3",
+
+    # 👇 Esta línea hace que Odoo muestre tu icono personalizado
+    "images": ["static/description/icon.png"],
 }
