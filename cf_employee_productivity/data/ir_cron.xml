@@ -12,8 +12,8 @@
         <field name="numbercall">-1</field>
         <field name="active">True</field>
 
-        <!-- ✅ 100 % compatible con Odoo 17 -->
-        <!-- Fija el primer disparo hoy a las 20:00 locales -->
-        <field name="nextcall" eval="(fields.Datetime.now() + relativedelta(hours=20 - fields.Datetime.now().hour, minutes=-fields.Datetime.now().minute, seconds=-fields.Datetime.now().second))"/>
+        <!-- ✅ Versión final 100 % compatible con Odoo 17 -->
+        <!-- Programado para hoy a las 20:00:00 -->
+        <field name="nextcall" eval="datetime.datetime.combine(datetime.date.today(), datetime.time(20, 0, 0))"/>
     </record>
 </odoo>
