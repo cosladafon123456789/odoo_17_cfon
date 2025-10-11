@@ -1,6 +1,6 @@
 <odoo>
     <!-- =============================== -->
-    <!-- CRON: Envío diario de resumenes -->
+    <!-- CRON: Envío diario de resúmenes -->
     <!-- =============================== -->
     <record id="ir_cron_cf_employee_productivity_daily_mail" model="ir.cron">
         <field name="name">CF Productividad - Envío diario</field>
@@ -11,7 +11,9 @@
         <field name="interval_type">days</field>
         <field name="numbercall">-1</field>
         <field name="active">True</field>
-        <!-- ✅ Fecha/hora correcta sin strftime ni doble namespace -->
-        <field name="nextcall" eval="(datetime.now() + datetime.timedelta(hours=2)).replace(minute=0, second=0, microsecond=0)"/>
+
+        <!-- ✅ Compatible con Odoo 17 -->
+        <!-- Programa el cron para hoy a las 20:00 -->
+        <field name="nextcall" eval="(datetime.datetime.combine(datetime.date.today(), datetime.time(20, 0, 0)))"/>
     </record>
 </odoo>
