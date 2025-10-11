@@ -1,19 +1,13 @@
-{
-    "name": "CF Productivity",
-    "version": "17.0.1.0.0",
-    "category": "Productivity",
-    "summary": "Dashboard, métricas y configuración de productividad (sin cron)",
-    "author": "CFON Telecomunicaciones",
-    "license": "LGPL-3",
-    "depends": ["base", "stock", "repair", "helpdesk", "mail"],
-    "data": [
-        "security/ir.model.access.csv",
-        "views/productivity_menu.xml",
-        "views/productivity_views.xml",
-        "views/res_config_settings_views.xml",
-        "wizard/repair_reason_wizard_views.xml"
-    ],
-    "images": ["static/description/icon.png"],
-    "application": True,
-    "installable": True
-}
+<odoo>
+    <record id="action_productivity_dashboard" model="ir.actions.act_window">
+        <field name="name">Dashboard Productividad</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    <record id="action_productivity_logs" model="ir.actions.act_window">
+        <field name="name">Registros de actividad</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+    </record>
+</odoo>
