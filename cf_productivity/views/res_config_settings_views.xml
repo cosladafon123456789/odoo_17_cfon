@@ -1,24 +1,4 @@
 <odoo>
-    <!-- Acciones -->
-    <record id="action_productivity_dashboard" model="ir.actions.act_window">
-        <field name="name">Dashboard Productividad</field>
-        <field name="res_model">productivity.log</field>
-        <field name="view_mode">pivot,graph,tree</field>
-    </record>
-
-    <record id="action_productivity_logs" model="ir.actions.act_window">
-        <field name="name">Registros de actividad</field>
-        <field name="res_model">productivity.log</field>
-        <field name="view_mode">tree,form</field>
-    </record>
-
-    <record id="action_cf_productivity_settings" model="ir.actions.act_window">
-        <field name="name">Configuración de Productividad</field>
-        <field name="res_model">res.config.settings</field>
-        <field name="view_mode">form</field>
-        <field name="view_id" ref="view_cf_productivity_settings"/>
-        <field name="target">inline</field>
-    </record>
 
     <!-- Vista de configuración -->
     <record id="view_cf_productivity_settings" model="ir.ui.view">
@@ -50,22 +30,51 @@
         </field>
     </record>
 
+    <!-- Acción Dashboard -->
+    <record id="action_productivity_dashboard" model="ir.actions.act_window">
+        <field name="name">Dashboard Productividad</field>
+        <field name="res_model">productivity.log</field>
+        <field name="view_mode">pivot,graph,tree</field>
+    </record>
+
+    <!-- Acción Registros -->
+    <record id="action_productivity_logs" model="ir.actions.act_window">
+        <field name="name">Registros de actividad</field>
+        <field name="res_model">productivity.log</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Acción Configuración -->
+    <record id="action_cf_productivity_settings" model="ir.actions.act_window">
+        <field name="name">Configuración de Productividad</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_cf_productivity_settings"/>
+        <field name="target">inline</field>
+    </record>
+
     <!-- Menús -->
+    <menuitem id="menu_cf_productivity_root"
+              name="Productividad"
+              sequence="10"
+              web_icon="cf_productivity,static/description/icon.png"/>
+
     <menuitem id="menu_cf_productivity_dashboard"
               name="Dashboard Productividad"
-              parent="menu_productivity_root"
+              parent="menu_cf_productivity_root"
               sequence="10"
               action="action_productivity_dashboard"/>
 
     <menuitem id="menu_cf_productivity_logs"
               name="Registros de actividad"
-              parent="menu_productivity_root"
+              parent="menu_cf_productivity_root"
               sequence="15"
               action="action_productivity_logs"/>
 
     <menuitem id="menu_cf_productivity_settings"
               name="Configuración"
-              parent="menu_productivity_root"
+              parent="menu_cf_productivity_root"
               sequence="20"
               action="action_cf_productivity_settings"/>
+
 </odoo>
