@@ -1,18 +1,1 @@
-<odoo>
-    <record id="view_repair_reason_wizard_form" model="ir.ui.view">
-        <field name="name">repair.reason.wizard.form</field>
-        <field name="model">repair.reason.wizard</field>
-        <field name="arch" type="xml">
-            <form string="Motivo de reparación">
-                <sheet>
-                    <group>
-                        <field name="reason"/>
-                    </group>
-                </sheet>
-                <footer>
-                    <button string="Cerrar" class="btn-secondary" special="cancel"/>
-                </footer>
-            </form>
-        </field>
-    </record>
-</odoo>
+<odoo><data/></odoo>
