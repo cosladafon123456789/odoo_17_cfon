@@ -22,8 +22,10 @@
                         <field name="summary_recipient_ids" widget="many2many_tags"/>
                     </group>
                 </sheet>
+
                 <footer>
-                    <button string="Guardar" type="object" name="execute" class="btn-primary"/>
+                    <!-- ✅ Ahora usa el método correcto de guardado -->
+                    <button string="Guardar" type="object" name="set_values" class="btn-primary"/>
                     <button string="Cancelar" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
