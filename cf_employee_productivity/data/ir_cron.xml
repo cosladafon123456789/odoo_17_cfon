@@ -8,6 +8,7 @@
         <field name="interval_type">days</field>
         <field name="numbercall">-1</field>
         <field name="active">True</field>
-        <field name="nextcall" eval="(DateTime.now().replace(hour=20, minute=0, second=0, microsecond=0)).strftime('%%Y-%%m-%%d %%H:%%M:%%S')"/>
+        <!-- Corrige el error de timestamp -->
+        <field name="nextcall" eval="(datetime.datetime.now() + datetime.timedelta(hours=2)).replace(minute=0, second=0, microsecond=0)"/>
     </record>
 </odoo>
