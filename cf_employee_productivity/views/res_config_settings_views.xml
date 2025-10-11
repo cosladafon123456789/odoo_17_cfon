@@ -1,7 +1,5 @@
 <odoo>
-    <!-- ============================
-         VISTA DE CONFIGURACIÓN
-    ============================= -->
+    <!-- Vista de configuración de Productividad -->
     <record id="view_cf_employee_productivity_settings" model="ir.ui.view">
         <field name="name">cf.employee.productivity.settings</field>
         <field name="model">res.config.settings</field>
@@ -31,9 +29,7 @@
         </field>
     </record>
 
-    <!-- ============================
-         ACCIÓN PARA ABRIR LA VISTA
-    ============================= -->
+    <!-- Acción para abrir la vista -->
     <record id="action_cf_employee_productivity_settings" model="ir.actions.act_window">
         <field name="name">Configuración de Productividad</field>
         <field name="res_model">res.config.settings</field>
@@ -42,36 +38,12 @@
         <field name="target">inline</field>
     </record>
 
-    <!-- ============================
-         MENÚ PRINCIPAL (RAÍZ)
-         *Visible para todos*
-    ============================= -->
+    <!-- Menú raíz -->
     <menuitem id="menu_cf_employee_productivity_root"
               name="Productividad"
               sequence="10"/>
 
-    <!-- ============================
-         SUBMENÚ DASHBOARD
-         (Por si quieres mantener coherencia)
-    ============================= -->
-    <menuitem id="menu_cf_employee_productivity_dashboard"
-              name="Dashboard Productividad"
-              parent="menu_cf_employee_productivity_root"
-              sequence="10"
-              action="action_productivity_dashboard"/>
-
-    <!-- ============================
-         SUBMENÚ REGISTROS
-    ============================= -->
-    <menuitem id="menu_cf_employee_productivity_logs"
-              name="Registros de actividad"
-              parent="menu_cf_employee_productivity_root"
-              sequence="15"
-              action="action_productivity_logs"/>
-
-    <!-- ============================
-         SUBMENÚ CONFIGURACIÓN
-    ============================= -->
+    <!-- Submenú de Configuración -->
     <menuitem id="menu_cf_employee_productivity_settings"
               name="Configuración"
               parent="menu_cf_employee_productivity_root"
