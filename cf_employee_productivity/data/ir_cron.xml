@@ -1,7 +1,4 @@
 <odoo>
-    <!-- =============================== -->
-    <!-- CRON: Envío diario de resúmenes -->
-    <!-- =============================== -->
     <record id="ir_cron_cf_employee_productivity_daily_mail" model="ir.cron">
         <field name="name">CF Productividad - Envío diario</field>
         <field name="model_id" ref="model_employee_productivity_log"/>
@@ -12,8 +9,8 @@
         <field name="numbercall">-1</field>
         <field name="active">True</field>
 
-        <!-- ✅ Versión final 100 % compatible con Odoo 17 -->
-        <!-- Programado para hoy a las 20:00:00 -->
-        <field name="nextcall" eval="datetime.datetime.combine(datetime.date.today(), datetime.time(20, 0, 0))"/>
+        <!-- ✅ 100 % compatible con safe_eval -->
+        <!-- Programa el cron para hoy a las 20:00 -->
+        <field name="nextcall" eval="datetime.combine(datetime.today(), datetime.time(20, 0, 0))"/>
     </record>
 </odoo>
