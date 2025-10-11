@@ -1,7 +1,0 @@
-<odoo>
-    <!-- Menú principal (único icono visible en el dashboard) -->
-    <menuitem id="menu_productivity_root"
-              name="Productividad"
-              sequence="10"
-              web_icon="cf_employee_productivity,static/description/icon.png"/>
-</odoo>

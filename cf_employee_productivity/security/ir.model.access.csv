@@ -1,4 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_employee_productivity_log,access_employee_productivity_log,model_employee_productivity_log,base.group_user,1,1,1,0
-access_cf_repair_reason,access_cf_repair_reason,model_cf_repair_reason,base.group_user,1,1,1,0
-access_repair_reason_wizard,access_repair_reason_wizard,model_repair_reason_wizard,base.group_user,1,1,1,0
