@@ -1,5 +1,4 @@
 <odoo>
-
     <record id="view_cf_productivity_settings" model="ir.ui.view">
         <field name="name">cf.productivity.settings</field>
         <field name="model">res.config.settings</field>
@@ -21,11 +20,14 @@
                         <field name="summary_recipient_ids" widget="many2many_tags"/>
                     </group>
                 </sheet>
+                <footer>
+                    <button string="Guardar" type="object" name="execute" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
             </form>
         </field>
     </record>
 
-    <!-- Acción Configuración -->
     <record id="action_cf_productivity_settings" model="ir.actions.act_window">
         <field name="name">Configuración de Productividad</field>
         <field name="res_model">res.config.settings</field>
@@ -34,7 +36,6 @@
         <field name="target">inline</field>
     </record>
 
-    <!-- Menús -->
     <menuitem id="menu_cf_productivity_root"
               name="Productividad"
               sequence="10"
@@ -57,5 +58,4 @@
               parent="menu_cf_productivity_root"
               sequence="20"
               action="action_cf_productivity_settings"/>
-
 </odoo>
