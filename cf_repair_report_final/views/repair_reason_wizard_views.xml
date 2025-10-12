@@ -1,0 +1,18 @@
+
+<odoo>
+    <record id="view_repair_reason_wizard_form_final" model="ir.ui.view">
+        <field name="name">repair.reason.wizard.form.final</field>
+        <field name="model">repair.reason.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Motivo de la reparación">
+                <group>
+                    <field name="reason" required="1"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" string="Confirmar" type="object" class="btn-primary"/>
+                    <button string="Cancelar" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
