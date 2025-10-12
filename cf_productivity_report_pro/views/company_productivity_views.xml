@@ -1,0 +1,16 @@
+<odoo>
+    <record id="view_company_form_cf_productivity" model="ir.ui.view">
+        <field name="name">res.company.form.cf.productivity</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet" position="inside">
+                <group string="Productividad CF">
+                    <field name="cf_user_repair_id"/>
+                    <field name="cf_user_ticket_id"/>
+                    <field name="cf_user_order_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
