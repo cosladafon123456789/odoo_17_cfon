@@ -1,5 +1,4 @@
 <odoo>
-    <!-- Reemplazar el botón de finalizar para abrir el wizard -->
     <record id="view_repair_order_inherit_cf" model="ir.ui.view">
         <field name="name">repair.order.inherit.cf</field>
         <field name="model">repair.order</field>
@@ -10,7 +9,7 @@
                         string="Finalizar reparación"
                         type="object"
                         class="btn-primary"
-                        attrs="{'invisible': [('state','not in', ('under_repair','confirmed'))]}"/>
+                        invisible="state not in ('under_repair','confirmed')"/>
             </xpath>
         </field>
     </record>
