@@ -10,15 +10,26 @@ class RepairReasonWizard(models.TransientModel):
         ("pantalla", "Cambio de pantalla"),
         ("bateria", "Cambio de batería"),
         ("bateria_usada", "Cambio de batería usada"),
-        ("software", "Actualización de software"),
+        ("camara", "Sustitución de cámara"),
+        ("carga", "Cambio de conector de carga"),
+        ("placa", "Reparación de placa base"),
+        ("limpieza", "Limpieza interna"),
         ("diagnostico", "Diagnóstico sin reparación"),
+        ("bateria_nueva", "Batería nueva (instalada recientemente)"),
+        ("bateria_100", "Batería 100 % de salud"),
         ("otro", "Otro motivo personalizado"),
     ], string="Motivo", required=True)
-    super_method = fields.Char(string="Método a ejecutar")
+    notes = fields.Char("Detalle (opcional)")
 
     def action_confirm(self):
-        if self.repair_id and self.super_method:
-            method = getattr(self.repair_id, self.super_method, None)
-            if method:
-                return method()
-        return True
+        self.ensure_one()
+        company_user = self.env.company.cf_user_repair_id or self.env.user
+        self.env["cf.productivity.line"].sudo().log_entry(
+            user=company_user,
+            type_key="repair",
+            reason=dict(self._fields["reason"].selection).get(self.reason),
+            ref_model="repair.order",
+            ref_id=self.repair_id.id,
+        )
+        # Continuar flujo estándar (marcar como hecho)
+        return self.repair_id.with_context(reason_from_wizard=True).action_repair_done()

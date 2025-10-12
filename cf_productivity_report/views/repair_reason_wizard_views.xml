@@ -6,13 +6,12 @@
             <form string="Motivo de reparación">
                 <group>
                     <field name="repair_id" invisible="1"/>
-                    <field name="super_method" invisible="1"/>
-                    <field name="reason" required="1"/>
-                    <field name="reason_other" attrs="{'invisible':[('reason','!=','other')], 'required':[('reason','=','other')]}"/>
+                    <field name="reason"/>
+                    <field name="notes"/>
                 </group>
                 <footer>
-                    <button string="Confirmar y finalizar" type="object" name="action_confirm" class="btn-primary"/>
-                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    <button string="Confirmar" type="object" name="action_confirm" class="btn-primary"/>
+                    <button string="Cancelar" special="cancel" class="btn-secondary"/>
                 </footer>
             </form>
         </field>

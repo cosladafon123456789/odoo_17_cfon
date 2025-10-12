@@ -26,14 +26,14 @@ class CFProductivityLine(models.Model):
         return res
 
     @api.model
-    def log_entry(self, *, user, type_key, reason=None, ref_model=None, ref_id=None):
-        if not user:
-            user = self.env.user
-        vals = {
+    def log_entry(self, *, user=None, type_key=None, reason=None, ref_model=None, ref_id=None):
+        user = user or self.env.user
+        if not type_key:
+            return False
+        return self.create({
             "user_id": user.id,
             "type": type_key,
             "reason": reason or False,
             "ref_model": ref_model or False,
             "ref_id": ref_id or False,
-        }
-        return self.create(vals)
+        })

@@ -1,19 +1,19 @@
 {
     "name": "Productividad CF",
-    "version": "1.0",
-    "category": "Productividad",
-    "summary": "Control de productividad (Reparaciones, Tickets, Ventas)",
+    "summary": "Productividad por usuario: Reparaciones, Tickets y Entregas (CosladaFon)",
+    "version": "17.0.1.0.0",
     "author": "CosladaFon",
-    "depends": ["base", "repair", "helpdesk", "stock", "base_setup"],
+    "website": "",
+    "category": "Productivity",
+    "depends": ["base", "mail", "repair", "helpdesk", "stock", "base_setup"],
     "data": [
-        "security/security.xml",
-        "security/ir.model.access.csv",
         "views/productivity_views.xml",
-        "views/productivity_menu.xml",
+        "views/menu_productivity.xml",
         "views/company_productivity_views.xml",
-        "views/res_config_settings_views.xml",
-        "views/repair_reason_wizard_views.xml"
+        "views/repair_reason_wizard_views.xml",
+        "security/ir.model.access.csv"
     ],
     "application": True,
-    "installable": True
+    "installable": True,
+    "license": "LGPL-3"
 }
