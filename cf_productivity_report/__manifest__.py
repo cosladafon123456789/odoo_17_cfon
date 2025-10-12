@@ -9,11 +9,11 @@
     "depends": ["base", "mail", "sale_management", "stock", "helpdesk", "repair"],
     "data": [
         "security/security.xml",
-        "views/productivity_menu.xml",
         "views/company_productivity_views.xml",
         "views/productivity_views.xml",
         "views/repair_reason_wizard_views.xml",
-        "security/ir.model.access.csv"
+        "security/ir.model.access.csv",
+        "views/productivity_menu.xml"
     ],
     "application": True,
     "installable": True,
