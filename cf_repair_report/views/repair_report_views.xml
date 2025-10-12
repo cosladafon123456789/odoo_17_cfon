@@ -44,12 +44,11 @@
         <field name="model">repair.report</field>
         <field name="arch" type="xml">
             <search string="Buscar informe">
-                <filter name="today" string="Hoy"
-                    domain="[('date','>=', (context_today().strftime('%%Y-%%m-%%d 00:00:00'))), ('date','<=', (context_today().strftime('%%Y-%%m-%%d 23:59:59')))]"/>
+                <filter name="today" string="Hoy" domain="[('date','>=',context_today()),('date','<', (context_today() + timedelta(days=1)))]"/>
                 <field name="technician_id"/>
                 <field name="reason"/>
                 <field name="repair_id"/>
-                <field name="date" filter_domain="[]"/>
+                <field name="date"/>
                 <group expand="0" string="Agrupar por">
                     <filter string="Técnico" context="{'group_by': 'technician_id'}"/>
                     <filter string="Motivo" context="{'group_by': 'reason'}"/>
