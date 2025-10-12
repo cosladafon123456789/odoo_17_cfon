@@ -1,0 +1,7 @@
+
+<odoo>
+    <menuitem id="menu_cf_productivity_root_clean" name="Productividad" parent="base.menu_reporting" sequence="50"/>
+    <menuitem id="menu_cf_productivity_repairs_clean" name="Reparaciones" parent="menu_cf_productivity_root_clean" sequence="10"/>
+    <menuitem id="menu_repair_report_clean" name="Informe de Reparaciones" parent="menu_cf_productivity_repairs_clean"
+              action="action_repair_report_clean" sequence="10"/>
+</odoo>
