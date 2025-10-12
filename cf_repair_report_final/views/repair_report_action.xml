@@ -1,0 +1,10 @@
+
+<odoo>
+    <record id="action_repair_report_final" model="ir.actions.act_window">
+        <field name="name">Informe de Reparaciones</field>
+        <field name="res_model">repair.report</field>
+        <field name="view_mode">tree,graph</field>
+        <field name="search_view_id" ref="view_repair_report_search_final"/>
+        <field name="context">{'search_default_today': 1}</field>
+    </record>
+</odoo>

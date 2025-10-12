@@ -1,3 +1,4 @@
+
 <odoo>
     <record id="view_repair_report_tree_final" model="ir.ui.view">
         <field name="name">repair.report.tree.final</field>
