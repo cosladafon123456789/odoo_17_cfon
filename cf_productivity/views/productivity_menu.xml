@@ -1,0 +1,7 @@
+<odoo>
+    <menuitem id="menu_cf_productivity_report"
+              name="Informe de Productividad"
+              parent="repair.menu_repair_root"
+              sequence="95"
+              action="action_cf_productivity_settings"/>
+</odoo>

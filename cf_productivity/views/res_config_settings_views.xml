@@ -1,0 +1,35 @@
+<odoo>
+    <record id="view_cf_productivity_settings" model="ir.ui.view">
+        <field name="name">cf.productivity.settings.view</field>
+        <field name="model">res.config.settings</field>
+        <field name="arch" type="xml">
+            <form string="Configuración de Productividad">
+                <sheet>
+                    <group>
+                        <separator string="📦 Usuarios de pedidos a contabilizar" colspan="2"/>
+                        <field name="picking_user_ids" widget="many2many_tags"/>
+                        <separator string="🔧 Usuarios técnicos a contabilizar" colspan="2"/>
+                        <field name="repair_user_ids" widget="many2many_tags"/>
+                        <separator string="🧾 Usuarios de postventa a contabilizar" colspan="2"/>
+                        <field name="helpdesk_user_ids" widget="many2many_tags"/>
+                        <separator string="📧 Notificaciones diarias" colspan="2"/>
+                        <field name="send_daily_summary"/>
+                        <field name="summary_recipient_ids" widget="many2many_tags"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Guardar" type="object" name="set_values" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_cf_productivity_settings" model="ir.actions.act_window">
+        <field name="name">Informe de Productividad</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_cf_productivity_settings"/>
+        <field name="target">inline</field>
+    </record>
+</odoo>
