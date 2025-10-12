@@ -1,0 +1,6 @@
+
+<odoo>
+    <menuitem id="menu_cfon_productivity_root" name="Productividad" sequence="50"/>
+    <menuitem id="menu_cfon_repair_report" name="Informe de Reparaciones"
+              parent="menu_cfon_productivity_root" action="action_repair_report_cfon" sequence="10"/>
+</odoo>
