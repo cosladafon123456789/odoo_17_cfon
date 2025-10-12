@@ -4,34 +4,22 @@
         <field name="name">repair.report.tree.final</field>
         <field name="model">repair.report</field>
         <field name="arch" type="xml">
-            <tree string="Informe de Reparaciones">
-                <field name="date"/>
+            <tree string="Informe de Reparaciones" default_order="create_date desc">
                 <field name="technician_id"/>
-                <field name="reason"/>
                 <field name="repair_id"/>
+                <field name="create_date"/>
+                <field name="reason"/>
             </tree>
         </field>
     </record>
 
-    <record id="view_repair_report_graph_bar_final" model="ir.ui.view">
-        <field name="name">repair.report.graph.bar.final</field>
+    <record id="view_repair_report_graph_final" model="ir.ui.view">
+        <field name="name">repair.report.graph.final</field>
         <field name="model">repair.report</field>
         <field name="arch" type="xml">
-            <graph string="Reparaciones por día / motivo" type="bar">
-                <field name="date" type="row" interval="day"/>
-                <field name="reason" type="col"/>
-                <field name="id" type="measure"/>
-            </graph>
-        </field>
-    </record>
-
-    <record id="view_repair_report_graph_pie_final" model="ir.ui.view">
-        <field name="name">repair.report.graph.pie.final</field>
-        <field name="model">repair.report</field>
-        <field name="arch" type="xml">
-            <graph string="Distribución por motivo" type="pie">
-                <field name="reason" type="row"/>
-                <field name="id" type="measure"/>
+            <graph string="Reparaciones por Técnico" type="bar">
+                <field name="technician_id" type="row"/>
+                <field name="repair_id" type="measure"/>
             </graph>
         </field>
     </record>
@@ -40,26 +28,10 @@
         <field name="name">repair.report.search.final</field>
         <field name="model">repair.report</field>
         <field name="arch" type="xml">
-            <search string="Buscar informe">
-                <filter name="today" string="Hoy" context="{'search_default_today': 1}"/>
+            <search string="Buscar Informe">
                 <field name="technician_id"/>
-                <field name="reason"/>
-                <field name="repair_id"/>
-                <field name="date"/>
-                <group expand="0" string="Agrupar por">
-                    <filter string="Técnico" context="{'group_by': 'technician_id'}"/>
-                    <filter string="Motivo" context="{'group_by': 'reason'}"/>
-                    <filter string="Día" context="{'group_by': 'date:day'}"/>
-                </group>
+                <filter name="today" string="Hoy" domain="[('create_date','&gt;=', context_today())]"/>
             </search>
         </field>
-    </record>
-
-    <record id="action_repair_report_final" model="ir.actions.act_window">
-        <field name="name">Informe de Reparaciones</field>
-        <field name="res_model">repair.report</field>
-        <field name="view_mode">tree,graph</field>
-        <field name="search_view_id" ref="view_repair_report_search_final"/>
-        <field name="context">{'search_default_today': 1}</field>
     </record>
 </odoo>

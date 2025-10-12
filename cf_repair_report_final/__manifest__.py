@@ -1,7 +1,7 @@
 
 {
     "name": "Informe de Reparaciones",
-    "version": "17.0.1.0.3",
+    "version": "17.0.1.0.4",
     "summary": "Wizard al finalizar reparación para registrar motivo y generar informe diario por técnico",
     "author": "CFON Telecomunicaciones",
     "license": "LGPL-3",
