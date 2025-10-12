@@ -3,12 +3,12 @@
         <!-- Open access to view the dashboard for all internal users -->
         <record id="group_cf_productivity_user" model="res.groups">
             <field name="name">CF Productividad - Usuario</field>
-            <field name="category_id" ref="base.module_category_productivity"/>
+            
         </record>
         <record id="group_cf_productivity_manager" model="res.groups">
             <field name="name">CF Productividad - Administrador</field>
             <field name="implied_ids" eval="[(4, ref('group_cf_productivity_user'))]"/>
-            <field name="category_id" ref="base.module_category_productivity"/>
+            
         </record>
     </data>
 </odoo>
