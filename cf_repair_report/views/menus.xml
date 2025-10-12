@@ -1,0 +1,7 @@
+<odoo>
+    <!-- Menú en Informes -> Productividad -> Reparaciones -->
+    <menuitem id="menu_cf_productivity_root" name="Productividad" parent="base.menu_reporting" sequence="50"/>
+    <menuitem id="menu_cf_productivity_repairs" name="Reparaciones" parent="menu_cf_productivity_root" sequence="10"/>
+    <menuitem id="menu_repair_report" name="Informe de Reparaciones" parent="menu_cf_productivity_repairs"
+              action="action_repair_report" sequence="10"/>
+</odoo>
