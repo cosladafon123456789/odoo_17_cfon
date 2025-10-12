@@ -1,7 +1,12 @@
 
 <odoo>
-    <menuitem id="menu_cf_productivity_root_final" name="Productividad" parent="base.menu_reporting" sequence="50"/>
-    <menuitem id="menu_cf_productivity_repairs_final" name="Reparaciones" parent="menu_cf_productivity_root_final" sequence="10"/>
-    <menuitem id="menu_repair_report_final" name="Informe de Reparaciones" parent="menu_cf_productivity_repairs_final"
-              action="action_repair_report_final" sequence="10"/>
+    <menuitem id="menu_cf_productivity_root_final"
+              name="Productividad"
+              sequence="50"/>
+
+    <menuitem id="menu_cf_repair_report_final"
+              name="Informe de Reparaciones"
+              parent="menu_cf_productivity_root_final"
+              action="action_repair_report_final"
+              sequence="10"/>
 </odoo>
