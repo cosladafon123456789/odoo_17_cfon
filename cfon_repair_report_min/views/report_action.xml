@@ -1,0 +1,8 @@
+
+<odoo>
+    <record id="action_repair_report_cfon_min" model="ir.actions.act_window">
+        <field name="name">Informe de Reparaciones</field>
+        <field name="res_model">repair.report</field>
+        <field name="view_mode">tree,graph</field>
+    </record>
+</odoo>
