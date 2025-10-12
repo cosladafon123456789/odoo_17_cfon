@@ -1,3 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_repair_report_user_clean,access_repair_report_user_clean,model:repair.report,base.group_user,1,1,1,1
-access_repair_reason_wizard_clean,access_repair_reason_wizard_clean,model:repair.reason.wizard,base.group_user,1,1,1,1
+access_repair_report_user_clean,access_repair_report_user_clean,cf_repair_report_clean.model_repair_report,base.group_user,1,1,1,1
+access_repair_reason_wizard_clean,access_repair_reason_wizard_clean,cf_repair_report_clean.model_repair_reason_wizard,base.group_user,1,1,1,1
