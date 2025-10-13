@@ -1,0 +1,54 @@
+
+<odoo>
+    <record id="view_cf_goal_tree" model="ir.ui.view">
+        <field name="name">cf.productivity.goal.tree</field>
+        <field name="model">cf.productivity.goal</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="user_id"/>
+                <field name="period_type"/>
+                <field name="period_start"/>
+                <field name="period_end"/>
+                <field name="target_repair"/>
+                <field name="done_repair"/>
+                <field name="target_ticket"/>
+                <field name="done_ticket"/>
+                <field name="target_order"/>
+                <field name="done_order"/>
+                <field name="target_points"/>
+                <field name="done_points"/>
+                <field name="progress_pct"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_cf_goal_form" model="ir.ui.view">
+        <field name="name">cf.productivity.goal.form</field>
+        <field name="model">cf.productivity.goal</field>
+        <field name="arch" type="xml">
+            <form string="Objetivo de productividad">
+                <sheet>
+                    <group>
+                        <field name="user_id"/>
+                        <field name="period_type"/>
+                        <field name="period_start"/>
+                        <field name="period_end"/>
+                    </group>
+                    <group string="Objetivos">
+                        <field name="target_repair"/>
+                        <field name="target_ticket"/>
+                        <field name="target_order"/>
+                        <field name="target_points"/>
+                    </group>
+                    <group string="Seguimiento (solo lectura)">
+                        <field name="done_repair" readonly="1"/>
+                        <field name="done_ticket" readonly="1"/>
+                        <field name="done_order" readonly="1"/>
+                        <field name="done_points" readonly="1"/>
+                        <field name="progress_pct" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

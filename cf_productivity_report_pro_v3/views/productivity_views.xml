@@ -1,0 +1,59 @@
+
+<odoo>
+    <record id="view_cf_productivity_search" model="ir.ui.view">
+        <field name="name">cf.productivity.line.search</field>
+        <field name="model">cf.productivity.line</field>
+        <field name="arch" type="xml">
+            <search string="Buscar líneas">
+                <filter name="today" string="Hoy"
+                        domain="[('date','&gt;=', (context_today()).strftime('%%Y-%%m-%%d 00:00:00')), ('date','&lt;=', (context_today()).strftime('%%Y-%%m-%%d 23:59:59'))]"/>
+                <field name="user_id"/>
+                <field name="type"/>
+                <group expand="0" string="Agrupar por">
+                    <filter name="grp_user" string="Usuario" context="{'group_by': 'user_id'}"/>
+                    <filter name="grp_type" string="Tipo" context="{'group_by': 'type'}"/>
+                    <filter name="grp_date" string="Fecha" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_cf_productivity_tree" model="ir.ui.view">
+        <field name="name">cf.productivity.line.tree</field>
+        <field name="model">cf.productivity.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="date"/>
+                <field name="user_id"/>
+                <field name="type"/>
+                <field name="reason"/>
+                <field name="points"/>
+                <field name="duration_seconds"/>
+                <field name="ref_model"/>
+                <field name="ref_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_cf_productivity_form" model="ir.ui.view">
+        <field name="name">cf.productivity.line.form</field>
+        <field name="model">cf.productivity.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="date"/>
+                        <field name="user_id"/>
+                        <field name="type"/>
+                        <field name="reason"/>
+                        <field name="points" readonly="1"/>
+                        <field name="duration_seconds"/>
+                        <field name="ref_model"/>
+                        <field name="ref_id"/>
+                    </group>
+                    <chatter/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
