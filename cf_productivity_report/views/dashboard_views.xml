@@ -1,0 +1,31 @@
+<odoo>
+    <record id="view_cf_productivity_dashboard_form" model="ir.ui.view">
+        <field name="name">cf.productivity.dashboard.form</field>
+        <field name="model">cf.productivity.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Resumen de Productividad" create="0" edit="0" delete="0">
+                <sheet>
+                    <group>
+                        <group string="Validaciones">
+                            <field name="validations_today" readonly="1"/>
+                            <field name="avg_interval_hhmmss" readonly="1"/>
+                            <field name="last_validation" readonly="1"/>
+                        </group>
+                        <group string="Postventa / Reparaciones">
+                            <field name="tickets_today" readonly="1"/>
+                            <field name="repairs_today" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_cf_productivity_dashboard" model="ir.actions.act_window">
+        <field name="name">Resumen de Productividad</field>
+        <field name="res_model">cf.productivity.dashboard</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{}</field>
+    </record>
+</odoo>

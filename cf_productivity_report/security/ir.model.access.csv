@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_cf_productivity_line,access_cf_productivity_line,model_cf_productivity_line,,1,1,1,1
-access_repair_reason_wizard,access_repair_reason_wizard,model_repair_reason_wizard,,1,1,1,1
+access_repair_reason_wizard,access_repair_reason_wizard,model_repair_reason_wizard,,1,0,1,0
+access_cf_productivity_dashboard,access_cf_productivity_dashboard,model_cf_productivity_dashboard,,1,1,1,1
