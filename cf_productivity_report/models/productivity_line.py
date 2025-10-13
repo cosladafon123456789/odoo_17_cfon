@@ -9,6 +9,19 @@ class CFProductivityLine(models.Model):
 
     date = fields.Datetime("Fecha", default=lambda self: fields.Datetime.now(), index=True)
     user_id = fields.Many2one("res.users", "Usuario", required=True, index=True)
+
+# Métrica para pedidos/entregas
+interval_minutes = fields.Integer(
+    "Minutos desde última validación",
+    default=0,
+    index=True,
+    help="Tiempo (en minutos) desde la última línea de tipo 'order' del mismo usuario. Se resetea si supera el timeout."
+)
+is_session_reset = fields.Boolean(
+    "Reseteo por inactividad",
+    default=False,
+    help="Marcado si el intervalo superó el timeout configurado en la compañía."
+)
     type = fields.Selection([
         ("repair", "Reparación"),
         ("ticket", "Ticket respondido"),
@@ -24,6 +37,32 @@ class CFProductivityLine(models.Model):
             name = f"{r.user_id.name or '-'} - {dict(self._fields['type'].selection).get(r.type)}"
             res.append((r.id, name))
         return res
+
+    
+@api.model
+def create(self, vals):
+    rec = super(CFProductivityLine, self).create(vals)
+    try:
+        if rec.type == "order" and rec.user_id:
+            timeout = rec.env.company.cf_order_timeout_min or 30
+            # Última validación del mismo usuario y tipo
+            last = self.search([
+                ("id", "!=", rec.id),
+                ("type", "=", "order"),
+                ("user_id", "=", rec.user_id.id),
+            ], order="date desc, id desc", limit=1)
+            if last:
+                diff = (fields.Datetime.from_string(rec.date) - fields.Datetime.from_string(last.date)).total_seconds() / 60.0
+                if diff > timeout:
+                    rec.write({"interval_minutes": 0, "is_session_reset": True})
+                else:
+                    rec.write({"interval_minutes": int(round(diff)), "is_session_reset": False})
+            else:
+                rec.write({"interval_minutes": 0, "is_session_reset": False})
+    except Exception:
+        pass
+    return rec
+
 
     @api.model
     def log_entry(self, *, user=None, type_key=None, reason=None, ref_model=None, ref_id=None):
