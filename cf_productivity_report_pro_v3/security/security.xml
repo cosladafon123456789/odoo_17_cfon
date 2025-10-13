@@ -1,7 +1,0 @@
-
-<odoo>
-    <record id="group_cf_productivity_access" model="res.groups">
-        <field name="name">Productividad CF (Acceso)</field>
-        <field name="category_id" ref="base.module_category_administration"/>
-    </record>
-</odoo>
