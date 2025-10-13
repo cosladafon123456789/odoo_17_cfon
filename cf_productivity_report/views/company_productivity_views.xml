@@ -9,7 +9,7 @@
                     <field name="cf_user_repair_id"/>
                     <field name="cf_user_ticket_id"/>
                     <field name="cf_user_order_id"/>
-                    <field name="cf_order_timeout_min"/>
+                    <field name="productivity_reset_minutes"/>
                 </group>
             </xpath>
         </field>

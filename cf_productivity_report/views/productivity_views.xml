@@ -1,4 +1,5 @@
 <odoo>
+    <!-- Tree -->
     <record id="view_cf_productivity_tree" model="ir.ui.view">
         <field name="name">cf.productivity.line.tree</field>
         <field name="model">cf.productivity.line</field>
@@ -8,12 +9,14 @@
                 <field name="user_id"/>
                 <field name="type"/>
                 <field name="reason"/>
+                <field name="interval_hhmmss"/>
                 <field name="ref_model"/>
                 <field name="ref_id"/>
             </tree>
         </field>
     </record>
 
+    <!-- Form -->
     <record id="view_cf_productivity_form" model="ir.ui.view">
         <field name="name">cf.productivity.line.form</field>
         <field name="model">cf.productivity.line</field>
@@ -25,23 +28,26 @@
                         <field name="user_id"/>
                         <field name="type"/>
                         <field name="reason"/>
-                        <field name="ref_model"/>
-                        <field name="ref_id"/>
+                        <field name="interval_seconds" readonly="1"/>
+                        <field name="interval_hhmmss" readonly="1"/>
+                        <field name="ref_model" readonly="1"/>
+                        <field name="ref_id" readonly="1"/>
                     </group>
-                    <chatter/>
                 </sheet>
             </form>
         </field>
     </record>
 
+    <!-- Search -->
     <record id="view_cf_productivity_search" model="ir.ui.view">
         <field name="name">cf.productivity.line.search</field>
         <field name="model">cf.productivity.line</field>
         <field name="arch" type="xml">
             <search string="Buscar líneas">
-                <filter name="today" string="Hoy" domain="[('date','&gt;=', (context_today()).strftime('%%Y-%%m-%%d 00:00:00')), ('date','&lt;=', (context_today()).strftime('%%Y-%%m-%%d 23:59:59'))]"/>
                 <field name="user_id"/>
                 <field name="type"/>
+                <filter name="only_orders" string="Sólo validaciones" domain="[('type','=','order')]"/>
+                <filter name="only_tickets" string="Sólo tickets" domain="[('type','in',('ticket','ticket_stage'))]"/>
                 <group expand="0" string="Agrupar por">
                     <filter name="grp_user" string="Usuario" context="{'group_by': 'user_id'}"/>
                     <filter name="grp_type" string="Tipo" context="{'group_by': 'type'}"/>
@@ -49,5 +55,26 @@
                 </group>
             </search>
         </field>
+    </record>
+
+    <!-- Pivot to analyze average interval -->
+    <record id="view_cf_productivity_pivot" model="ir.ui.view">
+        <field name="name">cf.productivity.line.pivot</field>
+        <field name="model">cf.productivity.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Productividad">
+                <field name="user_id" type="row"/>
+                <field name="type" type="col"/>
+                <field name="interval_seconds" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_cf_productivity_lines" model="ir.actions.act_window">
+        <field name="name">Productividad</field>
+        <field name="res_model">cf.productivity.line</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="context">{}</field>
     </record>
 </odoo>

@@ -1,7 +1,7 @@
 {
     "name": "Productividad CF",
     "summary": "Productividad por usuario: Reparaciones, Tickets y Entregas (CosladaFon)",
-    "version": "17.0.1.0.0",
+    "version": "17.0.2.0.0",
     "author": "CosladaFon",
     "website": "",
     "category": "Productivity",
@@ -15,5 +15,4 @@
     ],
     "application": True,
     "installable": True,
-    "license": "LGPL-3"
 }
