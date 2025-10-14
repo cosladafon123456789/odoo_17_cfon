@@ -11,8 +11,9 @@ class CFProductivitySummary(models.Model):
     repairs_done = fields.Integer(string="Reparaciones", default=0)
     tickets_done = fields.Integer(string="Tickets", default=0)
     orders_done  = fields.Integer(string="Entregas/Pedidos", default=0)
-    total_done   = fields.Integer(string="Total", compute="_compute_total", store=False)
-    avg_gap_minutes = fields.Float(string="Tiempo medio entre tareas (min)", default=0.0)
+    total_done   = fields.Integer(string="Total", compute="_compute_total", store=True)
+    avg_gap_seconds = fields.Integer(string="Tiempo medio entre validaciones (s)", default=0, store=True)
+    avg_gap_time = fields.Char(string="Tiempo medio entre validaciones")
     is_total = fields.Boolean(string="Total general", default=False, index=True)
     last_update = fields.Datetime(string="Última actualización")
 
@@ -62,10 +63,10 @@ class CFProductivitySummary(models.Model):
                 if l.date:
                     if last_dt is not None:
                         delta = fields.Datetime.from_string(l.date) - fields.Datetime.from_string(last_dt)
-                        minutes = delta.total_seconds() / 60.0
-                        if minutes >= 0:
-                            gaps.append(minutes)
-                            all_gaps.append(minutes)
+                        secs = delta.total_seconds()
+                        if secs >= 0:
+                            gaps.append(secs)
+                            all_gaps.append(secs)
                     last_dt = l.date
             avg_gap = sum(gaps)/len(gaps) if gaps else 0.0
 
@@ -83,14 +84,20 @@ class CFProductivitySummary(models.Model):
         total_repair = int(sum(created_recs.mapped("repairs_done"))) if created_recs else 0
         total_ticket = int(sum(created_recs.mapped("tickets_done"))) if created_recs else 0
         total_order  = int(sum(created_recs.mapped("orders_done"))) if created_recs else 0
-        total_avg    = round(sum(all_gaps)/len(all_gaps), 2) if all_gaps else 0.0
+        total_avg_sec = int(sum(all_gaps)/len(all_gaps)) if all_gaps else 0
 
-        Summary.create({
+hours = int(total_avg_sec // 3600)
+minutes = int((total_avg_sec % 3600) // 60)
+seconds = int(total_avg_sec % 60)
+total_avg_str = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+
+Summary.create({
             "user_id": False,
             "repairs_done": total_repair,
             "tickets_done": total_ticket,
             "orders_done": total_order,
-            "avg_gap_minutes": total_avg,
+            "avg_gap_seconds": total_avg_sec,
+            "avg_gap_time": total_avg_str,
             "is_total": True,
             "last_update": fields.Datetime.now(),
         })

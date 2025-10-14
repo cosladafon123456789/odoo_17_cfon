@@ -23,7 +23,8 @@
                 <field name="tickets_done"/>
                 <field name="orders_done"/>
                 <field name="total_done"/>
-                <field name="avg_gap_minutes"/>
+                <field name="avg_gap_time" string="Tiempo medio entre validaciones"/>
+                <field name="avg_gap_seconds" invisible="1"/>
                 <field name="last_update"/>
             </tree>
         </field>
@@ -40,7 +41,8 @@
                 <field name="tickets_done" type="measure"/>
                 <field name="orders_done" type="measure"/>
                 <field name="total_done" type="measure"/>
-                <field name="avg_gap_minutes" type="measure"/>
+                <field name="avg_gap_time" type="measure"/>
+                            <field name="avg_gap_seconds" type="measure"/>
             </pivot>
         </field>
     </record>
