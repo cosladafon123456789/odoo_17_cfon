@@ -45,31 +45,5 @@
         </field>
     </record>
 
-    <!-- Wizard to run update manually -->
-    <record id="view_cf_productivity_update_wizard" model="ir.ui.view">
-        <field name="name">cf.productivity.update.wizard.form</field>
-        <field name="model">cf.productivity.update.wizard</field>
-        <field name="arch" type="xml">
-            <form string="Actualizar Productividad Global">
-                <group>
-                    <label string="Esto recalculará el resumen global con los datos actuales (todas las líneas)."/>
-                </group>
-                <footer>
-                    <button name="action_update_now" type="object" class="btn-primary" string="Actualizar ahora"/>
-                    <button string="Cancelar" special="cancel" class="btn-secondary"/>
-                </footer>
-            </form>
-        </field>
-    </record>
-
-    <record id="action_cf_productivity_update_wizard" model="ir.actions.act_window">
-        <field name="name">Actualizar Productividad Global</field>
-        <field name="res_model">cf.productivity.update.wizard</field>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
-    </record>
-
-    <menuitem id="menu_cf_productivity_update" name="Actualizar Productividad"
-              parent="cf_productivity_report.menu_cf_productivity_root"
-              action="action_cf_productivity_update_wizard" sequence="3"/>
+    
 </odoo>
