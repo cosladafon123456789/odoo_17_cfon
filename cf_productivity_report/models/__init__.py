@@ -6,4 +6,4 @@ from . import stock_picking_inherit
 from . import res_company_inherit
 
 from . import productivity_summary
-from . import productivity_update_wizard
+

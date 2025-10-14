@@ -18,12 +18,13 @@
         <field name="arch" type="xml">
             <tree create="0">
                 <field name="is_total" invisible="1"/>
-                <field name="user_id" attrs="{'invisible':[('is_total','=',True)]}"/>
+                <field name="user_id" />
                 <field name="repairs_done"/>
                 <field name="tickets_done"/>
                 <field name="orders_done"/>
                 <field name="total_done"/>
                 <field name="avg_gap_minutes"/>
+                <field name="last_update"/>
             </tree>
         </field>
     </record>

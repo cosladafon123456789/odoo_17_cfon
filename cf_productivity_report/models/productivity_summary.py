@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import api, fields, models
-from datetime import datetime
+from odoo import SUPERUSER_ID
 
 class CFProductivitySummary(models.Model):
     _name = "cf.productivity.summary"
@@ -8,12 +8,13 @@ class CFProductivitySummary(models.Model):
     _order = "is_total desc, user_id asc"
 
     user_id = fields.Many2one("res.users", string="Usuario", index=True)
-    repairs_done = fields.Integer(string="Reparaciones")
-    tickets_done = fields.Integer(string="Tickets")
-    orders_done  = fields.Integer(string="Entregas/Pedidos")
+    repairs_done = fields.Integer(string="Reparaciones", default=0)
+    tickets_done = fields.Integer(string="Tickets", default=0)
+    orders_done  = fields.Integer(string="Entregas/Pedidos", default=0)
     total_done   = fields.Integer(string="Total", compute="_compute_total", store=False)
-    avg_gap_minutes = fields.Float(string="Tiempo medio entre tareas (min)")
+    avg_gap_minutes = fields.Float(string="Tiempo medio entre tareas (min)", default=0.0)
     is_total = fields.Boolean(string="Total general", default=False, index=True)
+    last_update = fields.Datetime(string="Última actualización")
 
     @api.depends("repairs_done", "tickets_done", "orders_done")
     def _compute_total(self):
@@ -34,16 +35,16 @@ class CFProductivitySummary(models.Model):
         Summary.search([]).unlink()
 
         # Obtener usuarios con líneas
-        user_ids = Line.read_group(
+        user_groups = Line.read_group(
             domain=[],
             fields=["user_id"],
             groupby=["user_id"],
             lazy=False,
         )
         all_gaps = []  # para media global
+        created_recs = self.browse()
 
-        created = []
-        for grp in user_ids:
+        for grp in user_groups:
             user_id = grp.get("user_id") and grp["user_id"][0]
             if not user_id:
                 continue
@@ -68,19 +69,20 @@ class CFProductivitySummary(models.Model):
                     last_dt = l.date
             avg_gap = sum(gaps)/len(gaps) if gaps else 0.0
 
-            created.append(Summary.create({
+            created_recs |= Summary.create({
                 "user_id": user_id,
                 "repairs_done": cnt_repair,
                 "tickets_done": cnt_ticket,
                 "orders_done": cnt_order,
                 "avg_gap_minutes": round(avg_gap, 2),
                 "is_total": False,
-            }).id)
+                "last_update": fields.Datetime.now(),
+            })
 
         # Crear TOTAL
-        total_repair = sum(self.browse(created).mapped("repairs_done")) if created else 0
-        total_ticket = sum(self.browse(created).mapped("tickets_done")) if created else 0
-        total_order  = sum(self.browse(created).mapped("orders_done")) if created else 0
+        total_repair = int(sum(created_recs.mapped("repairs_done"))) if created_recs else 0
+        total_ticket = int(sum(created_recs.mapped("tickets_done"))) if created_recs else 0
+        total_order  = int(sum(created_recs.mapped("orders_done"))) if created_recs else 0
         total_avg    = round(sum(all_gaps)/len(all_gaps), 2) if all_gaps else 0.0
 
         Summary.create({
@@ -90,8 +92,8 @@ class CFProductivitySummary(models.Model):
             "orders_done": total_order,
             "avg_gap_minutes": total_avg,
             "is_total": True,
+            "last_update": fields.Datetime.now(),
         })
 
-        # Devolver acción a la vista del resumen
         action = self.env.ref("cf_productivity_report.action_cf_productivity_summary").read()[0]
         return action

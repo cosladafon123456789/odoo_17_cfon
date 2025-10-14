@@ -37,3 +37,25 @@ class CFProductivityLine(models.Model):
             "ref_model": ref_model or False,
             "ref_id": ref_id or False,
         })
+
+from odoo import SUPERUSER_ID
+import threading, logging
+_logger = logging.getLogger(__name__)
+
+class CFProductivityLine(models.Model):
+    _inherit = "cf.productivity.line"
+
+    @api.model
+    def create(self, vals):
+        rec = super().create(vals)
+        def _delayed_update():
+            try:
+                # Reabrir entorno seguro para hilo ajeno
+                with api.Environment.manage():
+                    with self.env.registry.cursor() as cr:
+                        env2 = api.Environment(cr, SUPERUSER_ID, {})
+                        env2["cf.productivity.summary"].sudo().action_update_productivity_summary()
+            except Exception as e:
+                _logger.exception("Productivity summary update failed: %s", e)
+        threading.Timer(10.0, _delayed_update).start()
+        return rec
