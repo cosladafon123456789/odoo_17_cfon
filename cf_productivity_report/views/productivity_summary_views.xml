@@ -1,5 +1,4 @@
 <odoo>
-    <!-- Action & Menu -->
     <record id="action_cf_productivity_summary" model="ir.actions.act_window">
         <field name="name">Resumen Global</field>
         <field name="res_model">cf.productivity.summary</field>
@@ -11,14 +10,13 @@
               parent="cf_productivity_report.menu_cf_productivity_root"
               action="action_cf_productivity_summary" sequence="2"/>
 
-    <!-- Tree view -->
     <record id="view_cf_productivity_summary_tree" model="ir.ui.view">
         <field name="name">cf.productivity.summary.tree</field>
         <field name="model">cf.productivity.summary</field>
         <field name="arch" type="xml">
             <tree create="0">
                 <field name="is_total" invisible="1"/>
-                <field name="user_id" />
+                <field name="user_id"/>
                 <field name="repairs_done"/>
                 <field name="tickets_done"/>
                 <field name="orders_done"/>
@@ -30,7 +28,6 @@
         </field>
     </record>
 
-    <!-- Pivot -->
     <record id="view_cf_productivity_summary_pivot" model="ir.ui.view">
         <field name="name">cf.productivity.summary.pivot</field>
         <field name="model">cf.productivity.summary</field>
@@ -41,11 +38,8 @@
                 <field name="tickets_done" type="measure"/>
                 <field name="orders_done" type="measure"/>
                 <field name="total_done" type="measure"/>
-                <field name="avg_gap_time" type="measure"/>
-                            <field name="avg_gap_seconds" type="measure"/>
+                <field name="avg_gap_seconds" type="measure"/>
             </pivot>
         </field>
     </record>
-
-    
 </odoo>
