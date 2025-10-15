@@ -1,0 +1,11 @@
+<odoo noupdate="0">
+    <record id="filter_repair_pending_part" model="ir.filters">
+        <field name="name">Pendiente de pieza</field>
+        <field name="model_id">repair.order</field>
+        <field name="action_id" ref="repair.action_repair_order"/>
+        <field name="domain">[('state','=','pending_part')]</field>
+        <field name="context">{}</field>
+        <field name="user_id" eval="False"/>
+        <field name="is_default" eval="False"/>
+    </record>
+</odoo>
