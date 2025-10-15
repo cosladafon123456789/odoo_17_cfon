@@ -1,0 +1,32 @@
+<odoo>
+    <!-- Vista de formulario -->
+    <record id="view_repair_order_form_pending_stage" model="ir.ui.view">
+        <field name="name">repair.order.form.pending.stage.cf</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="repair.view_repair_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_pending_part"
+                        string="Pendiente de pieza"
+                        type="object"
+                        class="btn-warning"/>
+            </xpath>
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="widget">statusbar</attribute>
+                <attribute name="statusbar_visible">draft,confirmed,in_progress,pending_part,done,cancel</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vista de búsqueda -->
+    <record id="view_repair_order_search_pending_stage" model="ir.ui.view">
+        <field name="name">repair.order.search.pending.stage.cf</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="repair.view_repair_order_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='state']" position="after">
+                <filter string="Pendiente de pieza" name="pending_part" domain="[('state','=','pending_part')]" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
