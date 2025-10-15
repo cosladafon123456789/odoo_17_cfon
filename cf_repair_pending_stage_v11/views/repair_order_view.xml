@@ -1,0 +1,40 @@
+<odoo>
+    <record id="view_repair_order_form_pending_stage" model="ir.ui.view">
+        <field name="name">repair.order.form.pending.stage.cf.owl</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="repair.view_repair_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Botón para pasar a 'Pendiente de pieza' (siempre visible salvo que ya esté en ese estado) -->
+            <xpath expr="//header" position="inside">
+                <button name="action_pending_part"
+                        string="Pendiente de pieza"
+                        type="object"
+                        class="btn-warning"
+                        invisible="state == 'pending_part'"/>
+            </xpath>
+
+            <!-- Duplicados OWL-friendly de botones clave visibles en 'pending_part' -->
+            <xpath expr="//header" position="inside">
+                <button name="action_validate"
+                        string="Confirmar reparación"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="state != 'pending_part'"/>
+            </xpath>
+
+            <xpath expr="//header" position="inside">
+                <button name="action_repair_start"
+                        string="Iniciar reparación"
+                        type="object"
+                        class="oe_highlight"
+                        invisible="state != 'pending_part'"/>
+            </xpath>
+
+            <!-- Mantener statusbar mostrando el nuevo estado -->
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="widget">statusbar</attribute>
+                <attribute name="statusbar_visible">draft,confirmed,in_progress,pending_part,done,cancel</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
