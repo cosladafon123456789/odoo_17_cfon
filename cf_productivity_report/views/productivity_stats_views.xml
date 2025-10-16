@@ -14,6 +14,17 @@
     <field name="name">Tiempos medios entre validaciones</field>
     <field name="res_model">cf.productivity.stats</field>
     <field name="view_mode">tree</field>
+    
+    <field name="help" type="html">
+      <p><b>Definición de la métrica</b></p>
+      <p>Este informe muestra el <b>tiempo medio entre validaciones consecutivas</b> de pedidos o entregas por usuario.</p>
+      <ul>
+        <li>Se consideran solo las <b>15 validaciones más recientes</b> por usuario.</li>
+        <li>Se <b>excluyen</b> los intervalos superiores a <b>30 minutos</b> entre validaciones para evitar que pausas/incidencias distorsionen la métrica.</li>
+        <li>El valor mostrado (<code>HH:MM:SS</code>) refleja el ritmo de validación durante <b>actividad continua</b>.</li>
+      </ul>
+    </field>
+
   </record>
 
   <menuitem id="menu_cf_productivity_stats"
@@ -22,4 +33,30 @@
             action="action_cf_productivity_stats"
             groups="base.group_system"
             sequence="2"/>
+
+  <!-- Doc-only action that shows the help text explicitly (no records) -->
+  <record id="action_cf_productivity_stats_doc" model="ir.actions.act_window">
+    <field name="name">¿Qué mide esta métrica?</field>
+    <field name="res_model">cf.productivity.stats</field>
+    <field name="view_mode">tree</field>
+    <field name="domain">[('id','=',0)]</field>
+    
+    <field name="help" type="html">
+      <p><b>Definición de la métrica</b></p>
+      <p>Este informe muestra el <b>tiempo medio entre validaciones consecutivas</b> de pedidos o entregas por usuario.</p>
+      <ul>
+        <li>Se consideran solo las <b>15 validaciones más recientes</b> por usuario.</li>
+        <li>Se <b>excluyen</b> los intervalos superiores a <b>30 minutos</b> entre validaciones para evitar que pausas/incidencias distorsionen la métrica.</li>
+        <li>El valor mostrado (<code>HH:MM:SS</code>) refleja el ritmo de validación durante <b>actividad continua</b>.</li>
+      </ul>
+    </field>
+
+  </record>
+
+  <menuitem id="menu_cf_productivity_stats_doc"
+            name="Definición de la métrica"
+            parent="menu_cf_productivity_root"
+            action="action_cf_productivity_stats_doc"
+            groups="base.group_system"
+            sequence="3"/>
 </odoo>
