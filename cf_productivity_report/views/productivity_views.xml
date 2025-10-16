@@ -62,8 +62,8 @@
     <field name="arch" type="xml">
       <search string="Buscar líneas">
         <filter name="today" string="Hoy"
-                domain="[('date','>=', (context_today()).strftime('%%Y-%%m-%%d 00:00:00')),
-                         ('date','<=', (context_today()).strftime('%%Y-%%m-%%d 23:59:59'))]"/>
+                domain="[('date','&gt;=', context_today()),
+                         ('date','&lt;', (context_today() + datetime.timedelta(days=1)))]"/>
         <separator/>
         <field name="user_id"/>
         <field name="type"/>
