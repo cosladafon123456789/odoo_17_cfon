@@ -1,0 +1,34 @@
+<odoo>
+  <record id="view_cf_productivity_repair_stats_tree" model="ir.ui.view">
+    <field name="name">cf.productivity.repair.stats.tree</field>
+    <field name="model">cf.productivity.repair.stats</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="user_id"/>
+        <field name="avg_repair_interval"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="action_cf_productivity_repair_stats" model="ir.actions.act_window">
+    <field name="name">Tiempos medios entre reparaciones</field>
+    <field name="res_model">cf.productivity.repair.stats</field>
+    <field name="view_mode">tree</field>
+    <field name="help" type="html">
+      <p><b>Definición de la métrica</b></p>
+      <p>Este informe muestra el <b>tiempo medio entre finalizaciones de reparaciones</b> por usuario.</p>
+      <ul>
+        <li>Se consideran <b>todas las reparaciones registradas</b> por usuario.</li>
+        <li><b>No se excluyen pausas</b> ni intervalos prolongados.</li>
+        <li>El valor (<code>HH:MM:SS</code>) representa la <b>media general de ritmo de cierre de reparaciones</b>.</li>
+      </ul>
+    </field>
+  </record>
+
+  <menuitem id="menu_cf_productivity_repair_stats"
+            name="Tiempos medios entre reparaciones"
+            parent="menu_cf_productivity_root"
+            action="action_cf_productivity_repair_stats"
+            groups="base.group_system"
+            sequence="4"/>
+</odoo>

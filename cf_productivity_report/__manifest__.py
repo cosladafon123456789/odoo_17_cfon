@@ -17,7 +17,8 @@ Solo los administradores técnicos pueden ver el dashboard.
         "views/productivity_views.xml",
         "views/menu_productivity.xml",
         "views/repair_reason_wizard_views.xml",
-        "views/productivity_stats_views.xml"
+        "views/productivity_stats_views.xml",
+        "views/productivity_repair_stats_views.xml"
     ],
     "installable": True,
     "application": True,
