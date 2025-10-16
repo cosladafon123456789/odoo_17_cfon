@@ -7,18 +7,26 @@ class CFProductivityStats(models.Model):
     _description = "Estadísticas de productividad (tiempo medio entre validaciones)"
     _auto = False
     _rec_name = "user_id"
+    _order = "user_id,id"
 
     user_id = fields.Many2one("res.users", string="Usuario", readonly=True)
     avg_seconds = fields.Float(string="Segundos medios", readonly=True)
     avg_order_interval = fields.Char(string="Tiempo medio entre validaciones", compute="_compute_avg_text")
 
     def _compute_avg_text(self):
-        for rec in self:
-            seconds = int(rec.avg_seconds or 0)
-            h = seconds // 3600
-            m = (seconds % 3600) // 60
-            s = seconds % 60
-            rec.avg_order_interval = f"{h:02d}:{m:02d}:{s:02d}"
+    for rec in self:
+        # If synthetic footer row (no user), display explanatory rules instead of a time
+        if not rec.user_id:
+            rec.avg_order_interval = ("Definición de la métrica: "
+                                      "Se consideran solo las 15 validaciones más recientes por usuario. "
+                                      "Se excluyen intervalos superiores a 30 minutos para evitar que pausas o incidencias distorsionen la métrica. "
+                                      "El valor (HH:MM:SS) refleja el ritmo durante actividad continua.")
+            continue
+        seconds = int(rec.avg_seconds or 0)
+        h = seconds // 3600
+        m = (seconds % 3600) // 60
+        s = seconds % 60
+        rec.avg_order_interval = f"{h:02d}:{m:02d}:{s:02d}"
 
     
     def init(self):

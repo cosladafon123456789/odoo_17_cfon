@@ -7,18 +7,25 @@ class CFProductivityRepairStats(models.Model):
     _description = "Estadísticas de productividad (tiempo medio entre reparaciones finalizadas)"
     _auto = False
     _rec_name = "user_id"
+    _order = "user_id,id"
 
     user_id = fields.Many2one("res.users", string="Usuario", readonly=True)
     avg_seconds = fields.Float(string="Segundos medios", readonly=True)
     avg_repair_interval = fields.Char(string="Tiempo medio entre reparaciones", compute="_compute_avg_text")
 
     def _compute_avg_text(self):
-        for rec in self:
-            seconds = int(rec.avg_seconds or 0)
-            h = seconds // 3600
-            m = (seconds % 3600) // 60
-            s = seconds % 60
-            rec.avg_repair_interval = f"{h:02d}:{m:02d}:{s:02d}"
+    for rec in self:
+        if not rec.user_id:
+            rec.avg_repair_interval = ("Definición de la métrica: "
+                                       "Se consideran todas las reparaciones registradas por usuario. "
+                                       "No se excluyen pausas ni intervalos prolongados. "
+                                       "El valor (HH:MM:SS) representa la media general del ritmo de cierre de reparaciones.")
+            continue
+        seconds = int(rec.avg_seconds or 0)
+        h = seconds // 3600
+        m = (seconds % 3600) // 60
+        s = seconds % 60
+        rec.avg_repair_interval = f"{h:02d}:{m:02d}:{s:02d}"
 
     def init(self):
         tools.drop_view_if_exists(self._cr, 'cf_productivity_repair_stats')

@@ -14,15 +14,7 @@
     <field name="name">Tiempos medios entre reparaciones</field>
     <field name="res_model">cf.productivity.repair.stats</field>
     <field name="view_mode">tree</field>
-    <field name="help" type="html">
-      <p><b>Definición de la métrica</b></p>
-      <p>Este informe muestra el <b>tiempo medio entre finalizaciones de reparaciones</b> por usuario.</p>
-      <ul>
-        <li>Se consideran <b>todas las reparaciones registradas</b> por usuario.</li>
-        <li><b>No se excluyen pausas</b> ni intervalos prolongados.</li>
-        <li>El valor (<code>HH:MM:SS</code>) representa la <b>media general de ritmo de cierre de reparaciones</b>.</li>
-      </ul>
-    </field>
+    
   </record>
 
   <menuitem id="menu_cf_productivity_repair_stats"
