@@ -16,7 +16,8 @@ Solo los administradores técnicos pueden ver el dashboard.
         "security/ir.model.access.csv",
         "views/productivity_views.xml",
         "views/menu_productivity.xml",
-        "views/repair_reason_wizard_views.xml"
+        "views/repair_reason_wizard_views.xml",
+        "views/productivity_stats_views.xml"
     ],
     "installable": True,
     "application": True,

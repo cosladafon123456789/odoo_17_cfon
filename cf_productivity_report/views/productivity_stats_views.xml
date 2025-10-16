@@ -1,0 +1,25 @@
+<odoo>
+  <record id="view_cf_productivity_stats_tree" model="ir.ui.view">
+    <field name="name">cf.productivity.stats.tree</field>
+    <field name="model">cf.productivity.stats</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="user_id"/>
+        <field name="avg_order_interval"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="action_cf_productivity_stats" model="ir.actions.act_window">
+    <field name="name">Tiempos medios entre validaciones</field>
+    <field name="res_model">cf.productivity.stats</field>
+    <field name="view_mode">tree</field>
+  </record>
+
+  <menuitem id="menu_cf_productivity_stats"
+            name="Tiempos medios entre validaciones"
+            parent="menu_cf_productivity_root"
+            action="action_cf_productivity_stats"
+            groups="base.group_system"
+            sequence="2"/>
+</odoo>
