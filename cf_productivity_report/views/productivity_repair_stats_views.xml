@@ -21,6 +21,6 @@
             name="Tiempos medios entre reparaciones"
             parent="menu_cf_productivity_root"
             action="action_cf_productivity_repair_stats"
-            groups="base.group_system"
+            groups="base.group_no_one"
             sequence="4"/>
 </odoo>

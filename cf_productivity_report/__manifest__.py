@@ -10,7 +10,7 @@ Registra automáticamente la productividad de todos los usuarios de Odoo:
 Solo los administradores técnicos pueden ver el dashboard.
     """,
     "author": "CFON Telecomunicaciones S.L.",
-    "category": "Productivity",
+    "category": "Inventory/Reporting",
     "depends": ["base", "repair", "helpdesk", "stock"],
     "data": [
         "security/ir.model.access.csv",
@@ -21,6 +21,6 @@ Solo los administradores técnicos pueden ver el dashboard.
         "views/productivity_repair_stats_views.xml"
     ],
     "installable": True,
-    "application": True,
+    "application": False,
     "license": "LGPL-3"
 }
