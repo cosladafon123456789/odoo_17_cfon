@@ -1,0 +1,31 @@
+<odoo>
+  <record id="view_cf_productivity_full_stats_tree" model="ir.ui.view">
+    <field name="name">cf.productivity.full.stats.tree</field>
+    <field name="model">cf.productivity.full.stats</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="user_id"/>
+        <field name="date"/>
+        <field name="count_orders"/>
+        <field name="avg_order_text"/>
+        <field name="count_repairs"/>
+        <field name="avg_repair_text"/>
+        <field name="count_tickets"/>
+        <field name="avg_ticket_text"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="action_cf_productivity_full_stats" model="ir.actions.act_window">
+    <field name="name">Resumen completo de productividad</field>
+    <field name="res_model">cf.productivity.full.stats</field>
+    <field name="view_mode">tree</field>
+  </record>
+
+  <menuitem id="menu_cf_productivity_full_stats"
+            name="Resumen completo de productividad"
+            parent="stock.menu_stock_root"
+            action="action_cf_productivity_full_stats"
+            groups="base.group_no_one"
+            sequence="54"/>
+</odoo>

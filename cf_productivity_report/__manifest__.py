@@ -13,6 +13,8 @@ Solo los administradores técnicos pueden ver el dashboard.
     "category": "Inventory/Reporting",
     "depends": ["base", "repair", "helpdesk", "stock"],
     "data": [
+        "views/productivity_ticket_daily_views.xml",
+        "views/productivity_full_stats_views.xml",
         "security/ir.model.access.csv",
         "views/productivity_views.xml",
         "views/menu_productivity.xml",
