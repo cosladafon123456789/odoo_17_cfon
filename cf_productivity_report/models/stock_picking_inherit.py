@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models
+from odoo import api, models
 
 class StockPicking(models.Model):
     _inherit = "stock.picking"
@@ -8,14 +8,16 @@ class StockPicking(models.Model):
         res = super().button_validate()
         for picking in self:
             try:
-                if picking.picking_type_id.code == "outgoing" and picking.state == "done":
+                if picking.picking_type_id.code == "outgoing":
+                    company_user = self.env.company.cf_user_order_id or self.env.user
                     self.env["cf.productivity.line"].sudo().log_entry(
-                        user=self.env.user,
+                        user=company_user,
                         type_key="order",
-                        reason="Entrega/Pedido validado",
+                        reason="Entrega validada",
                         ref_model="stock.picking",
                         ref_id=picking.id,
                     )
             except Exception:
+                # No bloquear validación por conteo de productividad
                 continue
         return res
