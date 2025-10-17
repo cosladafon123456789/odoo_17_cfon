@@ -23,7 +23,6 @@ class CFProductivityTicketDaily(models.Model):
                     user_id,
                     DATE(date) AS date,
                     type,
-                    subtype,
                     model,
                     message_type,
                     is_internal
@@ -35,8 +34,8 @@ class CFProductivityTicketDaily(models.Model):
                 user_id,
                 date,
                 SUM(CASE WHEN model = 'helpdesk.ticket' AND message_type = 'comment' AND (is_internal IS NULL OR is_internal = FALSE) THEN 1 ELSE 0 END) AS msg_count,
-                SUM(CASE WHEN model = 'helpdesk.ticket' AND subtype = 'stage_change' THEN 1 ELSE 0 END) AS stage_changes,
-                SUM(CASE WHEN model = 'helpdesk.ticket' AND ((message_type = 'comment' AND (is_internal IS NULL OR is_internal = FALSE)) OR subtype = 'stage_change') THEN 1 ELSE 0 END) AS total_interactions
+                SUM(CASE WHEN model = 'helpdesk.ticket' AND message_type = 'notification' THEN 1 ELSE 0 END) AS stage_changes,
+                SUM(CASE WHEN model = 'helpdesk.ticket' AND ((message_type = 'comment' AND (is_internal IS NULL OR is_internal = FALSE)) OR message_type = 'notification') THEN 1 ELSE 0 END) AS total_interactions
             FROM base
             GROUP BY user_id, date
         """)

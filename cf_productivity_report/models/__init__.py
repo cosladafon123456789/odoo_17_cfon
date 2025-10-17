@@ -4,5 +4,4 @@ from . import stock_picking_inherit
 from . import repair_inherit
 from . import productivity_stats
 from . import productivity_repair_stats
-from . import productivity_full_stats
 from . import productivity_ticket_daily
