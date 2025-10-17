@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cf_productivity_full_stats_admin_patch3,access_cf_productivity_full_stats_admin_patch3,model_cf_productivity_full_stats,base.group_system,1,1,1,1
+access_cf_productivity_ticket_daily_admin_patch3,access_cf_productivity_ticket_daily_admin_patch3,model_cf_productivity_ticket_daily,base.group_system,1,1,1,1
