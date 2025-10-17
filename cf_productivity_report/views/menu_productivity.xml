@@ -21,7 +21,7 @@
   <!-- Single menu under Inventory -> Reports -->
   <menuitem id="menu_cf_productivity_root"
             name="Informe de productividad"
-            parent="stock.menu_stock_report"
+            parent="stock.menu_stock_root"
             action="action_cf_productivity_lines"
             groups="base.group_system"
             sequence="50"/>
