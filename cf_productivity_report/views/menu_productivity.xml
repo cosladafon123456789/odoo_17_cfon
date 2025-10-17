@@ -1,0 +1,28 @@
+<odoo>
+  <record id="action_cf_productivity_lines" model="ir.actions.act_window">
+    <field name="name">Informe de productividad general</field>
+    <field name="res_model">cf.productivity.line</field>
+    <field name="view_mode">tree,graph,pivot,form</field>
+    <field name="context">{'search_default_today': 1, 'group_by': ['type','user_id']}</field>
+    <field name="help" type="html">
+      <div style="text-align:center; padding:20px;">
+        <h3><b>Definición de las métricas</b></h3>
+        <p>Este informe muestra la <b>productividad media de los usuarios</b> en función de las acciones registradas en Odoo.</p>
+        <ul style="list-style:none; text-align:left; display:inline-block;">
+          <li><b>Validaciones:</b> se consideran solo las 15 más recientes por usuario y se excluyen pausas superiores a 30 minutos.</li>
+          <li><b>Reparaciones:</b> se consideran todas las reparaciones finalizadas, sin excluir pausas ni interrupciones.</li>
+          <li><b>Tickets:</b> cada respuesta registrada en Helpdesk se contabiliza como evento de productividad.</li>
+        </ul>
+        <p style="margin-top:10px;">El valor medio mostrado (<code>HH:MM:SS</code>) refleja el <b>ritmo de trabajo efectivo</b>.</p>
+      </div>
+    </field>
+  </record>
+
+  <!-- Single menu under Inventory -> Reports -->
+  <menuitem id="menu_cf_productivity_root"
+            name="Informe de productividad"
+            parent="stock.menu_stock_root"
+            action="action_cf_productivity_lines"
+            groups="base.group_system"
+            sequence="50"/>
+</odoo>
