@@ -10,7 +10,7 @@
               name="Tickets Respondidos"
               parent="menu_cf_productivity_root"
               action="action_cf_productivity_tickets"
-              sequence="2"/>
+              sequence="91"/>
 
     <record id="view_cf_productivity_tickets_graph" model="ir.ui.view">
         <field name="name">cf.productivity.line.tickets.graph</field>

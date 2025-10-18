@@ -3,7 +3,7 @@ from odoo import api, fields, models
 
 class CFProductivityLine(models.Model):
     _name = "cf.productivity.line"
-    _description = "CF Productividad - Registro"
+    _description = "Registro de Productividad"
     _order = "date desc, id desc"
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
