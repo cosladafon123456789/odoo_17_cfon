@@ -3,15 +3,38 @@ from odoo import api, fields, models
 
 class CFProductivityLine(models.Model):
     _name = "cf.productivity.line"
-    _description = "Registro de productividad"
+    _description = "CF Productividad - Registro"
     _order = "date desc, id desc"
     _inherit = ["mail.thread", "mail.activity.mixin"]
+
+    average_time_20 = fields.Char('Tiempo medio (20 val.)', compute='_compute_avg_time_20', store=False)
+
+    def _compute_avg_time_20(self):
+        for rec in self:
+            if rec.type != 'order' or not rec.user_id:
+                rec.average_time_20 = ''
+                continue
+            lines = self.env['cf.productivity.line'].search([
+                ('user_id', '=', rec.user_id.id),
+                ('type', '=', 'order')
+            ], order='date asc', limit=20)
+            if len(lines) < 2:
+                rec.average_time_20 = '00:00:00'
+                continue
+            deltas = []
+            for i in range(1, len(lines)):
+                d = (lines[i].date - lines[i-1].date).total_seconds()
+                deltas.append(max(0, int(d)))
+            avg = int(sum(deltas) / len(deltas))
+            hrs, rem = divmod(avg, 3600)
+            mins, secs = divmod(rem, 60)
+            rec.average_time_20 = f"{hrs:02}:{mins:02}:{secs:02}"
 
     date = fields.Datetime("Fecha", default=lambda self: fields.Datetime.now(), index=True)
     user_id = fields.Many2one("res.users", "Usuario", required=True, index=True)
     type = fields.Selection([
         ("repair", "Reparación"),
-        ("ticket", "Ticket respondido / gestionado"),
+        ("ticket", "Ticket respondido"),
         ("order",  "Pedido/Entrega validada"),
     ], string="Tipo", required=True, index=True)
     reason = fields.Char("Motivo")
@@ -21,16 +44,14 @@ class CFProductivityLine(models.Model):
     def name_get(self):
         res = []
         for r in self:
-            sel = dict(self._fields['type'].selection)
-            name = f"{r.user_id.name or '-'} - {sel.get(r.type)}"
+            name = f"{r.user_id.name or '-'} - {dict(self._fields['type'].selection).get(r.type)}"
             res.append((r.id, name))
         return res
 
     @api.model
     def log_entry(self, *, user=None, type_key=None, reason=None, ref_model=None, ref_id=None):
         user = user or self.env.user
-        # Evitar entradas de OdooBot
-        if not type_key or (user and user.name == "OdooBot"):
+        if not type_key:
             return False
         return self.create({
             "user_id": user.id,
