@@ -1,9 +1,8 @@
 {
     "name": "Productividad CF",
     "summary": "Productividad por usuario: Reparaciones, Tickets y Entregas (CosladaFon)",
-    "version": "17.0.1.0.0",
+    "version": "17.0.1.0.1",
     "author": "CosladaFon",
-    "website": "",
     "category": "Productivity",
     "depends": ["base", "mail", "repair", "helpdesk", "stock", "base_setup"],
     "data": [

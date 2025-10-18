@@ -19,7 +19,7 @@
             <graph string="Tickets por Usuario" type="bar">
                 <field name="user_id" type="row"/>
                 <field name="date" type="col"/>
-                <measure name="id" string="Tickets" type="count"/>
+                <field name="id" type="measure"/>
             </graph>
         </field>
     </record>
@@ -31,7 +31,7 @@
             <pivot string="Tickets Respondidos">
                 <field name="user_id" type="row"/>
                 <field name="date" type="col"/>
-                <measure name="id" string="Tickets" type="count"/>
+                <field name="id" type="measure"/>
             </pivot>
         </field>
     </record>
