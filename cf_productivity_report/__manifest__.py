@@ -1,7 +1,7 @@
 {
-    "name": "Informe de productividad (tickets v2)",
-    "summary": "Añade registro al cambiar la etapa de un ticket",
-    "version": "17.0.1.2.0",
+    "name": "Informe de productividad (tickets v3 sin OdooBot)",
+    "summary": "Evita que OdooBot genere registros de productividad",
+    "version": "17.0.1.3.0",
     "author": "CosladaFon",
     "category": "Productivity",
     "depends": ["base", "mail", "repair", "helpdesk", "stock", "base_setup"],
