@@ -7,6 +7,7 @@ class HelpdeskTicket(models.Model):
     def message_post(self, **kwargs):
         res = super().message_post(**kwargs)
         body = kwargs.get("body")
+        # Registrar una línea de productividad cuando un usuario responde manualmente en un ticket
         if body and not self.env.context.get("mail_auto_delete"):
             self.env["cf.productivity.line"].sudo().log_entry(
                 user=self.env.user,

@@ -3,7 +3,7 @@ from odoo import api, fields, models
 
 class CFProductivityLine(models.Model):
     _name = "cf.productivity.line"
-    _description = "Registro de Productividad"
+    _description = "Registro de productividad"
     _order = "date desc, id desc"
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
@@ -21,7 +21,8 @@ class CFProductivityLine(models.Model):
     def name_get(self):
         res = []
         for r in self:
-            name = f"{r.user_id.name or '-'} - {dict(self._fields['type'].selection).get(r.type)}"
+            sel = dict(self._fields['type'].selection)
+            name = f"{r.user_id.name or '-'} - {sel.get(r.type)}"
             res.append((r.id, name))
         return res
 

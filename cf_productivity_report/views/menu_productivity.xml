@@ -1,14 +1,22 @@
 <odoo>
+    <!-- Acción del Dashboard -->
     <record id="action_cf_productivity_lines" model="ir.actions.act_window">
-        <field name="name">Informe de Productividad</field>
+        <field name="name">Informe de productividad</field>
         <field name="res_model">cf.productivity.line</field>
         <field name="view_mode">tree,graph,pivot,form</field>
         <field name="context">{'group_by': ['type','user_id']}</field>
     </record>
 
+    <!-- Pestaña principal en Inventario -->
     <menuitem id="menu_cf_productivity_root"
-              name="Informe de Productividad"
-              parent="stock.menu_stock_report"
-              action="action_cf_productivity_lines"
+              name="Informe de productividad"
+              parent="stock.menu_stock_root"
               sequence="90"/>
+
+    <!-- Acción directa -->
+    <menuitem id="menu_cf_productivity_dashboard"
+              name="Dashboard"
+              parent="menu_cf_productivity_root"
+              action="action_cf_productivity_lines"
+              sequence="1"/>
 </odoo>
