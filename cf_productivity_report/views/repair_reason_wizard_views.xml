@@ -1,19 +1,21 @@
 <odoo>
-    <record id="view_repair_reason_wizard_form" model="ir.ui.view">
-        <field name="name">repair.reason.wizard.form</field>
-        <field name="model">repair.reason.wizard</field>
-        <field name="arch" type="xml">
-            <form string="Motivo de reparación">
-                <group>
-                    <field name="repair_id" invisible="1"/>
-                    <field name="reason"/>
-                    <field name="notes"/>
-                </group>
-                <footer>
-                    <button string="Confirmar" type="object" name="action_confirm" class="btn-primary"/>
-                    <button string="Cancelar" special="cancel" class="btn-secondary"/>
-                </footer>
-            </form>
-        </field>
-    </record>
+  <record id="view_repair_reason_wizard_form" model="ir.ui.view">
+    <field name="name">repair.reason.wizard.form</field>
+    <field name="model">repair.reason.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Motivo de reparación">
+        <sheet>
+          <group>
+            <field name="repair_id" readonly="1"/>
+            <field name="reason"/>
+            <field name="notes"/>
+          </group>
+        </sheet>
+        <footer>
+          <button name="action_confirm" type="object" string="Confirmar" class="btn-primary"/>
+          <button string="Cancelar" class="btn-secondary" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
 </odoo>

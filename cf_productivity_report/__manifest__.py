@@ -1,11 +1,16 @@
 {
-    'name': 'CF Productivity Report',
-    'version': '1.1',
-    'summary': 'Informe de productividad con tiempo entre validaciones',
-    'category': 'Productivity',
-    'author': 'CFON',
-    'depends': ['base', 'mail', 'stock', 'helpdesk', 'repair'],
-    'data': ['views/productivity_views.xml'],
-    'installable': True,
-    'application': False,
+    "name": "Informe de productividad (dashboard v2)",
+    "summary": "Dashboard agrupado Día → Tipo → Usuario. Registra tickets (mensaje/cambio etapa) y excluye OdooBot.",
+    "version": "17.0.1.4.0",
+    "author": "CosladaFon",
+    "category": "Inventory",
+    "depends": ["base", "mail", "repair", "helpdesk", "stock", "base_setup"],
+    "data": [
+        "views/productivity_views.xml",
+        "views/menu_productivity.xml",
+        "security/ir.model.access.csv"
+    ],
+    "application": False,
+    "installable": True,
+    "license": "LGPL-3"
 }
