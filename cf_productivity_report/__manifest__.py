@@ -1,9 +1,9 @@
 {
-    "name": "Informe de productividad (tiempo medio)",
-    "summary": "Añade tiempo medio entre las 20 primeras validaciones de cada usuario",
-    "version": "17.0.1.1.0",
+    "name": "Informe de productividad (tickets v2)",
+    "summary": "Añade registro al cambiar la etapa de un ticket",
+    "version": "17.0.1.2.0",
     "author": "CosladaFon",
-    "category": "Inventory",
+    "category": "Productivity",
     "depends": ["base", "mail", "repair", "helpdesk", "stock", "base_setup"],
     "data": [
         "views/productivity_views.xml",

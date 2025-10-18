@@ -7,6 +7,7 @@ class HelpdeskTicket(models.Model):
     def message_post(self, **kwargs):
         res = super().message_post(**kwargs)
         body = kwargs.get("body")
+        # Registrar línea de productividad al enviar mensaje manual
         if body and not self.env.context.get("mail_auto_delete"):
             self.env["cf.productivity.line"].sudo().log_entry(
                 user=self.env.user,
@@ -15,4 +16,21 @@ class HelpdeskTicket(models.Model):
                 ref_model="helpdesk.ticket",
                 ref_id=self.id,
             )
+        return res
+
+    def write(self, vals):
+        stage_changed = "stage_id" in vals
+        res = super().write(vals)
+        # Registrar línea de productividad al cambiar de etapa
+        if stage_changed:
+            for rec in self:
+                stage = self.env["helpdesk.stage"].browse(vals.get("stage_id")) if vals.get("stage_id") else rec.stage_id
+                if stage:
+                    self.env["cf.productivity.line"].sudo().log_entry(
+                        user=self.env.user,
+                        type_key="ticket",
+                        reason=f"Cambio de etapa a {stage.name}",
+                        ref_model="helpdesk.ticket",
+                        ref_id=rec.id,
+                    )
         return res
