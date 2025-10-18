@@ -1,9 +1,9 @@
 {
-    "name": "Informe de productividad (tiempo medio)",
-    "summary": "Añade tiempo medio entre las 20 primeras validaciones de cada usuario",
-    "version": "17.0.1.1.0",
+    "name": "Informe de productividad (tickets v3 sin OdooBot)",
+    "summary": "Evita que OdooBot genere registros de productividad",
+    "version": "17.0.1.3.0",
     "author": "CosladaFon",
-    "category": "Inventory",
+    "category": "Productivity",
     "depends": ["base", "mail", "repair", "helpdesk", "stock", "base_setup"],
     "data": [
         "views/productivity_views.xml",
