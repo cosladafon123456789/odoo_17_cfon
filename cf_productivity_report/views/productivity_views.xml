@@ -22,9 +22,9 @@
                 <field name="user_id"/>
                 <field name="type"/>
                 <group expand="0" string="Agrupar por">
-                    <filter name="grp_user" string="Usuario" context="{'group_by': 'user_id'}"/>
+                    <filter name="grp_day" string="Fecha: Día" context="{'group_by': 'date:day'}"/>
                     <filter name="grp_type" string="Tipo" context="{'group_by': 'type'}"/>
-                    <filter name="grp_date" string="Fecha" context="{'group_by': 'date'}"/>
+                    <filter name="grp_user" string="Usuario" context="{'group_by': 'user_id'}"/>
                 </group>
             </search>
         </field>

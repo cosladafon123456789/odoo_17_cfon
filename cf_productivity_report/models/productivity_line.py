@@ -29,7 +29,8 @@ class CFProductivityLine(models.Model):
     @api.model
     def log_entry(self, *, user=None, type_key=None, reason=None, ref_model=None, ref_id=None):
         user = user or self.env.user
-        if not type_key or user.name == "OdooBot":
+        # Evitar entradas de OdooBot
+        if not type_key or (user and user.name == "OdooBot"):
             return False
         return self.create({
             "user_id": user.id,
