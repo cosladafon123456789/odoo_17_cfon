@@ -10,6 +10,7 @@
                 <field name="reason"/>
                 <field name="ref_model"/>
                 <field name="ref_id"/>
+                <field name="average_time_20" string="Tiempo medio (20 val.)"/>
             </tree>
         </field>
     </record>

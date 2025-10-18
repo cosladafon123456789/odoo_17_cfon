@@ -1,7 +1,7 @@
 {
-    "name": "Informe de productividad",
-    "summary": "Informe de productividad por usuario: reparaciones, tickets y entregas",
-    "version": "17.0.1.0.4",
+    "name": "Informe de productividad (tiempo medio)",
+    "summary": "Añade tiempo medio entre las 20 primeras validaciones de cada usuario",
+    "version": "17.0.1.1.0",
     "author": "CosladaFon",
     "category": "Inventory",
     "depends": ["base", "mail", "repair", "helpdesk", "stock", "base_setup"],
