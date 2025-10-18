@@ -6,14 +6,10 @@ class HelpdeskTicket(models.Model):
 
     def message_post(self, **kwargs):
         res = super().message_post(**kwargs)
-        # Contabiliza cuando el usuario envía un mensaje (comentario)
-        # Evita duplicar en mensajes automáticos
-        subtype = kwargs.get("subtype_id")
         body = kwargs.get("body")
         if body and not self.env.context.get("mail_auto_delete"):
-            company_user = self.env.company.cf_user_ticket_id or self.env.user
             self.env["cf.productivity.line"].sudo().log_entry(
-                user=company_user,
+                user=self.env.user,
                 type_key="ticket",
                 reason="Ticket respondido",
                 ref_model="helpdesk.ticket",

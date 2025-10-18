@@ -1,26 +1,22 @@
 <odoo>
-    <!-- Acción específica para ver SOLO Tickets -->
     <record id="action_cf_productivity_tickets" model="ir.actions.act_window">
         <field name="name">Tickets Respondidos</field>
         <field name="res_model">cf.productivity.line</field>
         <field name="view_mode">tree,graph,pivot,form</field>
-        <field name="domain">[('type', '=', 'ticket')]</field>
-        <field name="context">{'search_default_only_tickets': 1}</field>
+        <field name="domain">[('type','=','ticket')]</field>
     </record>
 
-    <!-- Menú para Tickets -->
     <menuitem id="menu_cf_productivity_tickets"
               name="Tickets Respondidos"
-              parent="cf_productivity_report.menu_cf_productivity_root"
+              parent="menu_cf_productivity_root"
               action="action_cf_productivity_tickets"
               sequence="2"/>
 
-    <!-- Vista GRÁFICA (Graph) para Tickets -->
     <record id="view_cf_productivity_tickets_graph" model="ir.ui.view">
         <field name="name">cf.productivity.line.tickets.graph</field>
         <field name="model">cf.productivity.line</field>
         <field name="arch" type="xml">
-            <graph string="Tickets por Usuario y Fecha" type="bar">
+            <graph string="Tickets por Usuario" type="bar">
                 <field name="user_id" type="row"/>
                 <field name="date" type="col"/>
                 <measure name="id" string="Tickets" type="count"/>
@@ -28,7 +24,6 @@
         </field>
     </record>
 
-    <!-- Vista PIVOT para Tickets -->
     <record id="view_cf_productivity_tickets_pivot" model="ir.ui.view">
         <field name="name">cf.productivity.line.tickets.pivot</field>
         <field name="model">cf.productivity.line</field>
@@ -38,18 +33,6 @@
                 <field name="date" type="col"/>
                 <measure name="id" string="Tickets" type="count"/>
             </pivot>
-        </field>
-    </record>
-
-    <!-- Herencia de la vista de búsqueda para añadir un filtro "Solo tickets" -->
-    <record id="view_cf_productivity_search_inherit_tickets" model="ir.ui.view">
-        <field name="name">cf.productivity.line.search.inherit.tickets</field>
-        <field name="model">cf.productivity.line</field>
-        <field name="inherit_id" ref="cf_productivity_report.view_cf_productivity_search"/>
-        <field name="arch" type="xml">
-            <xpath expr="//search" position="inside">
-                <filter name="only_tickets" string="Solo tickets" domain="[('type','=','ticket')]" help="Mostrar solo líneas de tipo Ticket"/>
-            </xpath>
         </field>
     </record>
 </odoo>

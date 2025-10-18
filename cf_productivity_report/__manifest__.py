@@ -9,8 +9,7 @@
     "data": [
         "views/productivity_views.xml",
         "views/menu_productivity.xml",
-        "views/company_productivity_views.xml",
-        "views/repair_reason_wizard_views.xml",
+        "views/productivity_tickets_views.xml",
         "security/ir.model.access.csv"
     ],
     "application": True,
