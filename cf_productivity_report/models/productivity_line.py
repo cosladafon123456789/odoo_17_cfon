@@ -3,66 +3,57 @@ from odoo import api, fields, models
 
 class CFProductivityLine(models.Model):
     _name = "cf.productivity.line"
-    _description = "CF Productividad - Registro"
+    _description = "Registro de productividad"
     _order = "date desc, id desc"
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
-    date = fields.Datetime(
-        "Fecha",
-        default=lambda self: fields.Datetime.now(),
-        index=True,
-        tracking=True,
-    )
-    user_id = fields.Many2one(
-        "res.users",
-        "Usuario",
-        required=True,
-        index=True,
-        tracking=True,
-    )
-    type = fields.Selection(
-        [
-            ("repair", "Reparación"),
-            ("ticket", "Ticket respondido"),
-            ("order",  "Pedido/Entrega validada"),
-        ],
-        string="Tipo",
-        required=True,
-        index=True,
-        tracking=True,
-    )
-    reason = fields.Char("Motivo / Detalle", tracking=True)
-    ref = fields.Reference(
-        selection=[
-            ("repair.order", "Reparación"),
-            ("helpdesk.ticket", "Ticket"),
-            ("stock.picking", "Albarán"),
-        ],
-        string="Relacionado",
-        index=True,
-    )
+    date = fields.Datetime("Fecha", default=lambda self: fields.Datetime.now(), index=True)
+    user_id = fields.Many2one("res.users", "Usuario", required=True, index=True)
+    type = fields.Selection([
+        ("repair", "Reparación"),
+        ("ticket", "Ticket respondido"),
+        ("order",  "Pedido/Entrega validada"),
+    ], string="Tipo", required=True, index=True)
+    reason = fields.Char("Motivo")
+    ref_model = fields.Char("Modelo de referencia")
+    ref_id = fields.Integer("ID referencia")
+    average_time_20 = fields.Char("Tiempo medio (20 val.)", compute="_compute_avg_time_20", store=False)
+
+    def _compute_avg_time_20(self):
+        for rec in self:
+            if rec.type != 'order':
+                rec.average_time_20 = ''
+                continue
+            records = self.env['cf.productivity.line'].search([
+                ('user_id', '=', rec.user_id.id),
+                ('type', '=', 'order')
+            ], order='date asc', limit=20)
+            if len(records) < 2:
+                rec.average_time_20 = '00:00:00'
+                continue
+            deltas = [(records[i].date - records[i-1].date).total_seconds() for i in range(1, len(records))]
+            avg = sum(deltas) / len(deltas)
+            hrs, rem = divmod(int(avg), 3600)
+            mins, secs = divmod(rem, 60)
+            rec.average_time_20 = f"{hrs:02}:{mins:02}:{secs:02}"
 
     def name_get(self):
         res = []
         for r in self:
-            tdict = dict(self._fields['type'].selection)
-            d = r.date.strftime('%Y-%m-%d %H:%M') if r.date else ''
-            name = f"[{d}] {r.user_id.display_name} - {tdict.get(r.type, r.type)}"
-            if r.reason:
-                name += f" · {r.reason}"
+            sel = dict(self._fields['type'].selection)
+            name = f"{r.user_id.name or '-'} - {sel.get(r.type)}"
             res.append((r.id, name))
         return res
 
     @api.model
     def log_entry(self, *, user=None, type_key=None, reason=None, ref_model=None, ref_id=None):
-        """Permite llamadas con ref_model/ref_id; guarda en Reference."""
+        user = user or self.env.user
         if not type_key:
             return False
-        user = user or self.env.user
-        ref_val = f"{ref_model},{ref_id}" if (ref_model and ref_id) else False
-        return self.sudo().create({
+        return self.create({
             "user_id": user.id,
             "type": type_key,
             "reason": reason or False,
-            "ref": ref_val,
+            "ref_model": ref_model or False,
+            "ref_id": ref_id or False,
         })

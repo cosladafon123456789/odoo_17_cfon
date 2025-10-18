@@ -1,5 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_cf_productivity_line_admin,access_cf_productivity_line_admin,model_cf_productivity_line,base.group_system,1,1,1,1
-access_repair_reason_wizard,access_repair_reason_wizard,model_repair_reason_wizard,base.group_user,1,1,1,0
-access_cf_productivity_stats_admin,access_cf_productivity_stats_admin,model_cf_productivity_stats,base.group_system,1,1,1,1
-access_cf_productivity_repair_stats_admin,access_cf_productivity_repair_stats_admin,model_cf_productivity_repair_stats,base.group_system,1,1,1,1
+access_cf_productivity_line,access_cf_productivity_line,model_cf_productivity_line,base.group_user,1,1,1,1
