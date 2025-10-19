@@ -1,0 +1,40 @@
+
+<odoo>
+  <data>
+    <menuitem id="menu_cf_productivity_ranking" name="Ranking" parent="menu_cf_productivity_root" sequence="30"/>
+
+    <record id="action_cf_productivity_ranking" model="ir.actions.act_window">
+      <field name="name">Ranking diario</field>
+      <field name="res_model">cf.productivity.ranking</field>
+      <field name="view_mode">tree,graph,pivot</field>
+      <field name="context">{}</field>
+    </record>
+    <menuitem id="menu_cf_productivity_ranking_action" parent="menu_cf_productivity_ranking" action="action_cf_productivity_ranking"/>
+
+    <record id="view_cf_productivity_ranking_tree" model="ir.ui.view">
+      <field name="name">cf.productivity.ranking.tree</field>
+      <field name="model">cf.productivity.ranking</field>
+      <field name="arch" type="xml">
+        <tree string="Ranking de productividad" create="0" edit="0">
+          <field name="day"/>
+          <field name="user_id"/>
+          <field name="actions"/>
+          <field name="avg_gap_hhmmss" string="🕒 Tiempo medio"/>
+          <field name="pauses"/>
+          <field name="score"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="view_cf_productivity_ranking_graph" model="ir.ui.view">
+      <field name="name">cf.productivity.ranking.graph</field>
+      <field name="model">cf.productivity.ranking</field>
+      <field name="arch" type="xml">
+        <graph string="Ranking" type="bar">
+          <field name="user_id" type="row"/>
+          <field name="score" type="measure"/>
+        </graph>
+      </field>
+    </record>
+  </data>
+</odoo>
