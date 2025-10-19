@@ -1,48 +1,105 @@
-# -*- coding: utf-8 -*-
-from odoo import api, fields, models
 
-class CFProductivityLine(models.Model):
-    _name = "cf.productivity.line"
-    _description = "CF Productividad - Registro"
+from odoo import models, fields, api, _
+from datetime import timedelta
+
+class CfProductivityReport(models.Model):
+    _name = "cf.productivity.report"
+    _description = "Informe de Productividad"
     _order = "date desc, id desc"
-    _inherit = ["mail.thread", "mail.activity.mixin"]
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    date = fields.Datetime("Fecha", default=lambda self: fields.Datetime.now(), index=True)
-    user_id = fields.Many2one("res.users", "Usuario", required=True, index=True)
-    type = fields.Selection([
-        ("repair", "Reparación"),
-        ("ticket", "Ticket respondido"),
-        ("order",  "Pedido/Entrega validada"),
-    ], string="Tipo", required=True, index=True)
-    reason = fields.Char("Motivo")
-    ref_model = fields.Char("Modelo de referencia")
-    ref_id = fields.Integer("ID referencia")
-    duration_seconds = fields.Integer("Duración (segundos)", default=0, help="Tiempo dedicado estimado/real a la tarea")
-    points = fields.Float("Puntos", compute="_compute_points", store=True)
+    name = fields.Char(string="Descripción", compute="_compute_name", store=False)
+    date = fields.Datetime(string="Fecha", required=True, default=fields.Datetime.now, index=True)
+    user_id = fields.Many2one('res.users', string="Usuario", required=True, index=True, default=lambda self: self.env.user)
+    action_type = fields.Selection([
+        ('order', 'Pedido/Entrega validada'),
+        ('repair', 'Reparación'),
+        ('ticket', 'Helpdesk/Ticket'),
+        ('other', 'Otro'),
+    ], string="Tipo de acción", default='order', index=True)
+    model = fields.Char(string="Modelo origen")
+    res_id = fields.Integer(string="ID origen")
+    reason = fields.Char(string="Motivo")
+    note = fields.Text(string="Nota interna")
 
-    @api.depends("type")
-    def _compute_points(self):
-        for r in self:
-            # Ponderación básica: reparación=2, pedido=1.5, ticket=1
-            r.points = {"repair": 2.0, "order": 1.5, "ticket": 1.0}.get(r.type, 1.0)
+    # KPIs
+    time_since_previous = fields.Char(string="🕒 Tiempo desde anterior", compute="_compute_time_since_previous", store=False)
+    is_pause = fields.Boolean(string="Pausa detectada", compute="_compute_is_pause", store=False)
+    pause_threshold_min = fields.Integer(string="Umbral pausa (min)", default=30, help="Si el tiempo desde anterior supera este valor, se marca como pausa.")
 
-    def name_get(self):
-        res = []
-        for r in self:
-            name = f"{r.user_id.name or '-'} - {dict(self._fields['type'].selection).get(r.type)}"
-            res.append((r.id, name))
-        return res
+    avg_time_today = fields.Char(string="Tiempo medio de hoy", compute="_compute_avg_time_today", store=False)
 
+    @api.depends('date', 'user_id', 'action_type', 'reason')
+    def _compute_name(self):
+        for rec in self:
+            bits = [rec.date and rec.date.strftime('%Y-%m-%d %H:%M:%S') or '', rec.user_id.name or '', rec.action_type or '']
+            if rec.reason:
+                bits.append(rec.reason)
+            rec.name = " | ".join([b for b in bits if b])
+
+    @api.depends('user_id', 'date')
+    def _compute_time_since_previous(self):
+        for record in self:
+            record.time_since_previous = ''
+            if not record.user_id or not record.date:
+                continue
+            previous = self.search([
+                ('id', '!=', record.id),
+                ('user_id', '=', record.user_id.id),
+                ('date', '<', record.date),
+            ], order='date desc, id desc', limit=1)
+            if previous:
+                delta = record.date - previous.date
+                total_seconds = int(delta.total_seconds())
+                hh = total_seconds // 3600
+                mm = (total_seconds % 3600) // 60
+                ss = total_seconds % 60
+                record.time_since_previous = f"{hh:02d}:{mm:02d}:{ss:02d}"
+
+    @api.depends('time_since_previous', 'pause_threshold_min')
+    def _compute_is_pause(self):
+        for rec in self:
+            rec.is_pause = False
+            if rec.time_since_previous:
+                try:
+                    hh, mm, ss = rec.time_since_previous.split(':')
+                    total = int(hh) * 3600 + int(mm) * 60 + int(ss)
+                    rec.is_pause = total >= rec.pause_threshold_min * 60
+                except Exception:
+                    rec.is_pause = False
+
+    def _compute_avg_time_today(self):
+        for rec in self:
+            rec.avg_time_today = ''
+            if not rec.user_id or not rec.date:
+                continue
+            start = fields.Datetime.to_string(fields.Datetime.context_timestamp(rec, rec.date).replace(hour=0, minute=0, second=0, microsecond=0))
+            end = fields.Datetime.to_string(fields.Datetime.context_timestamp(rec, rec.date).replace(hour=23, minute=59, second=59, microsecond=999999))
+            lines = self.search([('user_id', '=', rec.user_id.id), ('date', '>=', start), ('date', '<=', end)], order='date asc')
+            prev_date = None
+            gaps = []
+            for l in lines:
+                if prev_date:
+                    gaps.append((l.date - prev_date).total_seconds())
+                prev_date = l.date
+            if gaps:
+                avg = sum(gaps) / len(gaps)
+                hh = int(avg) // 3600
+                mm = (int(avg) % 3600) // 60
+                ss = int(avg) % 60
+                rec.avg_time_today = f"{hh:02d}:{mm:02d}:{ss:02d}"
+            else:
+                rec.avg_time_today = ''
+
+    # Helpers to create log lines from other models (optional public methods)
     @api.model
-    def log_entry(self, *, user=None, type_key=None, reason=None, ref_model=None, ref_id=None, duration_seconds=0):
-        user = user or self.env.user
-        if not type_key:
-            return False
-        return self.create({
-            "user_id": user.id,
-            "type": type_key,
-            "reason": reason or False,
-            "ref_model": ref_model or False,
-            "ref_id": ref_id or False,
-            "duration_seconds": duration_seconds or 0,
-        })
+    def log_action(self, action_type='order', model=None, res_id=None, reason=None, user_id=None, date=None):
+        vals = {
+            'action_type': action_type,
+            'model': model,
+            'res_id': res_id or 0,
+            'reason': reason or False,
+            'user_id': user_id or self.env.uid,
+            'date': date or fields.Datetime.now(),
+        }
+        return self.create(vals)

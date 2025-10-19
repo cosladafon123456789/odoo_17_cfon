@@ -1,62 +1,94 @@
+
 <odoo>
-    <record id="view_cf_productivity_search" model="ir.ui.view">
-        <field name="name">cf.productivity.line.search</field>
-        <field name="model">cf.productivity.line</field>
-        <field name="arch" type="xml">
-            <search string="Buscar líneas">
-                <filter name="today" string="Hoy"
-                        domain="[('date','&gt;=', (context_today()).strftime('%%Y-%%m-%%d 00:00:00')), ('date','&lt;=', (context_today()).strftime('%%Y-%%m-%%d 23:59:59'))]"/>
-                <filter name="this_week" string="Esta semana"
-                        domain="[('date','&gt;=', (context_today() - datetime.timedelta(days=context_today().weekday())).strftime('%%Y-%%m-%%d 00:00:00'))]"/>
-                <filter name="this_month" string="Este mes"
-                        domain="[('date','&gt;=', (context_today().replace(day=1)).strftime('%%Y-%%m-%%d 00:00:00'))]"/>
-                <field name="user_id"/>
-                <field name="type"/>
-                <group expand="0" string="Agrupar por">
-                    <filter name="grp_user" string="Usuario" context="{'group_by': 'user_id'}"/>
-                    <filter name="grp_type" string="Tipo" context="{'group_by': 'type'}"/>
-                    <filter name="grp_date" string="Fecha" context="{'group_by': 'date'}"/>
-                </group>
-            </search>
-        </field>
+  <data>
+    <!-- Menú principal -->
+    <menuitem id="menu_cf_productivity_root" name="Productividad" sequence="10"/>
+    <menuitem id="menu_cf_productivity_report" name="Informe de productividad" parent="menu_cf_productivity_root" sequence="10"/>
+
+    <!-- Action window -->
+    <record id="action_cf_productivity_report" model="ir.actions.act_window">
+      <field name="name">Informe de productividad</field>
+      <field name="res_model">cf.productivity.report</field>
+      <field name="view_mode">tree,graph,pivot,form,kanban</field>
+      <field name="context">{'search_default_group_by_user': 1}</field>
     </record>
 
-    <record id="view_cf_productivity_tree" model="ir.ui.view">
-        <field name="name">cf.productivity.line.tree</field>
-        <field name="model">cf.productivity.line</field>
-        <field name="arch" type="xml">
-            <tree>
-                <field name="date"/>
-                <field name="user_id"/>
-                <field name="type"/>
-                <field name="reason"/>
-                <field name="points"/>
-                <field name="duration_seconds"/>
-                <field name="ref_model"/>
-                <field name="ref_id"/>
-            </tree>
-        </field>
+    <menuitem id="menu_cf_productivity_report_action" parent="menu_cf_productivity_report" action="action_cf_productivity_report" sequence="10"/>
+
+    <!-- Tree view -->
+    <record id="view_cf_productivity_report_tree" model="ir.ui.view">
+      <field name="name">cf.productivity.report.tree</field>
+      <field name="model">cf.productivity.report</field>
+      <field name="arch" type="xml">
+        <tree string="Informe de Productividad" create="1" edit="0">
+          <field name="date"/>
+          <field name="user_id"/>
+          <field name="action_type"/>
+          <field name="reason"/>
+          <field name="🕒 tiempo" invisible="1"/>
+          <field name="time_since_previous" readonly="1"/>
+          <field name="is_pause"/>
+          <field name="avg_time_today" readonly="1"/>
+          <field name="model"/>
+          <field name="res_id"/>
+          <field name="note"/>
+        </tree>
+      </field>
     </record>
 
-    <record id="view_cf_productivity_form" model="ir.ui.view">
-        <field name="name">cf.productivity.line.form</field>
-        <field name="model">cf.productivity.line</field>
-        <field name="arch" type="xml">
-            <form>
-                <sheet>
-                    <group>
-                        <field name="date"/>
-                        <field name="user_id"/>
-                        <field name="type"/>
-                        <field name="reason"/>
-                        <field name="points" readonly="1"/>
-                        <field name="duration_seconds"/>
-                        <field name="ref_model"/>
-                        <field name="ref_id"/>
-                    </group>
-                    <chatter/>
-                </sheet>
-            </form>
-        </field>
+    <!-- Form view -->
+    <record id="view_cf_productivity_report_form" model="ir.ui.view">
+      <field name="name">cf.productivity.report.form</field>
+      <field name="model">cf.productivity.report</field>
+      <field name="arch" type="xml">
+        <form string="Línea de productividad">
+          <sheet>
+            <group>
+              <field name="date"/>
+              <field name="user_id"/>
+              <field name="action_type"/>
+              <field name="reason"/>
+              <field name="time_since_previous" readonly="1"/>
+              <field name="is_pause" readonly="1"/>
+              <field name="avg_time_today" readonly="1"/>
+              <field name="model"/>
+              <field name="res_id"/>
+            </group>
+            <notebook>
+              <page string="Notas">
+                <field name="note" nolabel="1"/>
+              </page>
+            </notebook>
+          </sheet>
+          <chatter/>
+        </form>
+      </field>
     </record>
+
+    <!-- Graph & Pivot defaults -->
+    <record id="view_cf_productivity_report_graph" model="ir.ui.view">
+      <field name="name">cf.productivity.report.graph</field>
+      <field name="model">cf.productivity.report</field>
+      <field name="arch" type="xml">
+        <graph string="Acciones por usuario" type="bar">
+          <field name="user_id" type="row"/>
+          <field name="date" type="col"/>
+          <field name="id" type="measure"/>
+        </graph>
+      </field>
+    </record>
+
+    <record id="view_cf_productivity_report_pivot" model="ir.ui.view">
+      <field name="name">cf.productivity.report.pivot</field>
+      <field name="model">cf.productivity.report</field>
+      <field name="arch" type="xml">
+        <pivot string="KPIs de productividad">
+          <field name="user_id" type="row"/>
+          <field name="action_type" type="col"/>
+          <field name="id" type="measure" string="Acciones" />
+        </pivot>
+      </field>
+    </record>
+
+  </data>
 </odoo>

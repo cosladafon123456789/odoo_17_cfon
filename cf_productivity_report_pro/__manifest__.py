@@ -1,20 +1,22 @@
+
 {
-    "name": "Productividad CF Pro",
-    "summary": "KPI, objetivos, ranking, filtros rápidos (Hoy/Semana/Mes) y control de acceso",
-    "version": "17.0.2.0.0",
-    "author": "CosladaFon",
-    "category": "Productivity",
-    "depends": ["base", "mail", "repair", "helpdesk", "stock", "base_setup"],
-    "data": [
-        "security/security.xml",
-        "security/ir.model.access.csv",
-        "views/productivity_views.xml",
-        "views/menu_productivity.xml",
-        "views/company_productivity_views.xml",
-        "views/repair_reason_wizard_views.xml",
-        "views/goal_views.xml"
+    'name': 'CF Productividad Pro',
+    'summary': 'Suite avanzada de productividad: intervalos, ranking, pausas, dashboard y KPIs',
+    'version': '17.0.1.0.0',
+    'author': 'CFON / ChatGPT',
+    'category': 'Productivity',
+    'depends': ['base', 'mail'],
+    'data': [
+        'security/cf_productivity_security.xml',
+        'security/ir.model.access.csv',
+        'data/ir_cron.xml',
+        'views/productivity_views.xml',
+        'views/productivity_stats_views.xml',
+        'views/productivity_ranking_views.xml',
+        'views/dashboard_views.xml',
+        'views/mail_template.xml'
     ],
-    "application": True,
-    "installable": True,
-    "license": "LGPL-3"
+    'license': 'LGPL-3',
+    'installable': True,
+    'application': True,
 }
