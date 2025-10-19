@@ -1,0 +1,53 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version: cf_productivity_report_pro\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-19 00:00+0000\n"
+"PO-Revision-Date: 2025-10-19 00:00+0000\n"
+"Last-Translator: ChatGPT\n"
+"Language-Team: Spanish\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. module: cf_productivity_report_pro
+#: model:ir.ui.menu,name:cf_productivity_report_pro.menu_cf_productivity_root
+msgid "Productividad"
+msgstr "Productividad"
+
+#. module: cf_productivity_report_pro
+#: model:ir.ui.menu,name:cf_productivity_report_pro.menu_cf_productivity_report
+msgid "Informe de productividad"
+msgstr "Informe de Productividad"
+
+#. module: cf_productivity_report_pro
+#: model:ir.actions.act_window,name:cf_productivity_report_pro.action_cf_productivity_report
+msgid "Informe de productividad"
+msgstr "Informe de Productividad"
+
+#. module: cf_productivity_report_pro
+#: model:ir.model.fields,field_description:cf_productivity_report_pro.field_cf_productivity_report__time_since_previous
+msgid "🕒 Tiempo desde anterior"
+msgstr "🕒 Tiempo desde anterior"
+
+#. module: cf_productivity_report_pro
+#: model:ir.model.fields,field_description:cf_productivity_report_pro.field_cf_productivity_report__is_pause
+msgid "Pausa detectada"
+msgstr "Pausa detectada"
+
+#. module: cf_productivity_report_pro
+#: model:ir.ui.menu,name:cf_productivity_report_pro.menu_cf_productivity_stats
+msgid "Estadísticas"
+msgstr "Estadísticas"
+
+#. module: cf_productivity_report_pro
+#: model:ir.ui.menu,name:cf_productivity_report_pro.menu_cf_productivity_ranking
+msgid "Ranking"
+msgstr "Ranking"
+
+#. module: cf_productivity_report_pro
+#: model:ir.ui.menu,name:cf_productivity_report_pro.menu_cf_productivity_dashboard
+msgid "Dashboard"
+msgstr "Cuadro de mando"
