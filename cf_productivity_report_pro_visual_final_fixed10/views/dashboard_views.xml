@@ -1,0 +1,13 @@
+
+<odoo>
+  <data>
+    <menuitem id="menu_cf_productivity_dashboard" name="📊 Dashboard" parent="menu_cf_productivity_root" sequence="5"/>
+    <record id="action_cf_productivity_dashboard" model="ir.actions.act_window">
+      <field name="name">Dashboard de Productividad</field>
+      <field name="res_model">cf.productivity.report</field>
+      <field name="view_mode">graph,pivot,tree</field>
+      <field name="context">{}</field>
+    </record>
+    <menuitem id="menu_cf_productivity_dashboard_action" parent="menu_cf_productivity_dashboard" action="action_cf_productivity_dashboard"/>
+  </data>
+</odoo>

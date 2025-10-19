@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="model_cf_productivity_ranking" model="ir.model">
+            <field name="name">cf.productivity.ranking</field>
+            <field name="model">cf.productivity.ranking</field>
+            
+        </record>
+
+        <record id="model_cf_productivity_ranking" model="ir.model">
+    <field name="name">cf.productivity.ranking</field>
+    <field name="model">cf.productivity.ranking</field>
+</record>
+
+<record id="cron_cf_productivity_rebuild_ranking" model="ir.cron">
+            <field name="name">CF Productividad: Recalcular Ranking Diario</field>
+            <field name="model_id" ref="cf_productivity_report_pro_visual_final_fixed10.model_cf_productivity_ranking"/>
+            <field name="state">code</field>
+            <field name="code">model.action_rebuild_today()</field>
+            <field name="interval_type">days</field>
+            <field name="interval_number">1</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+            <field name="nextcall">2025-10-19 20:00:00</field>
+        </record>
+    </data>
+</odoo>
