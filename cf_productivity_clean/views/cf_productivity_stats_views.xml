@@ -1,0 +1,24 @@
+
+<odoo>
+  <data>
+    <record id="view_cf_clean_stats_tree" model="ir.ui.view">
+      <field name="name">cf.clean.stats.tree</field>
+      <field name="model">cf.clean.stats</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="user_id"/>
+          <field name="avg_interval"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="action_cf_clean_stats" model="ir.actions.act_window">
+      <field name="name">Estadísticas</field>
+      <field name="res_model">cf.clean.stats</field>
+      <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem id="menu_cf_clean_stats_action" parent="menu_cf_clean_stats" action="action_cf_clean_stats"/>
+  </data>
+</odoo>

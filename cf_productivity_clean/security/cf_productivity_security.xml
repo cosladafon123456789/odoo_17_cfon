@@ -1,0 +1,6 @@
+
+<odoo>
+  <data noupdate="1">
+    <!-- Minimal security: rely on base.group_user via ir.model.access.csv -->
+  </data>
+</odoo>

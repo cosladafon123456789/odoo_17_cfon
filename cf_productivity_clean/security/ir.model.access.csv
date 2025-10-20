@@ -1,0 +1,5 @@
+
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cf_clean_report_user,access_cf_clean_report_user,model_cf_clean_report,base.group_user,1,1,1,0
+access_cf_clean_ranking_user,access_cf_clean_ranking_user,model_cf_clean_ranking,base.group_user,1,1,1,0
+access_cf_clean_stats_user,access_cf_clean_stats_user,model_cf_clean_stats,base.group_user,1,1,1,0

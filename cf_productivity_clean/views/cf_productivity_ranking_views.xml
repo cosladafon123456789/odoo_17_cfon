@@ -1,0 +1,25 @@
+
+<odoo>
+  <data>
+    <record id="view_cf_clean_ranking_tree" model="ir.ui.view">
+      <field name="name">cf.clean.ranking.tree</field>
+      <field name="model">cf.clean.ranking</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="ranking_date"/>
+          <field name="user_id"/>
+          <field name="score"/>
+          <field name="lines_count"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="action_cf_clean_ranking" model="ir.actions.act_window">
+      <field name="name">Ranking</field>
+      <field name="res_model">cf.clean.ranking</field>
+      <field name="view_mode">tree</field>
+    </record>
+
+    <menuitem id="menu_cf_clean_ranking_action" parent="menu_cf_clean_ranking" action="action_cf_clean_ranking"/>
+  </data>
+</odoo>
