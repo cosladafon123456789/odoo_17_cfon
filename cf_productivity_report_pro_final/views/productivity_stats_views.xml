@@ -1,50 +1,24 @@
+
 <odoo>
   <data>
-<menuitem id="menu_cf_productivity_stats" name="📈 Estadísticas" parent="menu_cf_productivity_root" sequence="20"/>
-
-    <record id="action_cf_productivity_stats" model="ir.actions.act_window">
-      <field name="name">Estadísticas de productividad</field>
-      <field name="res_model">cf.productivity.stats</field>
-      <field name="view_mode">tree,graph,pivot</field>
-    </record>
-    <menuitem id="menu_cf_productivity_stats_action" parent="menu_cf_productivity_stats" action="action_cf_productivity_stats"/>
-
     <record id="view_cf_productivity_stats_tree" model="ir.ui.view">
       <field name="name">cf.productivity.stats.tree</field>
       <field name="model">cf.productivity.stats</field>
       <field name="arch" type="xml">
-        <tree string="Estadísticas por usuario/día" create="0" edit="0">
-          <field name="day"/>
+        <tree string="Estadísticas">
+          <field name="name"/>
           <field name="user_id"/>
-          <field name="actions"/>
-          <field name="avg_gap_hhmmss" string="🕒 Tiempo medio" readonly="1"/>
+          <field name="avg_interval"/>
         </tree>
       </field>
     </record>
 
-    <record id="view_cf_productivity_stats_graph" model="ir.ui.view">
-      <field name="name">cf.productivity.stats.graph</field>
-      <field name="model">cf.productivity.stats</field>
-      <field name="arch" type="xml">
-        <graph string="Acciones vs Tiempo medio" type="bar">
-          <field name="day" type="row"/>
-          <field name="actions" type="measure"/>
-          <field name="avg_gap_sec" type="measure"/>
-        </graph>
-      </field>
+    <record id="action_cf_productivity_stats" model="ir.actions.act_window">
+      <field name="name">Estadísticas</field>
+      <field name="res_model">cf.productivity.stats</field>
+      <field name="view_mode">tree</field>
     </record>
 
-    <record id="view_cf_productivity_stats_pivot" model="ir.ui.view">
-      <field name="name">cf.productivity.stats.pivot</field>
-      <field name="model">cf.productivity.stats</field>
-      <field name="arch" type="xml">
-        <pivot string="Estadísticas">
-          <field name="user_id" type="row"/>
-          <field name="day" type="col"/>
-          <field name="actions" type="measure"/>
-          <field name="avg_gap_sec" type="measure"/>
-        </pivot>
-      </field>
-    </record>
+    <menuitem id="menu_cf_productivity_stats_action" parent="menu_cf_productivity_stats" action="action_cf_productivity_stats" sequence="10"/>
   </data>
 </odoo>

@@ -1,10 +1,6 @@
 
-from odoo import models
+from odoo import fields, models
 
 class ResUsers(models.Model):
     _inherit = "res.users"
-
-    def action_view_productivity(self):
-        action = self.env.ref('cf_productivity_report_pro.action_cf_productivity_report').read()[0]
-        action['domain'] = [('user_id', 'in', self.ids)]
-        return action
+    cf_is_tracked = fields.Boolean(string="CF: Incluir en ranking", default=True)

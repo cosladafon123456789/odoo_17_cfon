@@ -1,54 +1,35 @@
 
-from odoo import models, fields, api
+from odoo import api, fields, models
+from datetime import datetime, date
 
-class CfProductivityRanking(models.Model):
+class CFProductivityRanking(models.Model):
     _name = "cf.productivity.ranking"
-    _description = "Ranking diario de productividad"
-    _order = "day desc, score desc"
+    _description = "CF Productivity Ranking"
+    _order = "ranking_date desc, score desc"
 
-    day = fields.Date(string="Día", required=True, index=True, default=lambda self: fields.Date.context_today(self))
-    user_id = fields.Many2one('res.users', string="Usuario", required=True, index=True)
-    actions = fields.Integer(string="Acciones", default=0)
-    avg_gap_hhmmss = fields.Char(string="Tiempo medio")
-    pauses = fields.Integer(string="Pausas", default=0)
-    score = fields.Float(string="Puntuación", help="Algoritmo simple: acciones - (pausas * 0.5)")
+    user_id = fields.Many2one("res.users", string="Usuario", required=True)
+    ranking_date = fields.Date(string="Fecha", required=True, default=fields.Date.context_today)
+    score = fields.Integer(string="Puntuación", default=0)
+    lines_count = fields.Integer(string="# Validaciones", default=0)
 
-    @api.model
     def action_rebuild_today(self):
-        day = fields.Date.context_today(self)
-        self.search([('day', '=', day)]).unlink()
-        Report = self.env['cf.productivity.report']
-        start_dt = fields.Datetime.to_datetime(f"{day} 00:00:00")
-        end_dt = fields.Datetime.to_datetime(f"{day} 23:59:59")
-        users = self.env['res.users'].search([])
-        for u in users:
-            lines = Report.search([('user_id', '=', u.id), ('date', '>=', start_dt), ('date', '<=', end_dt)], order='date asc')
-            if not lines:
-                continue
-            actions = len(lines)
-            # compute pauses and avg
-            prev = None
-            gaps = []
-            pauses = 0
-            for l in lines:
-                if prev:
-                    gap = (l.date - prev.date).total_seconds()
-                    gaps.append(gap)
-                    if gap >= ((l.pause_threshold_min or 30) * 60):
-                        pauses += 1
-                prev = l
-            avg = int(sum(gaps)/len(gaps)) if gaps else 0
-            hh = avg // 3600
-            mm = (avg % 3600) // 60
-            ss = avg % 60
-            avg_txt = f"{hh:02d}:{mm:02d}:{ss:02d}" if avg else ''
-            score = actions - (pauses * 0.5)
+        today = fields.Date.context_today(self)
+        # Simple scoring: # of report lines today per user
+        Report = self.env["cf.productivity.report"]
+        self.search([("ranking_date", "=", today)]).unlink()
+        data = self.env["cf.productivity.report"].read_group(
+            domain=[("date_time", ">=", datetime.combine(today, datetime.min.time())),
+                    ("date_time", "<=", datetime.combine(today, datetime.max.time()))],
+            fields=["user_id"],
+            groupby=["user_id"],
+        )
+        for row in data:
+            user = row.get("user_id") and row["user_id"][0] or False
+            cnt = row.get("__count", 0)
             self.create({
-                'day': day,
-                'user_id': u.id,
-                'actions': actions,
-                'avg_gap_hhmmss': avg_txt,
-                'pauses': pauses,
-                'score': score,
+                "user_id": user,
+                "ranking_date": today,
+                "score": cnt,
+                "lines_count": cnt,
             })
         return True

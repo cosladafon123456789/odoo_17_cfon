@@ -1,6 +1,7 @@
+
 <odoo>
-  <data>
-<record id="action_rebuild_ranking_now" model="ir.actions.server">
+  <data noupdate="1">
+    <record id="action_rebuild_ranking_now" model="ir.actions.server">
       <field name="name">Recalcular Ranking Diario</field>
       <field name="state">code</field>
       <field name="model_id" ref="model_cf_productivity_ranking"/>
