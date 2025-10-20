@@ -1,1 +1,2 @@
-from . import productivity_line, helpdesk_inherit
+from . import cf_productivity_report
+from . import stock_picking_inherit

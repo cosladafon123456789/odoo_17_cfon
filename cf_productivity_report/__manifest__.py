@@ -1,16 +1,15 @@
 {
-    "name": "Informe de productividad (dashboard v2)",
-    "summary": "Dashboard agrupado Día → Tipo → Usuario. Registra tickets (mensaje/cambio etapa) y excluye OdooBot.",
-    "version": "17.0.1.4.0",
-    "author": "CosladaFon",
-    "category": "Inventory",
-    "depends": ["base", "mail", "repair", "helpdesk", "stock", "base_setup"],
-    "data": [
-        "views/productivity_views.xml",
-        "views/menu_productivity.xml",
-        "security/ir.model.access.csv"
+    'name': 'CF Productivity Report',
+    'version': '1.1',
+    'summary': 'Informe de productividad (validaciones de pedidos y entregas)',
+    'author': 'CosladaFon',
+    'website': 'https://www.cosladafon.com',
+    'category': 'Productivity',
+    'depends': ['stock'],
+    'data': [
+        'views/cf_productivity_report_views.xml',
     ],
-    "application": False,
-    "installable": True,
-    "license": "LGPL-3"
+    'installable': True,
+    'application': False,
+    'license': 'LGPL-3',
 }

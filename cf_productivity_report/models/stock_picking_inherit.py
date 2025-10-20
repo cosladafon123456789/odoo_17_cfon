@@ -1,21 +1,21 @@
-# -*- coding: utf-8 -*-
-from odoo import models
+from odoo import models, fields
 
 class StockPicking(models.Model):
-    _inherit = "stock.picking"
+    _inherit = 'stock.picking'
 
     def button_validate(self):
-        res = super().button_validate()
+        # Ejecuta la validación original
+        res = super(StockPicking, self).button_validate()
+
+        # Registrar en el informe de productividad solo si se valida correctamente
+        report_model = self.env['cf.productivity.report']
         for picking in self:
-            try:
-                if picking.picking_type_id.code == "outgoing" and picking.state == "done":
-                    self.env["cf.productivity.line"].sudo().log_entry(
-                        user=self.env.user,
-                        type_key="order",
-                        reason="Entrega/Pedido validado",
-                        ref_model="stock.picking",
-                        ref_id=picking.id,
-                    )
-            except Exception:
-                continue
+            report_model.create({
+                'fecha': fields.Datetime.now(),
+                'usuario_id': self.env.user.id,
+                'tipo': 'Pedido/Entrega validada',
+                'motivo': 'Entrega/Pedido validado',
+                'modelo_referencia': 'stock.picking',
+                'id_referencia': picking.id,
+            })
         return res
