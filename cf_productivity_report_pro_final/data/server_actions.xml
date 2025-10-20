@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_rebuild_ranking_now" model="ir.actions.server">
+        <field name="name">Recalcular Ranking Diario</field>
+        <field name="state">code</field>
+        <field name="binding_model_id" search="[('model','=','cf.productivity.report')]"/>
+        <field name="binding_type">action</field>
+        <field name="code">env['cf.productivity.ranking'].sudo().action_rebuild_today()</field>
+    </record>
+</odoo>

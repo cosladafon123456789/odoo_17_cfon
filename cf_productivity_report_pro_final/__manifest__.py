@@ -5,7 +5,8 @@
     'version': '17.0.1.0.0',
     'author': 'CFON / ChatGPT',
     'category': 'Productivity',
-    'depends': ['base', 'mail'],
+    'depends': ['base', 'mail'    'data/server_actions.xml',
+],
     'data': [
         'security/cf_productivity_security.xml',
         'security/ir.model.access.csv',

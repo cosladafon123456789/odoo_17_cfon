@@ -1,7 +1,7 @@
 
 <odoo>
   <data>
-    <menuitem id="menu_cf_productivity_stats" name="Estadísticas" parent="menu_cf_productivity_root" sequence="20"/>
+    <menuitem id="menu_cf_productivity_stats" name="📈 Estadísticas" parent="menu_cf_productivity_root" sequence="20"/>
 
     <record id="action_cf_productivity_stats" model="ir.actions.act_window">
       <field name="name">Estadísticas de productividad</field>

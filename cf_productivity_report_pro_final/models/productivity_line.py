@@ -3,6 +3,38 @@ from odoo import models, fields, api, _
 from datetime import timedelta
 
 class CfProductivityReport(models.Model):
+    # Campo técnico para decoraciones (no visible)
+    time_since_previous_secs = fields.Integer(string='Segundos desde anterior', compute='_compute_time_since_previous_secs', store=False)
+
+    # Campos opcionales para visualización
+    validations_today = fields.Integer(string='Validaciones hoy', compute='_compute_validations_today', store=False)
+    rank_today = fields.Integer(string='Ranking Diario', compute='_compute_rank_today', store=False)
+
+    @api.depends('time_since_previous')
+    def _compute_time_since_previous_secs(self):
+        for rec in self:
+            secs = 0
+            val = rec.time_since_previous or ''
+            try:
+                parts = [int(p) for p in val.split(':')]
+                while len(parts) < 3:
+                    parts.insert(0, 0)
+                h, m, s = parts[-3], parts[-2], parts[-1]
+                secs = h*3600 + m*60 + s
+            except Exception:
+                secs = 0
+            rec.time_since_previous_secs = secs
+
+    def _compute_validations_today(self):
+        # Valor por defecto seguro (0) si no hay lógica específica
+        for rec in self:
+            rec.validations_today = 0
+
+    def _compute_rank_today(self):
+        # Valor por defecto seguro (0); puede ser recalculado por acción manual externa
+        for rec in self:
+            rec.rank_today = 0
+
     _name = "cf.productivity.report"
     _description = "Informe de Productividad"
     _order = "date desc, id desc"
@@ -103,3 +135,16 @@ class CfProductivityReport(models.Model):
             'date': date or fields.Datetime.now(),
         }
         return self.create(vals)
+
+time_since_previous_sec = fields.Integer(string="Segundos desde anterior", compute="_compute_time_since_previous_sec", store=False)
+
+def _compute_time_since_previous_sec(self):
+    for rec in self:
+        rec.time_since_previous_sec = 0
+        if rec.time_since_previous:
+            try:
+                hh, mm, ss = rec.time_since_previous.split(":")
+                rec.time_since_previous_sec = int(hh) * 3600 + int(mm) * 60 + int(ss)
+            except Exception:
+                rec.time_since_previous_sec = 0
+
