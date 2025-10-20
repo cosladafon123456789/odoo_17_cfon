@@ -1,7 +1,6 @@
-
 <odoo>
   <data>
-    <!-- Menú principal -->
+<!-- Menú principal -->
     <menuitem id="menu_cf_productivity_root" name="📊 Productividad" sequence="10"/>
     <menuitem id="menu_cf_productivity_report" name="🧾 Informe de productividad" parent="menu_cf_productivity_root" sequence="10"/>
 
@@ -97,6 +96,5 @@
         </pivot>
       </field>
     </record>
-
   </data>
 </odoo>

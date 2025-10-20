@@ -1,7 +1,6 @@
-
 <odoo>
   <data>
-    <menuitem id="menu_cf_productivity_dashboard" name="📊 Dashboard" parent="menu_cf_productivity_root" sequence="5"/>
+<menuitem id="menu_cf_productivity_dashboard" name="📊 Dashboard" parent="menu_cf_productivity_root" sequence="5"/>
     <record id="action_cf_productivity_dashboard" model="ir.actions.act_window">
       <field name="name">Dashboard de Productividad</field>
       <field name="res_model">cf.productivity.report</field>

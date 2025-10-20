@@ -9,6 +9,7 @@
         'security/cf_productivity_security.xml',
         'security/ir.model.access.csv',
         'data/ir_cron.xml',
+        'data/server_actions.xml',
         'views/productivity_views.xml',
         'views/productivity_stats_views.xml',
         'views/productivity_ranking_views.xml',
