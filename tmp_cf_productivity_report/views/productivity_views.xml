@@ -1,0 +1,32 @@
+<odoo>
+    <record id="view_cf_productivity_tree" model="ir.ui.view">
+        <field name="name">cf.productivity.line.tree</field>
+        <field name="model">cf.productivity.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="date"/>
+                <field name="user_id"/>
+                <field name="type"/>
+                <field name="reason"/>
+                <field name="ref_model"/>
+                <field name="ref_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_cf_productivity_search" model="ir.ui.view">
+        <field name="name">cf.productivity.line.search</field>
+        <field name="model">cf.productivity.line</field>
+        <field name="arch" type="xml">
+            <search string="Buscar líneas">
+                <field name="user_id"/>
+                <field name="type"/>
+                <group expand="0" string="Agrupar por">
+                    <filter name="grp_day" string="Fecha: Día" context="{'group_by': 'date:day'}"/>
+                    <filter name="grp_type" string="Tipo" context="{'group_by': 'type'}"/>
+                    <filter name="grp_user" string="Usuario" context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>
