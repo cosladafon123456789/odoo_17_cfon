@@ -1,0 +1,32 @@
+
+<odoo>
+  <data>
+    <menuitem id="menu_cf_productivity_root" name="📊 Productividad"/>
+    <menuitem id="menu_cf_productivity_report" name="🧾 Informes" parent="menu_cf_productivity_root"/>
+    <menuitem id="menu_cf_productivity_ranking" name="🏆 Ranking" parent="menu_cf_productivity_root"/>
+    <menuitem id="menu_cf_productivity_stats" name="📈 Estadísticas" parent="menu_cf_productivity_root"/>
+
+    <record id="view_cf_productivity_report_tree" model="ir.ui.view">
+      <field name="name">cf.productivity.report.tree</field>
+      <field name="model">cf.productivity.report</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="user_id"/>
+          <field name="action_type"/>
+          <field name="reason"/>
+          <field name="date_time"/>
+          <field name="time_since_previous"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="action_cf_productivity_report" model="ir.actions.act_window">
+      <field name="name">Informes de Productividad</field>
+      <field name="res_model">cf.productivity.report</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_cf_productivity_report_action" parent="menu_cf_productivity_report" action="action_cf_productivity_report"/>
+  </data>
+</odoo>
