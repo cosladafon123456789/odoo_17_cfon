@@ -20,28 +20,24 @@ class StockPicking(models.Model):
         return number
 
     def _cf_send_whatsapp_tecomprotumovil(self, partner):
-        """Envía la plantilla 'tecomprotumovil' al número de móvil del partner usando el campo wa_template_id."""
+        """Envía la plantilla 'tecomprotumovil' automáticamente mediante el asistente whatsapp.composer."""
         phone = partner.mobile or partner.phone
         if not phone:
             raise UserError(_("El contacto %s no tiene teléfono o móvil configurado.") % partner.display_name)
 
-        Template = self.env["whatsapp.template"].sudo()
-        template = Template.search([("name", "=", "tecomprotumovil")], limit=1)
+        template = self.env["whatsapp.template"].sudo().search([("name", "=", "tecomprotumovil")], limit=1)
         if not template:
             raise UserError(_("No se encontró la plantilla de WhatsApp llamada 'tecomprotumovil'."))
 
-        WMessage = self.env["whatsapp.message"].sudo()
-        msg_vals = {
+        composer = self.env["whatsapp.composer"].sudo().create({
             "wa_template_id": template.id,
             "mobile_number": phone,
-        }
+            "res_model": "stock.picking",
+            "res_id": self.id,
+        })
 
-        # Crear el mensaje
-        message = WMessage.create(msg_vals)
-
-        # Usar el método correcto para enviar el mensaje
-        if hasattr(message, "action_send_whatsapp_template"):
-            message.action_send_whatsapp_template()
+        if hasattr(composer, "action_send_whatsapp_template"):
+            composer.action_send_whatsapp_template()
         else:
             raise UserError(_("No se encontró el método para enviar el mensaje de WhatsApp."))
 
