@@ -36,16 +36,14 @@ class StockPicking(models.Model):
             "mobile_number": phone,
         }
 
+        # Crear el mensaje
         message = WMessage.create(msg_vals)
 
-        if hasattr(message, "send_whatsapp_message"):
-            message.send_whatsapp_message()
-        elif hasattr(message, "action_send"):
-            message.action_send()
-        elif hasattr(message, "send_now"):
-            message.send_now()
+        # Usar el método correcto para enviar el mensaje
+        if hasattr(message, "action_send_whatsapp_template"):
+            message.action_send_whatsapp_template()
         else:
-            raise UserError(_("No se encontró un método válido para enviar el mensaje de WhatsApp."))
+            raise UserError(_("No se encontró el método para enviar el mensaje de WhatsApp."))
 
         return True
 
