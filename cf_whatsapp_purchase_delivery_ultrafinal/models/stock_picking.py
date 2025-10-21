@@ -25,11 +25,17 @@ class StockPicking(models.Model):
         if not phone:
             raise UserError(_("El contacto %s no tiene teléfono o móvil configurado.") % partner.display_name)
 
-        template = self.env["whatsapp.template"].sudo().search([("name", "=", "tecomprotumovil")], limit=1)
-        if not template:
-            raise UserError(_("No se encontró la plantilla de WhatsApp llamada 'tecomprotumovil'."))
+        Template = self.env["whatsapp.template"].sudo()
+        template = Template.search([
+            ("name", "=", "tecomprotumovil"),
+            ("model", "=", "stock.picking"),
+            ("state", "=", "approved")
+        ], limit=1)
 
-        composer = self.env["whatsapp.composer"].sudo().create({
+        if not template:
+            raise UserError(_("No se encontró ninguna plantilla aprobada para el modelo 'stock.picking'."))
+
+        composer = self.env["whatsapp.composer"].sudo().with_context(default_model="stock.picking").create({
             "wa_template_id": template.id,
             "mobile_number": phone,
             "res_model": "stock.picking",
