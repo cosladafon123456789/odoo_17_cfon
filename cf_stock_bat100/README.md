@@ -1,0 +1,1 @@
+# cf_stock_bat100\n\nAñade casilla BAT100 junto a IMEIs en recepciones y entregas en Odoo 17.

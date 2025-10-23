@@ -1,0 +1,25 @@
+<odoo>
+    <!-- Añadimos el campo en la ficha del número de serie/lote (opcional pero útil) -->
+    <record id="view_stock_lot_form_bat100" model="ir.ui.view">
+        <field name="name">stock.lot.form.bat100</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_stock_lot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="bat100"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Filtro rápido en la búsqueda para encontrar lotes con BAT100 -->
+    <record id="view_stock_lot_search_bat100" model="ir.ui.view">
+        <field name="name">stock.lot.search.bat100</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_stock_lot_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='serial']" position="after">
+                <filter name="bat100_true" string="BAT100" domain="[('bat100','=',True)]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
