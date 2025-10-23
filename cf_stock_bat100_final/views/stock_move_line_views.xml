@@ -1,7 +1,5 @@
 <odoo>
-    <!-- ==========================
-         LISTA DE LÍNEAS DE MOVIMIENTO
-         ========================== -->
+    <!-- Lista de líneas -->
     <record id="view_move_line_tree_bat100" model="ir.ui.view">
         <field name="name">stock.move.line.tree.bat100</field>
         <field name="model">stock.move.line</field>
@@ -13,9 +11,7 @@
         </field>
     </record>
 
-    <!-- ==========================
-         FORMULARIO DE LÍNEA DE MOVIMIENTO
-         ========================== -->
+    <!-- Formulario de líneas -->
     <record id="view_stock_move_line_form_bat100" model="ir.ui.view">
         <field name="name">stock.move.line.form.bat100</field>
         <field name="model">stock.move.line</field>
@@ -27,23 +23,19 @@
         </field>
     </record>
 
-    <!-- ==========================
-         WIZARD DE OPERACIONES DETALLADAS (RECEPCIONES / ENTREGAS)
-         ========================== -->
+    <!-- Wizard de operaciones detalladas -->
     <record id="view_move_line_detailed_operations_bat100" model="ir.ui.view">
         <field name="name">stock.move.line.detailed.operations.bat100</field>
         <field name="model">stock.move.line</field>
         <field name="inherit_id" ref="stock.view_stock_move_line_operation_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='lot_id']" position="after">
-                <field name="bat100" widget="boolean_toggle"/>
+                <field name="bat100" widget="boolean_toggle" options="{'terminology': 'switch'}"/>
             </xpath>
         </field>
     </record>
 
-    <!-- ==========================
-         FORMULARIO DE LOTE (IMEI)
-         ========================== -->
+    <!-- Formulario de lotes -->
     <record id="view_stock_lot_form_bat100" model="ir.ui.view">
         <field name="name">stock.lot.form.bat100</field>
         <field name="model">stock.lot</field>
@@ -55,9 +47,7 @@
         </field>
     </record>
 
-    <!-- ==========================
-         NUEVA VISTA DE BÚSQUEDA PARA LOTES (SIN HEREDAR)
-         ========================== -->
+    <!-- Búsqueda personalizada -->
     <record id="view_stock_lot_search_bat100" model="ir.ui.view">
         <field name="name">stock.lot.search.bat100</field>
         <field name="model">stock.lot</field>
