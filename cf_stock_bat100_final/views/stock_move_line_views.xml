@@ -55,17 +55,17 @@
         </field>
     </record>
 
-    <!-- ==========================
-         FILTRO BAT100 EN LOTES
-         ========================== -->
-    <record id="view_stock_lot_search_bat100" model="ir.ui.view">
-        <field name="name">stock.lot.search.bat100</field>
-        <field name="model">stock.lot</field>
-        <field name="inherit_id" ref="stock.view_production_lot_search"/>
-        <field name="arch" type="xml">
-            <xpath expr="//filter[@name='serial']" position="after">
-                <filter name="bat100_true" string="BAT100" domain="[('bat100','=',True)]"/>
-            </xpath>
-        </field>
-    </record>
+   <!-- ==========================
+     FILTRO BAT100 EN LOTES
+     ========================== -->
+<record id="view_stock_lot_search_bat100" model="ir.ui.view">
+    <field name="name">stock.lot.search.bat100</field>
+    <field name="model">stock.lot</field>
+    <field name="inherit_id" ref="stock.view_lot_search"/>
+    <field name="arch" type="xml">
+        <xpath expr="//filter[@name='serial']" position="after">
+            <filter name="bat100_true" string="BAT100" domain="[('bat100','=',True)]"/>
+        </xpath>
+    </field>
+</record>
 </odoo>
