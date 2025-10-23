@@ -1,5 +1,7 @@
 <odoo>
+    <!-- =========================================================== -->
     <!-- Vista de lista (árbol) de líneas de movimiento -->
+    <!-- =========================================================== -->
     <record id="view_move_line_tree_bat100" model="ir.ui.view">
         <field name="name">stock.move.line.tree.bat100</field>
         <field name="model">stock.move.line</field>
@@ -11,7 +13,9 @@
         </field>
     </record>
 
+    <!-- =========================================================== -->
     <!-- Vista de formulario de línea de movimiento -->
+    <!-- =========================================================== -->
     <record id="view_stock_move_line_form_bat100" model="ir.ui.view">
         <field name="name">stock.move.line.form.bat100</field>
         <field name="model">stock.move.line</field>
@@ -23,7 +27,9 @@
         </field>
     </record>
 
-    <!-- Vista del popup de operaciones detalladas -->
+    <!-- =========================================================== -->
+    <!-- Vista del popup de operaciones detalladas (recepciones/entregas) -->
+    <!-- =========================================================== -->
     <record id="view_move_line_detailed_operations_bat100" model="ir.ui.view">
         <field name="name">stock.move.line.detailed.operations.bat100</field>
         <field name="model">stock.move.line</field>
@@ -35,20 +41,26 @@
         </field>
     </record>
 
-    <!-- Vista del formulario de lotes (editable) -->
+    <!-- =========================================================== -->
+    <!-- Vista del formulario de lotes/series -->
+    <!-- =========================================================== -->
     <record id="view_stock_lot_form_bat100" model="ir.ui.view">
         <field name="name">stock.lot.form.bat100</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='product_id']" position="after">
-                <!-- Campo BAT100 editable -->
-                <field name="bat100" widget="boolean_toggle" options="{'terminology': 'switch'}" readonly="0"/>
+                <field name="bat100"
+                       widget="boolean_toggle"
+                       options="{'terminology': 'switch'}"
+                       readonly="0"/>
             </xpath>
         </field>
     </record>
 
-    <!-- Vista de búsqueda de lotes -->
+    <!-- =========================================================== -->
+    <!-- Vista de búsqueda / filtro de lotes -->
+    <!-- =========================================================== -->
     <record id="view_stock_lot_search_bat100" model="ir.ui.view">
         <field name="name">stock.lot.search.bat100</field>
         <field name="model">stock.lot</field>
@@ -56,8 +68,12 @@
             <search string="Buscar Números de Serie / Lotes">
                 <field name="name"/>
                 <field name="product_id"/>
-                <filter name="bat100_true" string="BAT100" domain="[('bat100','=',True)]"/>
-                <filter name="bat100_false" string="Sin BAT100" domain="[('bat100','=',False)]"/>
+                <filter name="bat100_true"
+                        string="BAT100"
+                        domain="[('bat100','=',True)]"/>
+                <filter name="bat100_false"
+                        string="Sin BAT100"
+                        domain="[('bat100','=',False)]"/>
             </search>
         </field>
     </record>
