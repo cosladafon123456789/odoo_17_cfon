@@ -1,0 +1,36 @@
+
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Formulario del número de serie/lote con botón BAT100 -->
+    <record id="view_stock_production_lot_form_bat100" model="ir.ui.view">
+        <field name="name">stock.production.lot.form.bat100</field>
+        <field name="model">stock.production.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <button name="action_toggle_bat100"
+                        type="object"
+                        class="oe_highlight"
+                        string="🔋 BAT 100%"
+                        invisible="x_bat100"/>
+                <button name="action_toggle_bat100"
+                        type="object"
+                        class="btn-success"
+                        string="✅ BAT 100% activado"
+                        invisible="not x_bat100"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vista lista: mostrar estado BAT100 -->
+    <record id="view_stock_production_lot_tree_bat100" model="ir.ui.view">
+        <field name="name">stock.production.lot.tree.bat100</field>
+        <field name="model">stock.production.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="after">
+                <field name="x_bat100" widget="boolean_toggle" string="🔋 BAT100"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
