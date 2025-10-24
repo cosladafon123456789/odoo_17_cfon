@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Vista del wizard para importar IMEIs -->
     <record id="view_serial_import_wizard_form" model="ir.ui.view">
         <field name="name">cf.serial.import.wizard.form</field>
         <field name="model">cf.serial.import.wizard</field>
@@ -8,7 +9,9 @@
                 <group>
                     <field name="picking_id" readonly="1"/>
                     <field name="imei_text" placeholder="Pegue o escanee IMEIs, uno por línea" nolabel="0"/>
-                    <field name="result_log" attrs="{'invisible': [('result_log','=',False)]}" readonly="1"/>
+                    <field name="result_log"
+                           readonly="1"
+                           attrs="{'invisible': [('result_log','=',False)]}"/>
                 </group>
                 <footer>
                     <button string="Procesar" type="object" name="action_process" class="btn-primary"/>
