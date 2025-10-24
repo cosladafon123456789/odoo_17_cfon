@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_stock_lot_form_inherit_bat100_v4_0" model="ir.ui.view">
+        <field name="name">stock.lot.form.inherit.bat100.v4.0</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <group>
+                    <field name="x_bat100" widget="boolean_toggle" string="Batería 100%"/>
+                    <button name="action_toggle_bat100"
+                            type="object"
+                            string="Marcar Batería 100%"
+                            class="oe_highlight"
+                            invisible="x_bat100"/>
+                    <button name="action_toggle_bat100"
+                            type="object"
+                            string="Desmarcar Batería 100%"
+                            class="btn-secondary"
+                            invisible="not x_bat100"/>
+                </group>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_stock_lot_tree_inherit_bat100_v4_0" model="ir.ui.view">
+        <field name="name">stock.lot.tree.inherit.bat100.v4.0</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="x_bat100" widget="boolean_toggle" string="Batería 100%"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_move_line_lot_form_inherit_bat100_v4_0" model="ir.ui.view">
+        <field name="name">stock.move.line.form.inherit.bat100.v4.0</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_move_line_lot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='lot_name']" position="after">
+                <field name="lot_id.x_bat100" string="Batería 100%" widget="boolean_toggle"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
