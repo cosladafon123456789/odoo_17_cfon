@@ -1,17 +1,17 @@
 <odoo>
-    <record id="view_stock_move_line_tree_inherit_bat100_v3_1" model="ir.ui.view">
-        <field name="name">stock.move.line.tree.inherit.bat100.v3.1</field>
+    <record id="view_stock_move_line_tree_inherit_bat100_v3_3" model="ir.ui.view">
+        <field name="name">stock.move.line.tree.inherit.bat100.v3.3</field>
         <field name="model">stock.move.line</field>
         <field name="inherit_id" ref="stock.view_move_line_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='lot_id']" position="after">
-                <field name="x_bat100"/>
+                <field name="x_bat100" widget="boolean_toggle"/>
             </xpath>
         </field>
     </record>
 
-    <record id="view_stock_move_line_form_inherit_bat100_v3_1" model="ir.ui.view">
-        <field name="name">stock.move.line.form.inherit.bat100.v3.1</field>
+    <record id="view_stock_move_line_form_inherit_bat100_v3_3" model="ir.ui.view">
+        <field name="name">stock.move.line.form.inherit.bat100.v3.3</field>
         <field name="model">stock.move.line</field>
         <field name="inherit_id" ref="stock.view_move_line_form"/>
         <field name="arch" type="xml">
