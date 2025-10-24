@@ -4,19 +4,23 @@
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
+
             <header position="inside">
+                <!-- Mostrar solo si BAT100 está desmarcado -->
                 <button name="action_toggle_bat100"
                         type="object"
                         icon="fa-battery-full"
                         string="Batería 100%"
                         class="oe_highlight"
-                        attrs="{'invisible': [('x_bat100','=',True)]}"/>
+                        invisible="x_bat100"/>
+
+                <!-- Mostrar solo si BAT100 está marcado -->
                 <button name="action_toggle_bat100"
                         type="object"
                         icon="fa-battery-empty"
                         string="Desmarcar BAT100"
                         class="btn-secondary"
-                        attrs="{'invisible': [('x_bat100','=',False)]}"/>
+                        invisible="not x_bat100"/>
             </header>
 
             <field name="name" position="after">
@@ -25,6 +29,7 @@
         </field>
     </record>
 
+    <!-- Vista lista editable -->
     <record id="view_stock_lot_tree_inherit_bat100_v3_1" model="ir.ui.view">
         <field name="name">stock.lot.tree.inherit.bat100.v3.1</field>
         <field name="model">stock.lot</field>
@@ -36,6 +41,7 @@
         </field>
     </record>
 
+    <!-- Vista kanban -->
     <record id="view_stock_lot_kanban_inherit_bat100_v3_1" model="ir.ui.view">
         <field name="name">stock.lot.kanban.inherit.bat100.v3.1</field>
         <field name="model">stock.lot</field>
