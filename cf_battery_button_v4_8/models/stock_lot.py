@@ -28,25 +28,24 @@ class StockMoveLine(models.Model):
         return records
 
     def write(self, vals):
-        """Guardar el valor en el lote al validar o editar."""
+        """Guardar el valor en el lote al editar la línea."""
         res = super().write(vals)
         for rec in self:
             if rec.lot_id and 'x_bat100' in vals:
-                rec.lot_id.sudo().write({'x_bat100': rec.x_bat100})
+                rec.lot_id.sudo().write({'x_bat100': vals['x_bat100']})
         return res
 
-    def _create_or_update_lot(self):
-        """Sobrescribe creación del lote al validar para copiar el toggle."""
-        lots = super()._create_or_update_lot()
-        for rec in self:
-            if rec.lot_id:
-                rec.lot_id.sudo().write({'x_bat100': rec.x_bat100})
-        return lots
 
-    def action_done(self):
-        """Forzar sincronización también al validar la transferencia."""
-        res = super().action_done()
-        for rec in self:
-            if rec.lot_id:
-                rec.lot_id.sudo().write({'x_bat100': rec.x_bat100})
+class StockPicking(models.Model):
+    _inherit = 'stock.picking'
+
+    def button_validate(self):
+        """Al validar la transferencia, sincroniza todos los lotes."""
+        res = super().button_validate()
+
+        for picking in self:
+            for move_line in picking.move_line_ids:
+                if move_line.lot_id and move_line.x_bat100:
+                    move_line.lot_id.sudo().write({'x_bat100': move_line.x_bat100})
+
         return res
