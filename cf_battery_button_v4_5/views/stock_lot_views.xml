@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <!-- 1) Form de Lotes/Series -->
-    <record id="view_stock_lot_form_inherit_bat100_v4_5" model="ir.ui.view">
-        <field name="name">stock.lot.form.inherit.bat100.v4.5</field>
+    <!-- 1) Formulario de Lotes/Series -->
+    <record id="view_stock_lot_form_inherit_bat100_v4_6" model="ir.ui.view">
+        <field name="name">stock.lot.form.inherit.bat100.v4.6</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
@@ -25,8 +25,8 @@
     </record>
 
     <!-- 2) Lista de Lotes/Series -->
-    <record id="view_stock_lot_tree_inherit_bat100_v4_5" model="ir.ui.view">
-        <field name="name">stock.lot.tree.inherit.bat100.v4.5</field>
+    <record id="view_stock_lot_tree_inherit_bat100_v4_6" model="ir.ui.view">
+        <field name="name">stock.lot.tree.inherit.bat100.v4.6</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_tree"/>
         <field name="arch" type="xml">
@@ -36,11 +36,10 @@
         </field>
     </record>
 
-    <!-- 3) Wizard de movimientos: árbol de operaciones -->
-    <record id="view_move_line_lot_form_inherit_bat100_v4_5" model="ir.ui.view">
-        <field name="name">stock.move.line.form.inherit.bat100.v4.5</field>
+    <!-- 3) Popup de movimiento de stock -->
+    <record id="view_move_line_lot_form_inherit_bat100_v4_6" model="ir.ui.view">
+        <field name="name">stock.move.line.form.inherit.bat100.v4.6</field>
         <field name="model">stock.move.line</field>
-        <!-- Vista que usa el popup de líneas/operaciones en Odoo 17 -->
         <field name="inherit_id" ref="stock.view_stock_move_line_operation_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='lot_name']" position="after">
