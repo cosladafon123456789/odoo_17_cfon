@@ -3,12 +3,11 @@
     <!-- ========================================================= -->
     <!-- 1. Vista formulario de Lotes/Series -->
     <!-- ========================================================= -->
-    <record id="view_stock_lot_form_inherit_bat100_v4_1" model="ir.ui.view">
-        <field name="name">stock.lot.form.inherit.bat100.v4.1</field>
+    <record id="view_stock_lot_form_inherit_bat100_v4_2" model="ir.ui.view">
+        <field name="name">stock.lot.form.inherit.bat100.v4.2</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
-            <!-- Añadimos los botones justo después del campo "name" -->
             <field name="name" position="after">
                 <group>
                     <field name="x_bat100" widget="boolean_toggle" string="Batería 100%"/>
@@ -30,8 +29,8 @@
     <!-- ========================================================= -->
     <!-- 2. Vista lista de Lotes/Series -->
     <!-- ========================================================= -->
-    <record id="view_stock_lot_tree_inherit_bat100_v4_1" model="ir.ui.view">
-        <field name="name">stock.lot.tree.inherit.bat100.v4.1</field>
+    <record id="view_stock_lot_tree_inherit_bat100_v4_2" model="ir.ui.view">
+        <field name="name">stock.lot.tree.inherit.bat100.v4.2</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_tree"/>
         <field name="arch" type="xml">
@@ -42,16 +41,15 @@
     </record>
 
     <!-- ========================================================= -->
-    <!-- 3. Vista del wizard de movimientos de stock -->
+    <!-- 3. Wizard de movimientos de stock -->
     <!-- ========================================================= -->
-    <record id="view_move_line_lot_form_inherit_bat100_v4_1" model="ir.ui.view">
-        <field name="name">stock.move.line.form.inherit.bat100.v4.1</field>
+    <record id="view_move_line_lot_form_inherit_bat100_v4_2" model="ir.ui.view">
+        <field name="name">stock.move.line.form.inherit.bat100.v4.2</field>
         <field name="model">stock.move.line</field>
-        <!-- Esta es la vista correcta en Odoo 17 -->
         <field name="inherit_id" ref="stock.view_stock_move_line_operation_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='lot_name']" position="after">
-                <field name="lot_id.x_bat100" string="Batería 100%" widget="boolean_toggle"/>
+                <field name="x_bat100" widget="boolean_toggle" string="Batería 100%"/>
             </xpath>
         </field>
     </record>
