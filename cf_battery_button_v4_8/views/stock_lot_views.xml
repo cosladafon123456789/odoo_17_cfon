@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <!-- Vista formulario de lotes -->
-    <record id="view_stock_lot_form_inherit_bat100_v5_3" model="ir.ui.view">
-        <field name="name">stock.lot.form.inherit.bat100.v5.3</field>
+    <record id="view_stock_lot_form_inherit_bat100_v5_4" model="ir.ui.view">
+        <field name="name">stock.lot.form.inherit.bat100.v5.4</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='name']" position="after">
-                <div class="oe_inline" style="display:flex; align-items:center; gap:8px; margin-top:5px; transform:scale(0.65); transform-origin:left;">
-                    <label string="Batería 100%" for="x_bat100" style="font-weight:600; font-size:13px; margin-right:5px;"/>
-                    <field name="x_bat100" widget="boolean_toggle" class="oe_inline"/>
+                <div style="display:flex; align-items:center; gap:10px; margin-top:8px;">
+                    <label string="Batería 100%" for="x_bat100"
+                           style="font-weight:600; font-size:15px; color:#333; margin-right:4px;"/>
+                    <div style="transform:scale(0.6); transform-origin:left center;">
+                        <field name="x_bat100" widget="boolean_toggle" class="oe_inline"/>
+                    </div>
                 </div>
             </xpath>
         </field>
     </record>
 
     <!-- Vista árbol de lotes -->
-    <record id="view_stock_lot_tree_inherit_bat100_v5_3" model="ir.ui.view">
-        <field name="name">stock.lot.tree.inherit.bat100.v5.3</field>
+    <record id="view_stock_lot_tree_inherit_bat100_v5_4" model="ir.ui.view">
+        <field name="name">stock.lot.tree.inherit.bat100.v5.4</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_tree"/>
         <field name="arch" type="xml">
@@ -28,8 +31,8 @@
     </record>
 
     <!-- Popup de movimientos de stock -->
-    <record id="view_move_line_lot_form_inherit_bat100_v5_3" model="ir.ui.view">
-        <field name="name">stock.move.line.form.inherit.bat100.v5.3</field>
+    <record id="view_move_line_lot_form_inherit_bat100_v5_4" model="ir.ui.view">
+        <field name="name">stock.move.line.form.inherit.bat100.v5.4</field>
         <field name="model">stock.move.line</field>
         <field name="inherit_id" ref="stock.view_stock_move_line_operation_tree"/>
         <field name="arch" type="xml">
