@@ -30,11 +30,11 @@
         </field>
     </record>
 
-    <!-- Vista lista editable (Odoo 17 usa stock.view_lot_tree_default) -->
+    <!-- Vista lista editable (usando stock.view_production_lot_tree) -->
     <record id="view_stock_lot_tree_inherit_bat100_v3_2" model="ir.ui.view">
         <field name="name">stock.lot.tree.inherit.bat100.v3.2</field>
         <field name="model">stock.lot</field>
-        <field name="inherit_id" ref="stock.view_lot_tree_default"/>
+        <field name="inherit_id" ref="stock.view_production_lot_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='name']" position="after">
                 <field name="x_bat100" widget="boolean_toggle"/>
