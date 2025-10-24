@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_serial_import_wizard_form" model="ir.ui.view">
+        <field name="name">cf.serial.import.wizard.form</field>
+        <field name="model">cf.serial.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Importar números de serie" create="false" edit="false">
+                <group>
+                    <field name="picking_id" readonly="1"/>
+                    <field name="imei_text" placeholder="Pegue o escanee IMEIs, uno por línea" nolabel="0"/>
+                    <field name="result_log" attrs="{'invisible': [('result_log','=',False)]}" readonly="1"/>
+                </group>
+                <footer>
+                    <button string="Procesar" type="object" name="action_process" class="btn-primary"/>
+                    <button string="Cerrar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
