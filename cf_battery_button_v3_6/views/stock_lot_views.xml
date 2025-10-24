@@ -1,26 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <!-- ========================================================= -->
-    <!-- Vista formulario: botón BAT100 -->
+    <!-- 1. Vista formulario de Lotes/Series -->
     <!-- ========================================================= -->
-    <record id="view_stock_lot_form_inherit_bat100_v3_7" model="ir.ui.view">
-        <field name="name">stock.lot.form.inherit.bat100.v3.7</field>
+    <record id="view_stock_lot_form_inherit_bat100_v3_8" model="ir.ui.view">
+        <field name="name">stock.lot.form.inherit.bat100.v3.8</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
             <field name="name" position="after">
                 <group>
-                    <!-- Campo indicador -->
                     <field name="x_bat100" widget="boolean_toggle"/>
-
-                    <!-- Botón para activar BAT100 -->
                     <button name="action_toggle_bat100"
                             type="object"
                             string="Batería 100%"
                             class="oe_highlight"
                             invisible="x_bat100"/>
-
-                    <!-- Botón para desactivar BAT100 -->
                     <button name="action_toggle_bat100"
                             type="object"
                             string="Desmarcar BAT100"
@@ -32,15 +27,30 @@
     </record>
 
     <!-- ========================================================= -->
-    <!-- Vista lista (árbol): mostrar campo BAT100 -->
+    <!-- 2. Vista lista de Lotes/Series -->
     <!-- ========================================================= -->
-    <record id="view_stock_lot_tree_inherit_bat100_v3_7" model="ir.ui.view">
-        <field name="name">stock.lot.tree.inherit.bat100.v3.7</field>
+    <record id="view_stock_lot_tree_inherit_bat100_v3_8" model="ir.ui.view">
+        <field name="name">stock.lot.tree.inherit.bat100.v3.8</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='name']" position="after">
                 <field name="x_bat100" widget="boolean_toggle"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ========================================================= -->
+    <!-- 3. Vista del wizard de movimientos de stock -->
+    <!-- (para que aparezca el campo dentro del popup de "Número de serie/lote") -->
+    <!-- ========================================================= -->
+    <record id="view_move_line_lot_form_inherit_bat100_v3_8" model="ir.ui.view">
+        <field name="name">stock.move.line.form.inherit.bat100.v3.8</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_move_line_lot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='lot_name']" position="after">
+                <field name="lot_id.x_bat100" string="Batería 100%" widget="boolean_toggle" readonly="0"/>
             </xpath>
         </field>
     </record>
