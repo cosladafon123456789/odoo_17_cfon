@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Botón para abrir el wizard de importación de números de serie -->
+    <!-- Añade el botón de importación al encabezado del formulario de picking -->
     <record id="view_picking_form_serial_import" model="ir.ui.view">
         <field name="name">stock.picking.form.serial.import.button</field>
         <field name="model">stock.picking</field>
