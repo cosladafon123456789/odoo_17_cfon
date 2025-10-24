@@ -1,7 +1,7 @@
 <odoo>
     <!-- Vista de formulario de número de serie -->
-    <record id="view_stock_lot_form_inherit_bat100_v3_2" model="ir.ui.view">
-        <field name="name">stock.lot.form.inherit.bat100.v3.2</field>
+    <record id="view_stock_lot_form_inherit_bat100_v3_3" model="ir.ui.view">
+        <field name="name">stock.lot.form.inherit.bat100.v3.3</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
@@ -30,30 +30,14 @@
         </field>
     </record>
 
-    <!-- Vista lista editable (usando stock.view_production_lot_tree) -->
-    <record id="view_stock_lot_tree_inherit_bat100_v3_2" model="ir.ui.view">
-        <field name="name">stock.lot.tree.inherit.bat100.v3.2</field>
+    <!-- Vista lista editable (usando stock.view_production_lot_tree confirmada) -->
+    <record id="view_stock_lot_tree_inherit_bat100_v3_3" model="ir.ui.view">
+        <field name="name">stock.lot.tree.inherit.bat100.v3.3</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='name']" position="after">
                 <field name="x_bat100" widget="boolean_toggle"/>
-            </xpath>
-        </field>
-    </record>
-
-    <!-- Vista Kanban -->
-    <record id="view_stock_lot_kanban_inherit_bat100_v3_2" model="ir.ui.view">
-        <field name="name">stock.lot.kanban.inherit.bat100.v3.2</field>
-        <field name="model">stock.lot</field>
-        <field name="inherit_id" ref="stock.view_lot_kanban"/>
-        <field name="arch" type="xml">
-            <xpath expr="//div[contains(@class,'o_kanban_record_body')]" position="inside">
-                <t t-if="record.x_bat100.raw_value">
-                    <span class="badge badge-success mt8">
-                        <i class="fa fa-battery-full"/> BAT100
-                    </span>
-                </t>
             </xpath>
         </field>
     </record>
