@@ -8,11 +8,17 @@
             <form string="Importar números de serie" create="false" edit="false">
                 <group>
                     <field name="picking_id" readonly="1"/>
-                    <field name="imei_text" placeholder="Pegue o escanee IMEIs, uno por línea" nolabel="0"/>
-                    <field name="result_log"
-                           readonly="1"
-                           attrs="{'invisible': [('result_log','=',False)]}"/>
+                    <field name="imei_text"
+                           placeholder="Pegue o escanee IMEIs, uno por línea"
+                           nolabel="0"/>
                 </group>
+
+                <!-- bloque separado para mostrar el resultado -->
+                <group invisible="not result_log">
+                    <separator string="Resultado"/>
+                    <field name="result_log" readonly="1" nolabel="1"/>
+                </group>
+
                 <footer>
                     <button string="Procesar" type="object" name="action_process" class="btn-primary"/>
                     <button string="Cerrar" class="btn-secondary" special="cancel"/>
