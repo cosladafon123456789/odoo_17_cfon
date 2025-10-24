@@ -3,11 +3,12 @@
     <!-- ========================================================= -->
     <!-- 1. Vista formulario de Lotes/Series -->
     <!-- ========================================================= -->
-    <record id="view_stock_lot_form_inherit_bat100_v3_8" model="ir.ui.view">
-        <field name="name">stock.lot.form.inherit.bat100.v3.8</field>
+    <record id="view_stock_lot_form_inherit_bat100_v3_9" model="ir.ui.view">
+        <field name="name">stock.lot.form.inherit.bat100.v3.9</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
+            <!-- Añadimos los botones justo después del campo "name" -->
             <field name="name" position="after">
                 <group>
                     <field name="x_bat100" widget="boolean_toggle"/>
@@ -29,8 +30,8 @@
     <!-- ========================================================= -->
     <!-- 2. Vista lista de Lotes/Series -->
     <!-- ========================================================= -->
-    <record id="view_stock_lot_tree_inherit_bat100_v3_8" model="ir.ui.view">
-        <field name="name">stock.lot.tree.inherit.bat100.v3.8</field>
+    <record id="view_stock_lot_tree_inherit_bat100_v3_9" model="ir.ui.view">
+        <field name="name">stock.lot.tree.inherit.bat100.v3.9</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_tree"/>
         <field name="arch" type="xml">
@@ -42,10 +43,9 @@
 
     <!-- ========================================================= -->
     <!-- 3. Vista del wizard de movimientos de stock -->
-    <!-- (para que aparezca el campo dentro del popup de "Número de serie/lote") -->
     <!-- ========================================================= -->
-    <record id="view_move_line_lot_form_inherit_bat100_v3_8" model="ir.ui.view">
-        <field name="name">stock.move.line.form.inherit.bat100.v3.8</field>
+    <record id="view_move_line_lot_form_inherit_bat100_v3_9" model="ir.ui.view">
+        <field name="name">stock.move.line.form.inherit.bat100.v3.9</field>
         <field name="model">stock.move.line</field>
         <field name="inherit_id" ref="stock.view_move_line_lot_form"/>
         <field name="arch" type="xml">
