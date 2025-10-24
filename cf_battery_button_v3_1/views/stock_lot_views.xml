@@ -1,43 +1,63 @@
 <odoo>
     <!-- Vista de formulario de número de serie -->
-    <record id="view_stock_lot_form_inherit_bat100_v3_3" model="ir.ui.view">
-        <field name="name">stock.lot.form.inherit.bat100.v3.3</field>
+    <record id="view_stock_lot_form_inherit_bat100_v3_5" model="ir.ui.view">
+        <field name="name">stock.lot.form.inherit.bat100.v3.5</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
-
-            <header position="inside">
-                <!-- Mostrar solo si BAT100 está desmarcado -->
-                <button name="action_toggle_bat100"
-                        type="object"
-                        icon="fa-battery-full"
-                        string="Batería 100%"
-                        class="oe_highlight"
-                        invisible="x_bat100"/>
-
-                <!-- Mostrar solo si BAT100 está marcado -->
-                <button name="action_toggle_bat100"
-                        type="object"
-                        icon="fa-battery-empty"
-                        string="Desmarcar BAT100"
-                        class="btn-secondary"
-                        invisible="not x_bat100"/>
-            </header>
-
+            <!-- Insertar debajo del nombre -->
             <field name="name" position="after">
-                <field name="x_bat100" widget="boolean_toggle"/>
+                <group>
+                    <field name="x_bat100" widget="boolean_toggle"/>
+                    <button name="action_toggle_bat100"
+                            type="object"
+                            icon="fa-battery-full"
+                            string="Batería 100%"
+                            class="oe_highlight"
+                            invisible="x_bat100"/>
+                    <button name="action_toggle_bat100"
+                            type="object"
+                            icon="fa-battery-empty"
+                            string="Desmarcar BAT100"
+                            class="btn-secondary"
+                            invisible="not x_bat100"/>
+                </group>
             </field>
         </field>
     </record>
 
-    <!-- Vista lista editable (usando stock.view_production_lot_tree confirmada) -->
-    <record id="view_stock_lot_tree_inherit_bat100_v3_3" model="ir.ui.view">
-        <field name="name">stock.lot.tree.inherit.bat100.v3.3</field>
+    <!-- Vista lista editable de números de serie -->
+    <record id="view_stock_lot_tree_inherit_bat100_v3_5" model="ir.ui.view">
+        <field name="name">stock.lot.tree.inherit.bat100.v3.5</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='name']" position="after">
                 <field name="x_bat100" widget="boolean_toggle"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vista árbol del wizard de recepción -->
+    <record id="view_stock_move_line_tree_inherit_bat100_v3_5" model="ir.ui.view">
+        <field name="name">stock.move.line.tree.inherit.bat100.v3.5</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_move_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='lot_id']" position="after">
+                <field name="x_bat100" widget="boolean_toggle"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vista formulario del wizard de recepción -->
+    <record id="view_stock_move_line_form_inherit_bat100_v3_5" model="ir.ui.view">
+        <field name="name">stock.move.line.form.inherit.bat100.v3.5</field>
+        <field name="model">stock.move.line</field>
+        <field name="inherit_id" ref="stock.view_move_line_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='lot_id']" position="after">
+                <field name="x_bat100"/>
             </xpath>
         </field>
     </record>
