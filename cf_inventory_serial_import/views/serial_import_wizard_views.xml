@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Vista del wizard para importar IMEIs -->
+    <!-- Vista del wizard de importación de números de serie -->
     <record id="view_serial_import_wizard_form" model="ir.ui.view">
         <field name="name">cf.serial.import.wizard.form</field>
         <field name="model">cf.serial.import.wizard</field>
@@ -13,15 +13,20 @@
                            nolabel="0"/>
                 </group>
 
-                <!-- bloque separado para mostrar el resultado -->
+                <!-- Mostrar el resultado solo cuando existe texto -->
                 <group invisible="not result_log">
                     <separator string="Resultado"/>
                     <field name="result_log" readonly="1" nolabel="1"/>
                 </group>
 
                 <footer>
-                    <button string="Procesar" type="object" name="action_process" class="btn-primary"/>
-                    <button string="Cerrar" class="btn-secondary" special="cancel"/>
+                    <button string="Procesar"
+                            type="object"
+                            name="action_process"
+                            class="btn-primary"/>
+                    <button string="Cerrar"
+                            class="btn-secondary"
+                            special="cancel"/>
                 </footer>
             </form>
         </field>
