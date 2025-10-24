@@ -1,8 +1,7 @@
-
 from odoo import api, fields, models
 
-class StockProductionLot(models.Model):
-    _inherit = "stock.production.lot"
+class StockLot(models.Model):
+    _inherit = "stock.lot"
 
     x_bat100 = fields.Boolean(string="BAT100", default=False)
 
