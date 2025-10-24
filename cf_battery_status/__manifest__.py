@@ -8,11 +8,11 @@
     "category": "Inventory/Inventory",
     "depends": ["stock"],
     "data": [
-        # importante: el orden importa
         "security/ir.model.access.csv",
         "views/stock_production_lot_views.xml",
     ],
-    "auto_install": False,
+    "sequence": 150,
     "installable": True,
+    "auto_install": False,
     "application": False,
 }
