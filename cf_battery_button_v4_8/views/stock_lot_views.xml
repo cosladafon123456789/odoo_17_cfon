@@ -51,8 +51,14 @@
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_kanban"/>
         <field name="arch" type="xml">
+            <!-- 🔹 Añadimos el campo para que esté disponible en record -->
+            <xpath expr="//templates" position="before">
+                <field name="x_bat100" invisible="1"/>
+            </xpath>
+
+            <!-- 🔹 Añadimos el texto si está marcado -->
             <xpath expr="//div[contains(@class, 'oe_kanban_details')]" position="inside">
-                <t t-if="record.x_bat100.raw_value">
+                <t t-if="record.x_bat100 and record.x_bat100.raw_value">
                     <div style="margin-top:4px;">
                         <span style="color:#00C853;font-weight:600;">🔋 Batería 100%</span>
                     </div>
