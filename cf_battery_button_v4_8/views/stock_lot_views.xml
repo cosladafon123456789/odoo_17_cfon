@@ -9,12 +9,10 @@
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
-
             <!-- Insertamos debajo del campo product_id -->
             <xpath expr="//field[@name='product_id']" position="after">
                 <field name="x_bat100"/>
             </xpath>
-
         </field>
     </record>
 
@@ -38,18 +36,16 @@
     <record id="view_stock_quant_kanban_bat100" model="ir.ui.view">
         <field name="name">stock.quant.kanban.bat100</field>
         <field name="model">stock.quant</field>
-        <field name="inherit_id" ref="stock.view_stock_quant_kanban"/>
+        <field name="inherit_id" ref="stock.view_quant_kanban"/>
         <field name="arch" type="xml">
-
             <!-- Agregamos el indicador visual -->
             <xpath expr="//div[contains(@class, 'o_kanban_record_body')]" position="inside">
                 <div t-if="record.x_bat100.value"
                      class="badge bg-success text-white"
-                     style="margin-top: 6px; font-size: 12px; border-radius: 8px; padding: 2px 6px; display: inline-block;">
+                     style="margin-top:6px;font-size:12px;border-radius:8px;padding:2px 6px;display:inline-block;">
                     🔋 Batería 100%
                 </div>
             </xpath>
-
         </field>
     </record>
 
