@@ -3,8 +3,8 @@
     <!-- ============================== -->
     <!-- VISTA FORMULARIO -->
     <!-- ============================== -->
-    <record id="view_stock_lot_form_inherit_bat100_v6_3" model="ir.ui.view">
-        <field name="name">stock.lot.form.inherit.bat100.v6.3</field>
+    <record id="view_stock_lot_form_inherit_bat100_v6_4" model="ir.ui.view">
+        <field name="name">stock.lot.form.inherit.bat100.v6.4</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
@@ -23,8 +23,8 @@
     <!-- ============================== -->
     <!-- VISTA ÁRBOL -->
     <!-- ============================== -->
-    <record id="view_stock_lot_tree_inherit_bat100_v6_3" model="ir.ui.view">
-        <field name="name">stock.lot.tree.inherit.bat100.v6.3</field>
+    <record id="view_stock_lot_tree_inherit_bat100_v6_4" model="ir.ui.view">
+        <field name="name">stock.lot.tree.inherit.bat100.v6.4</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_tree"/>
         <field name="arch" type="xml">
@@ -37,8 +37,8 @@
     <!-- ============================== -->
     <!-- POPUP DE MOVIMIENTOS DE STOCK -->
     <!-- ============================== -->
-    <record id="view_move_line_lot_form_inherit_bat100_v6_3" model="ir.ui.view">
-        <field name="name">stock.move.line.form.inherit.bat100.v6.3</field>
+    <record id="view_move_line_lot_form_inherit_bat100_v6_4" model="ir.ui.view">
+        <field name="name">stock.move.line.form.inherit.bat100.v6.4</field>
         <field name="model">stock.move.line</field>
         <field name="inherit_id" ref="stock.view_stock_move_line_operation_tree"/>
         <field name="arch" type="xml">
@@ -49,10 +49,10 @@
     </record>
 
     <!-- ============================== -->
-    <!-- VISTA KANBAN (FINAL FUNCIONAL) -->
+    <!-- VISTA KANBAN (FUNCIONAL CON TU DOM) -->
     <!-- ============================== -->
-    <record id="view_stock_lot_kanban_inherit_bat100_v6_3" model="ir.ui.view">
-        <field name="name">stock.lot.kanban.inherit.bat100.v6.3</field>
+    <record id="view_stock_lot_kanban_inherit_bat100_v6_4" model="ir.ui.view">
+        <field name="name">stock.lot.kanban.inherit.bat100.v6.4</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_kanban"/>
         <field name="arch" type="xml">
@@ -62,21 +62,13 @@
                 <field name="x_bat100"/>
             </xpath>
 
-            <!-- Insertamos el icono 🔋 después del nombre -->
-            <xpath expr="//strong[@class='o_kanban_record_title']/field[@name='name']" position="after">
-                <!-- Comprobación segura -->
+            <!-- Insertamos el icono antes del nombre del producto -->
+            <xpath expr="//div[@name='product_name']" position="before">
                 <t t-if="record.x_bat100 and (record.x_bat100.value in ['1', 1, true, 'true'])">
-                    <span style="margin-left:6px; font-size:11px; background-color:#00b050; color:white;
+                    <span style="margin-right:6px; font-size:11px; background-color:#00b050; color:white;
                                  border-radius:6px; padding:2px 5px;"
                           t-att-title="'Batería 100%'">
                         🔋
-                    </span>
-                </t>
-                <t t-elif="record.x_bat100 and (record.x_bat100.value in ['0', 0, false, 'false'])">
-                    <span style="margin-left:6px; font-size:11px; background-color:#ccc; color:#333;
-                                 border-radius:6px; padding:2px 5px;"
-                          t-att-title="'Batería sin comprobar'">
-                        ⚙️
                     </span>
                 </t>
             </xpath>
