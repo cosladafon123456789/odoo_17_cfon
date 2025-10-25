@@ -49,23 +49,21 @@
     </record>
 
     <!-- ============================== -->
-    <!-- VISTA KANBAN (FUNCIONAL ODOO 17) -->
+    <!-- VISTA KANBAN (FINAL FUNCIONAL) -->
     <!-- ============================== -->
     <record id="view_stock_lot_kanban_inherit_bat100_v5_4" model="ir.ui.view">
         <field name="name">stock.lot.kanban.inherit.bat100.v5.4</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_kanban"/>
         <field name="arch" type="xml">
-            <!-- Insertamos el icono de batería dentro del cuerpo principal de la tarjeta -->
-            <xpath expr="//div[contains(@class,'o_kanban_record_body')]" position="inside">
+            <!-- Insertamos el icono 🔋 justo después del nombre del número de serie -->
+            <xpath expr="//field[@name='name']" position="after">
                 <t t-if="record.x_bat100.raw_value">
-                    <div style="margin-top:4px;">
-                        <span style="font-size:11px; background-color:#00b050; color:white;
-                                     border-radius:6px; padding:2px 5px;"
-                              t-att-title="'Batería 100%'">
-                            🔋 Batería 100%
-                        </span>
-                    </div>
+                    <span style="margin-left:6px; font-size:11px; background-color:#00b050; color:white;
+                                 border-radius:6px; padding:2px 5px;"
+                          t-att-title="'Batería 100%'">
+                        🔋
+                    </span>
                 </t>
             </xpath>
         </field>
