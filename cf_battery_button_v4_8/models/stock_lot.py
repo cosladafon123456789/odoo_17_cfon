@@ -49,13 +49,3 @@ class StockPicking(models.Model):
                     move_line.lot_id.sudo().write({'x_bat100': move_line.x_bat100})
 
         return res
-
-class StockQuant(models.Model):
-    _inherit = 'stock.quant'
-
-    x_bat100 = fields.Boolean(
-        string="Batería 100%",
-        related='lot_id.x_bat100',
-        store=True
-    )
-
