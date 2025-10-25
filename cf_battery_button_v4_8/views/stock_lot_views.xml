@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <!-- ============================== -->
-    <!-- VISTA FORMULARIO -->
-    <!-- ============================== -->
-    <record id="view_stock_lot_form_inherit_bat100_v6_4" model="ir.ui.view">
-        <field name="name">stock.lot.form.inherit.bat100.v6.4</field>
+    <!-- ========================================= -->
+    <!-- FORMULARIO -->
+    <!-- ========================================= -->
+    <record id="view_stock_lot_form_inherit_bat100_v7_0" model="ir.ui.view">
+        <field name="name">stock.lot.form.inherit.bat100.v7.0</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='name']" position="after">
-                <div style="display:flex; align-items:center; gap:10px; margin-top:8px;">
+                <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
                     <label string="Batería 100%" for="x_bat100"
-                           style="font-weight:600; font-size:15px; color:#333; margin-right:4px;"/>
-                    <div style="transform:scale(0.6); transform-origin:left center;">
-                        <field name="x_bat100" widget="boolean_toggle" class="oe_inline"/>
-                    </div>
+                           style="font-weight:600;font-size:14px;color:#333;"/>
+                    <field name="x_bat100" widget="boolean_toggle" class="oe_inline"
+                           style="transform:scale(0.8);"/>
                 </div>
             </xpath>
         </field>
     </record>
 
-    <!-- ============================== -->
-    <!-- VISTA ÁRBOL -->
-    <!-- ============================== -->
-    <record id="view_stock_lot_tree_inherit_bat100_v6_4" model="ir.ui.view">
-        <field name="name">stock.lot.tree.inherit.bat100.v6.4</field>
+    <!-- ========================================= -->
+    <!-- LISTA -->
+    <!-- ========================================= -->
+    <record id="view_stock_lot_tree_inherit_bat100_v7_0" model="ir.ui.view">
+        <field name="name">stock.lot.tree.inherit.bat100.v7.0</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_tree"/>
         <field name="arch" type="xml">
@@ -34,42 +33,40 @@
         </field>
     </record>
 
-    <!-- ============================== -->
-    <!-- POPUP DE MOVIMIENTOS DE STOCK -->
-    <!-- ============================== -->
-    <record id="view_move_line_lot_form_inherit_bat100_v6_4" model="ir.ui.view">
-        <field name="name">stock.move.line.form.inherit.bat100.v6.4</field>
-        <field name="model">stock.move.line</field>
-        <field name="inherit_id" ref="stock.view_stock_move_line_operation_tree"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='lot_name']" position="after">
-                <field name="x_bat100" widget="boolean_toggle" string="Batería 100%" options="{'size': 'small'}"/>
-            </xpath>
-        </field>
-    </record>
-
-    <!-- ============================== -->
-    <!-- VISTA KANBAN (FUNCIONAL CON TU DOM) -->
-    <!-- ============================== -->
-    <record id="view_stock_lot_kanban_inherit_bat100_v6_4" model="ir.ui.view">
-        <field name="name">stock.lot.kanban.inherit.bat100.v6.4</field>
+    <!-- ========================================= -->
+    <!-- KANBAN -->
+    <!-- ========================================= -->
+    <record id="view_stock_lot_kanban_inherit_bat100_v7_0" model="ir.ui.view">
+        <field name="name">stock.lot.kanban.inherit.bat100.v7_0</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_kanban"/>
         <field name="arch" type="xml">
 
-            <!-- Aseguramos que el campo se cargue -->
+            <!-- 🔹 Asegurar que el campo se cargue -->
             <xpath expr="//kanban" position="inside">
                 <field name="x_bat100"/>
             </xpath>
 
-            <!-- Insertamos el icono antes del nombre del producto -->
-            <xpath expr="//div[@name='product_name']" position="before">
-                <t t-if="record.x_bat100 and (record.x_bat100.value in ['1', 1, true, 'true'])">
-                    <span style="margin-right:6px; font-size:11px; background-color:#00b050; color:white;
-                                 border-radius:6px; padding:2px 5px;"
-                          t-att-title="'Batería 100%'">
-                        🔋
-                    </span>
+            <!-- 🔹 Mostrar el icono arriba a la derecha -->
+            <xpath expr="//div[contains(@class,'oe_kanban_details')]" position="inside">
+                <t t-if="record.x_bat100.raw_value or record.x_bat100.value">
+                    <div style="
+                        position:absolute;
+                        top:4px;
+                        right:8px;
+                        background-color:#00b050;
+                        color:white;
+                        border-radius:50%;
+                        width:22px;
+                        height:22px;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        font-size:12px;
+                        box-shadow:0 0 3px rgba(0,0,0,0.2);
+                    "
+                         t-att-title="'Batería 100%'">🔋
+                    </div>
                 </t>
             </xpath>
         </field>
