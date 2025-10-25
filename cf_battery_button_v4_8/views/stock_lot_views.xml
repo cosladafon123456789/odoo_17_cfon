@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <!-- ========================================= -->
     <!-- FORMULARIO -->
-    <!-- ========================================= -->
-    <record id="view_stock_lot_form_inherit_bat100_v7_0" model="ir.ui.view">
-        <field name="name">stock.lot.form.inherit.bat100.v7.0</field>
+    <record id="view_stock_lot_form_inherit_bat100_v7_1_debug" model="ir.ui.view">
+        <field name="name">stock.lot.form.inherit.bat100.v7.1.debug</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
@@ -19,53 +17,35 @@
         </field>
     </record>
 
-    <!-- ========================================= -->
-    <!-- LISTA -->
-    <!-- ========================================= -->
-    <record id="view_stock_lot_tree_inherit_bat100_v7_0" model="ir.ui.view">
-        <field name="name">stock.lot.tree.inherit.bat100.v7.0</field>
-        <field name="model">stock.lot</field>
-        <field name="inherit_id" ref="stock.view_production_lot_tree"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='name']" position="after">
-                <field name="x_bat100" widget="boolean_toggle" string="Batería 100%" options="{'size': 'small'}"/>
-            </xpath>
-        </field>
-    </record>
-
-    <!-- ========================================= -->
     <!-- KANBAN -->
-    <!-- ========================================= -->
-    <record id="view_stock_lot_kanban_inherit_bat100_v7_0" model="ir.ui.view">
-        <field name="name">stock.lot.kanban.inherit.bat100.v7_0</field>
+    <record id="view_stock_lot_kanban_inherit_bat100_v7_1_debug" model="ir.ui.view">
+        <field name="name">stock.lot.kanban.inherit.bat100.v7.1.debug</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_kanban"/>
         <field name="arch" type="xml">
 
-            <!-- 🔹 Asegurar que el campo se cargue -->
+            <!-- Cargar campo -->
             <xpath expr="//kanban" position="inside">
                 <field name="x_bat100"/>
             </xpath>
 
-            <!-- 🔹 Mostrar el icono arriba a la derecha -->
+            <!-- Mostrar valor real arriba a la derecha -->
             <xpath expr="//div[contains(@class,'oe_kanban_details')]" position="inside">
-                <t t-if="record.x_bat100.raw_value or record.x_bat100.value">
+                <t>
                     <div style="
                         position:absolute;
                         top:4px;
                         right:8px;
-                        background-color:#00b050;
-                        color:white;
-                        border-radius:50%;
-                        width:22px;
-                        height:22px;
-                        display:flex;
-                        align-items:center;
-                        justify-content:center;
-                        font-size:12px;
-                        box-shadow:0 0 3px rgba(0,0,0,0.2);
-                    "
-                         t-att-title="'Batería 100%'">🔋
+                        background:#ccc;
+                        color:black;
+                        border-radius:6px;
+                        padding:1px 4px;
+                        font-size:11px;
+                    ">
+                        <t t-esc="record.x_bat100"/>
+                        <t t-esc="record.x_bat100.value"/>
+                        <t t-esc="record.x_bat100.raw_value"/>
+                        <t t-esc="record.data.x_bat100"/>
                     </div>
                 </t>
             </xpath>
