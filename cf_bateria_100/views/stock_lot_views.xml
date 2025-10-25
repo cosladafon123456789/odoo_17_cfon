@@ -1,0 +1,30 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Añadir el toggle 'Batería 100%' en el formulario del lote -->
+    <record id="view_stock_lot_form_bat100_inherit" model="ir.ui.view">
+        <field name="name">stock.lot.form.bat100.inherit</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet//group" position="inside">
+                <field name="x_bat100"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Añadir icono en la vista kanban de lotes (números de serie) solo si x_bat100 es True -->
+    <record id="view_stock_lot_kanban_bat100_inherit" model="ir.ui.view">
+        <field name="name">stock.lot.kanban.bat100.inherit</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_kanban"/>
+        <field name="arch" type="xml">
+            <!-- Insertar el icono a la derecha del nombre del lote -->
+            <xpath expr="//div[contains(@class,'o_kanban_record_title')]" position="inside">
+                <t t-if="record.x_bat100.raw_value">
+                    <i class="fa fa-battery-full text-success" style="margin-left:6px;" aria-label="Batería 100%"/>
+                </t>
+            </xpath>
+        </field>
+    </record>
+</odoo>
