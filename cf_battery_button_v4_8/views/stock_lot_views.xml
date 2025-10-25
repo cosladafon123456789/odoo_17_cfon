@@ -3,8 +3,8 @@
     <!-- ============================== -->
     <!-- VISTA FORMULARIO -->
     <!-- ============================== -->
-    <record id="view_stock_lot_form_inherit_bat100_v6_1" model="ir.ui.view">
-        <field name="name">stock.lot.form.inherit.bat100.v6.1</field>
+    <record id="view_stock_lot_form_inherit_bat100_v6_2" model="ir.ui.view">
+        <field name="name">stock.lot.form.inherit.bat100.v6.2</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
@@ -23,8 +23,8 @@
     <!-- ============================== -->
     <!-- VISTA ÁRBOL -->
     <!-- ============================== -->
-    <record id="view_stock_lot_tree_inherit_bat100_v6_1" model="ir.ui.view">
-        <field name="name">stock.lot.tree.inherit.bat100.v6.1</field>
+    <record id="view_stock_lot_tree_inherit_bat100_v6_2" model="ir.ui.view">
+        <field name="name">stock.lot.tree.inherit.bat100.v6.2</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_tree"/>
         <field name="arch" type="xml">
@@ -37,8 +37,8 @@
     <!-- ============================== -->
     <!-- POPUP DE MOVIMIENTOS DE STOCK -->
     <!-- ============================== -->
-    <record id="view_move_line_lot_form_inherit_bat100_v6_1" model="ir.ui.view">
-        <field name="name">stock.move.line.form.inherit.bat100.v6.1</field>
+    <record id="view_move_line_lot_form_inherit_bat100_v6_2" model="ir.ui.view">
+        <field name="name">stock.move.line.form.inherit.bat100.v6.2</field>
         <field name="model">stock.move.line</field>
         <field name="inherit_id" ref="stock.view_stock_move_line_operation_tree"/>
         <field name="arch" type="xml">
@@ -49,21 +49,21 @@
     </record>
 
     <!-- ============================== -->
-    <!-- VISTA KANBAN (CORREGIDA Y SEGURA) -->
+    <!-- VISTA KANBAN -->
     <!-- ============================== -->
-    <record id="view_stock_lot_kanban_inherit_bat100_v6_1" model="ir.ui.view">
-        <field name="name">stock.lot.kanban.inherit.bat100.v6.1</field>
+    <record id="view_stock_lot_kanban_inherit_bat100_v6_2" model="ir.ui.view">
+        <field name="name">stock.lot.kanban.inherit.bat100.v6.2</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_kanban"/>
         <field name="arch" type="xml">
-            <!-- Añadimos el campo a la carga -->
+            <!-- Aseguramos carga del campo -->
             <xpath expr="//kanban" position="inside">
                 <field name="x_bat100"/>
             </xpath>
 
-            <!-- Insertamos el icono 🔋 después del nombre -->
+            <!-- Mostramos el icono solo si es True -->
             <xpath expr="//strong[@class='o_kanban_record_title']/field[@name='name']" position="after">
-                <t t-if="record.x_bat100 and record.x_bat100.value">
+                <t t-if="record.x_bat100 and (record.x_bat100.value == true or record.x_bat100.value == 1 or record.x_bat100.value == '1')">
                     <span style="margin-left:6px; font-size:11px; background-color:#00b050; color:white;
                                  border-radius:6px; padding:2px 5px;"
                           t-att-title="'Batería 100%'">
