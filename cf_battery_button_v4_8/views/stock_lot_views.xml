@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <!-- FORMULARIO -->
-    <record id="view_stock_lot_form_inherit_bat100_final" model="ir.ui.view">
-        <field name="name">stock.lot.form.inherit.bat100.final</field>
+    <record id="view_stock_lot_form_inherit_bat100_final_v2" model="ir.ui.view">
+        <field name="name">stock.lot.form.inherit.bat100.final.v2</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_form"/>
         <field name="arch" type="xml">
@@ -18,8 +18,8 @@
     </record>
 
     <!-- LISTA -->
-    <record id="view_stock_lot_tree_inherit_bat100_final" model="ir.ui.view">
-        <field name="name">stock.lot.tree.inherit.bat100.final</field>
+    <record id="view_stock_lot_tree_inherit_bat100_final_v2" model="ir.ui.view">
+        <field name="name">stock.lot.tree.inherit.bat100.final.v2</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_tree"/>
         <field name="arch" type="xml">
@@ -30,20 +30,20 @@
     </record>
 
     <!-- KANBAN -->
-    <record id="view_stock_lot_kanban_inherit_bat100_final" model="ir.ui.view">
-        <field name="name">stock.lot.kanban.inherit.bat100.final</field>
+    <record id="view_stock_lot_kanban_inherit_bat100_final_v2" model="ir.ui.view">
+        <field name="name">stock.lot.kanban.inherit.bat100.final.v2</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_kanban"/>
         <field name="arch" type="xml">
 
-            <!-- Aseguramos que el campo esté disponible -->
+            <!-- Asegurar que el campo esté cargado -->
             <xpath expr="//kanban" position="inside">
                 <field name="x_bat100"/>
             </xpath>
 
-            <!-- Mostrar el icono solo si el campo está activo -->
+            <!-- Mostrar icono solo si está activado -->
             <xpath expr="//div[contains(@class,'oe_kanban_details')]" position="inside">
-                <t t-if="record.data.x_bat100 or record.x_bat100.value or record.x_bat100.raw_value">
+                <t t-if="record.data and record.data.x_bat100">
                     <div style="
                         position:absolute;
                         top:4px;
