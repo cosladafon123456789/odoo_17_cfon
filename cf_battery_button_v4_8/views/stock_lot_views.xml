@@ -31,21 +31,35 @@
     </record>
 
     <!-- ======================================== -->
-    <!--   VISTA KANBAN DE QUANTS (UBICACIONES)  -->
+    <!--   NUEVA VISTA KANBAN DE QUANTS (UBICACIONES)  -->
     <!-- ======================================== -->
     <record id="view_stock_quant_kanban_bat100" model="ir.ui.view">
         <field name="name">stock.quant.kanban.bat100</field>
         <field name="model">stock.quant</field>
-        <field name="inherit_id" ref="stock.view_quant_kanban"/>
         <field name="arch" type="xml">
-            <!-- Agregamos el indicador visual -->
-            <xpath expr="//div[contains(@class, 'o_kanban_record_body')]" position="inside">
-                <div t-if="record.x_bat100.value"
-                     class="badge bg-success text-white"
-                     style="margin-top:6px;font-size:12px;border-radius:8px;padding:2px 6px;display:inline-block;">
-                    🔋 Batería 100%
-                </div>
-            </xpath>
+            <kanban class="o_kanban_mobile">
+                <field name="product_id"/>
+                <field name="lot_id"/>
+                <field name="location_id"/>
+                <field name="quantity"/>
+                <field name="x_bat100"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record_body"
+                             style="border:1px solid #ccc; border-radius:10px; padding:10px; margin:5px;">
+                            <strong t-esc="record.product_id.value"/>
+                            <div t-if="record.lot_id.value">Lote: <t t-esc="record.lot_id.value"/></div>
+                            <div>Cantidad: <t t-esc="record.quantity.value"/></div>
+                            <div>Ubicación: <t t-esc="record.location_id.value"/></div>
+                            <div t-if="record.x_bat100.value"
+                                 class="badge bg-success text-white"
+                                 style="margin-top:6px; font-size:12px; border-radius:8px; padding:2px 6px; display:inline-block;">
+                                🔋 Batería 100%
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
         </field>
     </record>
 
