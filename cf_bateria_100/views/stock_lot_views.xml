@@ -12,14 +12,14 @@
         </field>
     </record>
 
-    <!-- Icono de batería en la vista kanban (solo si x_bat100 es True) -->
+    <!-- Icono de batería verde en la vista kanban (solo si x_bat100 es True) -->
     <record id="view_stock_lot_kanban_bat100_inherit" model="ir.ui.view">
         <field name="name">stock.lot.kanban.bat100.inherit</field>
         <field name="model">stock.lot</field>
         <field name="inherit_id" ref="stock.view_production_lot_kanban"/>
         <field name="arch" type="xml">
-            <!-- Añadimos el icono justo a la derecha del nombre del número de serie -->
-            <xpath expr="//div[contains(@class,'o_kanban_record_title')]" position="inside">
+            <!-- Insertar el icono justo después del nombre del número de serie -->
+            <xpath expr="//field[@name='name']" position="after">
                 <t t-if="record.x_bat100.raw_value">
                     <i class="fa fa-battery-full text-success" style="margin-left:6px;" aria-label="Batería 100%"/>
                 </t>
